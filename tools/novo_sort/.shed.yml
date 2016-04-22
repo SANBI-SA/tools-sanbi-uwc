@@ -1,0 +1,9 @@
+categories:
+- Fasta Manipulation
+description: Custom designed multi-threaded sort/merge tools for BAM files.
+long_description: |
+   Powerful custom designed multi-threaded sort/merge tools for BAM files.
+name: novo_sort
+owner: sanbi-uwc
+remote_repository_url: https://github.com/zipho/novo_sort
+type: unrestricted

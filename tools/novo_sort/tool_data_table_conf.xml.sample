@@ -1,0 +1,6 @@
+<tables>
+    <table name="novocraft_index" comment_char="#">
+        <columns>value, dbkey, name, path</columns>
+        <file path="tool-data/novocraft_index.loc" />
+    </table>
+</tables>

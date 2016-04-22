@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<tool id="novo_sort" name="NOVO SORT" version="0.0.1">
+    <description>Tool to run the Novo Sort mapping tool</description>
+    <requirements>
+        <requirement type="package" version="1.2">samtools</requirement>
+        <requirement type="package" version="3.04.01">novocraft</requirement>
+    </requirements>
+    <stdio>
+        <exit_code range=":-1" />
+        <exit_code range="1:" />
+    </stdio>
+    <command interpreter="python">
+        novo_sort.py '${out_file}' --bam_filename ${input1}
+    </command>
+    <inputs>
+        <param name="input1" type="data" format="bam" label="Select first set of reads" help="Specify dataset with forward reads"/>
+    </inputs>
+    <outputs>
+        <data format="bam" name="out_file" />
+    </outputs>
+    <help>Help!</help>
+    <citations>
+        <citation></citation>
+    </citations>
+    <tests>
+        <test>
+        </test>
+    </tests>
+</tool>

@@ -1,0 +1,6 @@
+<?xml version="1.0"?>
+<tool_dependency>
+    <package name="novocraft" version="3.04.01">
+        <repository name="package_novocraft_3_04_01" owner="sanbi-uwc" />
+    </package>
+</tool_dependency>

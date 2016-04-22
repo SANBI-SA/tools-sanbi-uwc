@@ -1,0 +1,9 @@
+categories:
+- Fasta Manipulation
+description: Tool designed for mapping of short reads onto a reference genome from Illumina, Ion Torrent, and 454 NGS platforms.
+long_description: |
+   Powerful tool designed for mapping of short reads onto a reference genome from Illumina, Ion Torrent, and 454 NGS platforms.
+name: novo_align
+owner: sanbi-uwc
+remote_repository_url: https://github.com/zipho/novo_align
+type: unrestricted

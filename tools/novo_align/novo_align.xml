@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<tool id="novo_align" name="NOVO ALIGN" version="0.0.1">
+    <description>Tool to run the Novo Align mapping tool</description>
+    <requirements>
+        <requirement type="package" version="1.2">samtools</requirement>
+        <requirement type="package" version="3.04.01">novocraft</requirement>
+    </requirements>
+    <stdio>
+        <exit_code range=":-1" />
+        <exit_code range="1:" />
+    </stdio>
+    <command interpreter="python">
+        novo_align.py '${out_file}' --index_file ${index1.fields.path} --forward_file ${fastq_input1} --reverse_file ${fastq_input2}
+    </command>
+    <inputs>
+        <param name="fastq_input1" type="data" format="fastqsanger" label="Select first set of reads" help="Specify dataset with forward reads"/>
+        <param name="fastq_input2" type="data" format="fastqsanger" label="Select second set of reads" help="Specify dataset with reverse reads"/>
+        <param name="index1" type="select" label="Novo-Align Index(FASTA format)">
+            <options from_data_table="novocraft_index"/>
+        </param>
+    </inputs>
+    <outputs>
+        <data format="bam" name="out_file" />
+    </outputs>
+    <help>Help!</help>
+    <citations>
+        <citation></citation>
+    </citations>
+    <tests>
+        <test>
+        </test>
+    </tests>
+</tool>
