@@ -1,7 +1,6 @@
 # Galaxy Tools maintained by the SANBI-UWC Galaxy Team
 
 The repo's main goals are to:
-
   * simplify and centralise the maintenance of the SANBI-UWC related tools
   * provide a learning environment to Galaxy Tool developers 
 
