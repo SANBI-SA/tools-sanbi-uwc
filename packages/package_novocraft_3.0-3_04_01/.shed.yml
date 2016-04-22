@@ -1,0 +1,11 @@
+categories:
+- Next Gen Mappers
+- Tool Dependency Packages
+description: Contains a tool dependency definition that downloads and compiles version 3.04.01 of novocraft.
+long_description: |
+    Powerful tool designed for mapping of short reads onto a reference genome from Illumina, Ion Torrent, and 454 NGS platforms.
+    http://www.novocraft.com/
+name: package_novocraft_3_04_01
+owner: sanbi-uwc
+remote_repository_url: https://github.com/zipho/package_novocraft_3_04_01.git
+type: tool_dependency_definition

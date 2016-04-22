@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+<tool_dependency>
+    <package name="novocraft" version="3.04.01">
+        <install version="1.0">
+            <actions_group>
+                <actions>
+                    <action type="download_by_url">http://intranet.sanbi.ac.za/novocraftV3.04.01.Linux3.0_with_lic.tar.gz</action>
+                    <action type="move_directory_files">
+                        <source_directory>.</source_directory>
+                        <destination_directory>$INSTALL_DIR</destination_directory>
+                    </action>
+                </actions>
+                <action type="set_environment">
+                    <environment_variable name="PATH" action="prepend_to">$INSTALL_DIR</environment_variable>
+                </action>
+            </actions_group>
+        </install>
+        <readme>
+            <![CDATA[
+                Release Novoalign V3.04.01, NovoalignCS V1.06.01, Novomethyl V1.02, Novosort V1.03.09. 14 Jan 2016
+
+                Changes:
+                Novoalign[CS]
+                    Fix: For pairs with one read unmapped the SAM flags may be set incorrectly in the unmapped read (Mate not Mapped set) causing novosort markduplicates to report an error.
+            ]]>
+        </readme>
+    </package>
+</tool_dependency>
+

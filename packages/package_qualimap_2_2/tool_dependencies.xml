@@ -1,0 +1,32 @@
+<?xml version="1.0"?>
+<tool_dependency>
+    <package name="qualimap" version="2.2">
+        <install version="1.0">
+            <actions_group>
+                <actions>
+                    <action type="download_by_url">https://depot.galaxyproject.org/software/qualimap/qualimap_2.2_src_all.zip</action>
+                    <action type="move_directory_files">
+                        <source_directory>.</source_directory>
+                        <destination_directory>$INSTALL_DIR</destination_directory>
+                    </action>
+                </actions>
+                <action type="set_environment">
+                    <environment_variable name="PATH" action="prepend_to">$INSTALL_DIR</environment_variable>
+                </action>
+            </actions_group>
+        </install>
+        <readme>
+             <![CDATA[
+                Qualimap 2 is a platform-independent application written in Java and R that provides both a Graphical User Inteface (GUI)
+                and a command-line interface to facilitate the quality control of alignment sequencing data and its derivatives like feature counts.
+
+                Supported types of experiments include:
+                Whole-genome sequencing
+                Whole-exome sequencing
+                RNA-seq (speical mode available)
+                ChIP-seq
+                http://qualimap.bioinfo.cipf.es
+            ]]>
+        </readme>
+    </package>
+</tool_dependency>

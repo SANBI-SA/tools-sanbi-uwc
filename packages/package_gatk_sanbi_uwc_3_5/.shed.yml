@@ -1,0 +1,11 @@
+categories:
+    - Tool Dependency Packages
+description: Contains a tool dependency definition that downloads and compiles version 3.04.01 of novocraft.
+long_description: |
+    This package is downloadable only within sanbi uwc network.
+    The Genome Analysis Toolkit or GATK is a software package for analysis of high-throughput sequencing data,
+    developed by the Data Science and Data Engineering group at the Broad Institute.
+name: package_gatk_sanbi_uwc_3_5
+owner: sanbi-uwc
+remote_repository_url: https://github.com/zipho/package_gatk_sanbi_uwc_3_5
+type: tool_dependency_definition

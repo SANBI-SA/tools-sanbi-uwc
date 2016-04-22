@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+<tool_dependency>
+    <package name="gatk_sanbi_uwc" version="3.5">
+        <install version="1.0">
+            <actions>
+                <action type="download_by_url">http://intranet.sanbi.ac.za/GenomeAnalysisTK-3.5.tar.gz</action>
+                <action type="move_directory_files">
+                    <source_directory>.</source_directory>
+                    <destination_directory>$INSTALL_DIR/jars</destination_directory>
+                </action>
+                <action type="set_environment">
+                    <environment_variable name="PATH" action="set_to">$INSTALL_DIR/jars</environment_variable>
+                </action>
+            </actions>
+        </install>
+        <readme>
+             <![CDATA[
+                This package is downloadable only within sanbi uwc network.
+
+                The Genome Analysis Toolkit or GATK is a software package for analysis of high-throughput sequencing data,
+                developed by the Data Science and Data Engineering group at the Broad Institute.
+
+                The toolkit offers a wide variety of tools, with a primary focus on variant discovery and
+                genotyping as well as strong emphasis on data quality assurance.
+                Its robust architecture, powerful processing engine and high-performance computing features make it
+                capable of taking on projects of any size.
+             ]]>
+        </readme>
+    </package>
+</tool_dependency>
