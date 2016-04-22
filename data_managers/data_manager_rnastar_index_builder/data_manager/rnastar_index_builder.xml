@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<tool id="rnastar_index_builder" name="RNA STAR index" tool_type="manage_data" version="0.0.1">
+    <description>Build an index for use by the RNA STAR mapping tool</description>
+    <requirements>
+        <requirement type="package" version="2.4.0d">rnastar</requirement>
+    </requirements>
+    <command interpreter="python">rnastar_index_builder.py "${out_file}" --fasta_filename "${input1.fields.path}" --fasta_dbkey "${input1.fields.dbkey}" --fasta_description "${input1.fields.name}" --data_table_name "rnastar_index"</command>
+    <inputs>
+        <param name="input1" type="select" label="Genome to index(FASTA format)">
+            <options from_data_table="all_fasta"/>
+        </param>
+        <param type="text" name="sequence_name" value="" label="Name of sequence" />
+        <param type="text" name="sequence_id" value="" label="ID for sequence" />
+    </inputs>
+    <outputs>
+        <data name="out_file" format="data_manager_json" />
+    </outputs>
+    <help>Help!</help>
+    <citations><citation></citation>
+    </citations>
+    <tests>
+
+    </tests>
+</tool>

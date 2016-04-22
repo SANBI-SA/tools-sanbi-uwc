@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<data_managers>
+    <data_manager tool_file="data_manager/novocraft_index_builder.xml" id="novocraft_index_builder" version="0.0.1">
+        <data_table name="novocraft_index">
+            <output>
+                <column name="value" />
+                <column name="dbkey" />
+                <column name="name" />
+                <column name="path" output_ref="out_file">
+                    <move type="file">
+                        <!-- no need to set source, gets taken from out_dir.extra_files_path -->
+                        <target base="${GALAXY_DATA_MANAGER_DATA_PATH}">${dbkey}/novocraft_index/${path}</target>
+                    </move>
+                    <value_translation>${GALAXY_DATA_MANAGER_DATA_PATH}/${dbkey}/novocraft_index/${path}/</value_translation>
+                    <value_translation type="function">abspath</value_translation>
+                </column>
+            </output>
+        </data_table>
+    </data_manager>
+</data_managers>

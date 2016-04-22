@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<tool id="novocraft_index_builder" name="NOVO CRAFT index" tool_type="manage_data" version="0.0.1">
+    <description>Build an index for use by the Novo Craft mapping tool</description>
+    <stdio>
+        <exit_code range=":-1" />
+        <exit_code range="1:" />
+    </stdio>
+    <requirements>
+        <requirement type="package" version="1.2">samtools</requirement>
+        <requirement type="package" version="3.04.01">novocraft</requirement>
+    </requirements>
+    <command interpreter="python">
+        novocraft_index_builder.py "${out_file}" --input_filename "${input_fasta.fields.path}" --data_table_name "novocraft_index"
+    </command>
+    <inputs>
+        <param type="text" name="sequence_name" value="" label="Name of sequence" optional="False" />
+        <param type="text" name="sequence_desc" value="" label="Description of sequence" />
+        <param type="text" name="sequence_id" value="" label="ID for sequence" optional="False" />
+        <param name="input_fasta" type="select" label="Genome to index(FASTA format)">
+            <options from_data_table="all_fasta"/>
+        </param>
+
+    </inputs>
+    <outputs>
+        <data name="out_file" format="data_manager_json" />
+    </outputs>
+    <tests>
+        <test>
+            <param name="reference_source_selector" value="history"/>
+            <output name="out_file" file="phiX174_as_anoGam1.data_manager_json"/>
+        </test>
+    </tests>
+    <help>Help!</help>
+    <citations>
+        <citation></citation>
+    </citations>
+</tool>

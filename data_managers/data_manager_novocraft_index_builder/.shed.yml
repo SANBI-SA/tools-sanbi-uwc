@@ -1,0 +1,8 @@
+categories:
+- Data Managers
+description: Index a FASTA file for use with NOVO-ALIGN/NOVO-SORT and populate the novocraft_index.nix file.
+long_description: ''
+name: data_manager_novocraft_index_builder
+owner: sanbi-uwc
+remote_repository_url: https://github.com/zipho/data_manager_novocraft_index_builder
+type: unrestricted

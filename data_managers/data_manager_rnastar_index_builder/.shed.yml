@@ -1,0 +1,8 @@
+categories:
+- Data Managers
+description: Index a FASTA file for use with RNA STAR and populate the rnastar_index.loc file.
+long_description: ''
+name: data_manager_rnastar_index_builder
+owner: sanbi-uwc
+remote_repository_url: https://github.com/pvanheus/data_manager_rnastar_index_builder
+type: unrestricted

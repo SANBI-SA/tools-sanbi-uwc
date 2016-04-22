@@ -1,0 +1,8 @@
+categories:
+- Data Managers
+description: Loading the license file for Novo-align program to the tool-data path.
+long_description: ''
+name: data_manager_novoalign_license_uploader
+owner: sanbi-uwc
+remote_repository_url: https://github.com/zipho/data_manager_novoalign_license_uploader
+type: unrestricted

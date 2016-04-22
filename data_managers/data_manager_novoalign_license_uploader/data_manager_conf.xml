@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<data_managers>
+    <data_manager tool_file="data_manager/novoalign_license_uploader.xml" id="novoalign_license_uploader" version="0.0.1">
+    </data_manager>
+</data_managers>
