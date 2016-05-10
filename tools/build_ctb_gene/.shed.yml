@@ -1,0 +1,10 @@
+categories:
+- Variant Analysis
+description: build_ctb_gene is the tool used to extract data about genes using locus_tags
+long_description: |
+   build_ctb_gene is the tool used to extract data about genes using locus_tags
+   http://www.sanbi.ac.za/combact_tb
+name: build_ctb_gene
+owner: sanbi-uwc
+remote_repository_url: https://github.com/SANBI-SA/tools-sanbi-uwc.git
+type: unrestricted

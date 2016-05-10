@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<tool id="build_ctb_gene" name="Build_ctb_gene Tool" version="1.0">
+    <requirements>
+       <requirement type="package" version="0.1">build_ctb_gene</requirement>
+    </requirements>
+    <description> build_ctb_gene is the tool used to extract data about genes using locus_tags </description>
+    <stdio>
+        <exit_code range=":-1" />
+        <exit_code range="1:" />
+    </stdio>
+    <command>
+        export NEO4J_REST_URL=http://${neo4j_db_username}:${neo4j_db_password}@${neo4j_db_url}:${neo4j_db_port}/db/data/ &&
+        build_ctb_gene goterms ${input_file}
+    </command>
+    <inputs>
+        <param name="input_file" type="data" format="gff" label="Choose the GFF file" help="Specify the GFF file" optional="False" />
+        <param type="text" name="neo4j_db_url" value="" label="Neo4j database URL" optional="False" />
+        <param type="text" name="neo4j_db_port" value="" label="Neo4j database port" optional="False" />
+        <param type="text" name="neo4j_db_username" value="" label="Neo4j database username" optional="False" />
+        <param type="text" name="neo4j_db_password" value="" label="Neo4j database password" optional="False" />
+    </inputs>
+    <outputs>
+        <data format="txt" name="out_file" />
+    </outputs>
+    <help>Help!</help>
+    <citations>
+        <citation></citation>
+    </citations>
+    <tests>
+        <test>
+        </test>
+    </tests>
+</tool>

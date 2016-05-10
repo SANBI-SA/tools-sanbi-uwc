@@ -1,0 +1,10 @@
+categories:
+    - Tool Dependency Packages
+description: Contains a tool dependency definition that downloads and compiles version 0.1 of build_ctb_gene.
+long_description: |
+    build_ctb_gene is the tool used to extract data about genes using locus_tags
+    http://www.sanbi.ac.za/combat_tb
+name: package_build_ctb_gene_0_1
+owner: sanbi-uwc
+remote_repository_url: https://github.com/SANBI-SA/tools-sanbi-uwc.git
+type: tool_dependency_definition

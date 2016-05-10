@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+<tool_dependency>
+    <package name="build_ctb_gene" version="0.1">
+        <install version="1.0">
+            <actions_group>
+                <actions architecture="x86_64" os="linux">
+                    <action type="download_by_url">http://intranet.sanbi.ac.za/build_ctb_gene_0_1.tar.gz</action>
+                    <action type="move_directory_files">
+                        <source_directory>.</source_directory>
+                        <destination_directory>$INSTALL_DIR</destination_directory>
+                    </action>
+                    <action type="shell_command">
+                        pip install -r $INSTALL_DIR/requirements.txt
+                        pip install --editable $INSTALL_DIR
+
+                    </action>
+                    <action type="set_environment">
+                        <environment_variable name="PATH" action="prepend_to">$INSTALL_DIR</environment_variable>
+                    </action>
+                </actions>
+            </actions_group>
+        </install>
+        <readme>
+             <![CDATA[
+                Build_ctb_gene is the tool used to extract data about genes using locus_tags
+                http://www.sanbi.ac.za/combat_tb
+            ]]>
+        </readme>
+    </package>
+</tool_dependency>
