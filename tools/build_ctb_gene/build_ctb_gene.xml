@@ -9,7 +9,7 @@
         <exit_code range="1:" />
     </stdio>
     <command>
-        export NEO4J_REST_URL=http://${neo4j_db_username}:${neo4j_db_password}@${neo4j_db_url}:${neo4j_db_port}/db/data/ &&
+        export NEO4J_REST_URL=http://${neo4j_db_username}:${neo4j_db_password}@${neo4j_db_url}:${neo4j_db_port}/db/data/ &amp;&amp;
         build_ctb_gene goterms ${input_file}
     </command>
     <inputs>
