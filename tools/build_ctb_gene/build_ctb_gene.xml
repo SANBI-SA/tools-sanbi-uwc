@@ -20,7 +20,41 @@
         <param type="text" name="neo4j_db_password" value="" label="Neo4j database password" optional="False" />
     </inputs>
     <outputs>
-        <data format="txt" name="out_file" />
+        <data format="neostore" name="outputFile1"/>
+        <data format="neostore" name="outputFile2"/>
+        <data format="neostore" name="outputFile3"/>
+        <data format="neostore" name="outputFile4"/>
+        <data format="neostore" name="outputFile5"/>
+        <data format="neostore" name="outputFile6"/>
+        <data format="neostore" name="outputFile7"/>
+        <data format="neostore" name="outputFile8"/>
+        <data format="neostore" name="outputFile9"/>
+        <data format="neostore" name="outputFile10"/>
+        <data format="neostore" name="outputFile11"/>
+        <data format="neostore" name="outputFile12"/>
+        <data format="neostore" name="outputFile13"/>
+        <data format="neostore" name="outputFile14"/>
+        <data format="neostore" name="outputFile15"/>
+        <data format="neostore" name="outputFile16"/>
+        <data format="neostore" name="outputFile17"/>
+        <data format="neostore" name="outputFile18"/>
+        <data format="neostore" name="outputFile19"/>
+        <data format="neostore" name="outputFile20"/>
+        <data format="neostore" name="outputFile21"/>
+        <data format="neostore" name="outputFile22"/>
+        <data format="neostore" name="outputFile23"/>
+        <data format="neostore" name="outputFile24"/>
+        <data format="neostore" name="outputFile25"/>
+        <data format="neostore" name="outputFile26"/>
+        <data format="neostore" name="outputFile27"/>
+        <data format="neostore" name="outputFile28"/>
+        <data format="neostore" name="outputFile29"/>
+        <data format="neostore" name="outputFile30"/>
+        <data format="neostore" name="outputFile31"/>
+        <data format="neostore" name="outputFile32"/>
+        <data format="neostore" name="outputFile33"/>
+        <data format="neostore" name="outputFile34"/>
+        <data format="neostore" name="outputFile35"/>
     </outputs>
     <help>Help!</help>
     <citations>
