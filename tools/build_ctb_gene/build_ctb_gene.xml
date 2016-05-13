@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <tool id="build_ctb_gene" name="Build_ctb_gene Tool" version="1.0">
     <requirements>
-       <requirement type="package" version="0.1">build_ctb_gene</requirement>
+       <requirement type="package" version="0.1">build_ctb_gene_neo4j</requirement>
     </requirements>
     <description> build_ctb_gene is the tool used to extract data about genes using locus_tags </description>
     <stdio>

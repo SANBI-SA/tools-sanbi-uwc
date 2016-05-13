@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <tool_dependency>
-    <package name="build_ctb_gene" version="0.1">
+    <package name="build_ctb_gene_neo4j" version="0.1">
         <install version="1.0">
             <actions_group>
                 <actions architecture="x86_64" os="linux">

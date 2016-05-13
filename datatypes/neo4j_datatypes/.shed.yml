@@ -1,0 +1,8 @@
+categories:
+- Sequence Analysis
+description: Datatypes for the neo4j database.
+long_description: ''
+name: neo4j_datatypes
+owner: sanbi-uwc
+remote_repository_url: 
+type: unrestricted
