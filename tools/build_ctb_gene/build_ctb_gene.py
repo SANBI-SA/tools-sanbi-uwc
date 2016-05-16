@@ -41,7 +41,7 @@ def build_ctb_gene(output_file1, output_dir, input_file, mount_point ):
 def main():
     parser = argparse.ArgumentParser(description="Generate a BAM file from the Novo Align tool")
     parser.add_argument('output_file1')
-    parser.add_argument('output_dir')
+    parser.add_argument('--output_dir')
     parser.add_argument('--input_file')
     parser.add_argument('--mount_point')
     parser.add_argument('--username')

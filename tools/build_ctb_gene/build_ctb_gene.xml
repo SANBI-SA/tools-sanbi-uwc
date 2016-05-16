@@ -10,7 +10,7 @@
     </stdio>
     <command interpreter="python">
         build_ctb_gene.py '${outputFile1}' --outputdir ${outputFile2.files_path} --input_file ${input_file} --mount_point ${neo4j_data_mount_point} \
-                            --username ${neo4j_db_username} --password ${neo4j_db_password} --url ${neo4j_db_url} --port ${neo4j_db_port}
+                            --username ${db_settings.neo4j_db_username} --password ${db_settings.neo4j_db_password} --url ${db_settings.neo4j_db_url} --port ${db_settings.neo4j_db_port}
     </command>
     <inputs>
         <param name="input_file" type="data" format="gff" label="Choose the GFF file" help="Specify the GFF file" optional="False" />
