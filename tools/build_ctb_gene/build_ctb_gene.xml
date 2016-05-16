@@ -8,21 +8,24 @@
         <exit_code range=":-1" />
         <exit_code range="1:" />
     </stdio>
-    <command>
-        export NEO4J_REST_URL=http://${neo4j_db_username}:${neo4j_db_password}@${neo4j_db_url}:${neo4j_db_port}/db/data/ &amp;&amp;
-        build_ctb_gene goterms ${input_file}
+    <command interpreter="python">
+        build_ctb_gene.py '${outputFile1}' --outputdir ${outputFile2.files_path} --input_file ${input_file} --mount_point ${neo4j_data_mount_point} \
+                            --username ${neo4j_db_username} --password ${neo4j_db_password} --url ${neo4j_db_url} --port ${neo4j_db_port}
     </command>
     <inputs>
         <param name="input_file" type="data" format="gff" label="Choose the GFF file" help="Specify the GFF file" optional="False" />
-        <param type="text" name="neo4j_db_url" value="" label="Neo4j database URL" optional="False" />
-        <param type="text" name="neo4j_db_port" value="" label="Neo4j database port" optional="False" />
-        <param type="text" name="neo4j_db_username" value="" label="Neo4j database username" optional="False" />
-        <param type="text" name="neo4j_db_password" value="" label="Neo4j database password" optional="False" />
+        <param type="text" name="neo4j_data_mount_point" value="" label="Neo4j data mount point" place-holder="/mnt/neo4j/data/lib" optional="False" />
+        <section name="db_settings" title="Neo4j Backend Database Settings" expanded="True">
+            <param type="text" name="neo4j_db_url" value="" label="Neo4j database URL" optional="False" />
+            <param type="text" name="neo4j_db_port" value="" label="Neo4j database port" optional="False" />
+            <param type="text" name="neo4j_db_username" value="" label="Neo4j database username" optional="False" />
+            <param type="text" name="neo4j_db_password" value="" label="Neo4j database password" optional="False" />
+        </section>
     </inputs>
     <outputs>
-        <data format="neostore" name="outputFile1"/>
+        <data format="neo4j" name="outputFile1"/>
         <data format="neostore" name="outputFile2"/>
-        <data format="neostore" name="outputFile3"/>
+        <!--<data format="neostore" name="outputFile3"/>
         <data format="neostore" name="outputFile4"/>
         <data format="neostore" name="outputFile5"/>
         <data format="neostore" name="outputFile6"/>
@@ -54,7 +57,7 @@
         <data format="neostore" name="outputFile32"/>
         <data format="neostore" name="outputFile33"/>
         <data format="neostore" name="outputFile34"/>
-        <data format="neostore" name="outputFile35"/>
+        <data format="neostore" name="outputFile35"/> -->
     </outputs>
     <help>Help!</help>
     <citations>
