@@ -12,7 +12,8 @@ log = logging.getLogger(__name__)
 
 def build_ctb_gene(output_file1, output_dir, input_file, mount_point):
     # cmdline_str = "build_ctb_gene goterms ${}".format(input_file)
-    cmdline_str = "echo goterms"
+    cmdline_str = "echo %s" % input_file
+    output_dir = mount_point
     build_ctb = False
     try:
         os.system(cmdline_str)
