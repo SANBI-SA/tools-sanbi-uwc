@@ -6,10 +6,12 @@ import sys
 import glob
 
 import logging
-log = logging.getLogger( __name__ )
 
-def build_ctb_gene(output_file1, output_dir, input_file, mount_point ):
-    #cmdline_str = "build_ctb_gene goterms ${}".format(input_file)
+log = logging.getLogger(__name__)
+
+
+def build_ctb_gene(output_file1, output_dir, input_file, mount_point):
+    # cmdline_str = "build_ctb_gene goterms ${}".format(input_file)
     cmdline_str = "echo goterms"
     build_ctb = False
     try:
@@ -19,9 +21,9 @@ def build_ctb_gene(output_file1, output_dir, input_file, mount_point ):
         log.debug("Error running the build_ctb_gene goterms", file=sys.stderr)
 
     # Read the files at the mount point and load the html file
-    if build_ctb == True:
-         files=glob.glob(mount_point)
-         output_file1 = """<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+    if build_ctb:
+        files = glob.glob(mount_point)
+        output_file1 = """<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
                 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
                 <head> <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
                 <meta name="generator" content="Galaxy %s tool output - see http://g2.trac.bx.psu.edu/" />
@@ -33,9 +35,9 @@ def build_ctb_gene(output_file1, output_dir, input_file, mount_point ):
                 <table>
                     <th>Files</th>
                 """
-         for file in files:
-             output_file1 += """<tr><td>file</td></tr>"""
-         output_file1 += """</table></div></body></html>\n"""
+        for f in files:
+            output_file1 += "<tr><td>" + f + "</td></tr>"
+        output_file1 += """</table></div></body></html>\n"""
 
 
 def main():
@@ -57,5 +59,6 @@ def main():
         log.debug("Error exporting the NEO4J db environmental values")
 
     build_ctb_gene(args.output_file1, args.output_dir, args.input_file, args.mount_point)
+
 
 if __name__ == "__main__": main()
