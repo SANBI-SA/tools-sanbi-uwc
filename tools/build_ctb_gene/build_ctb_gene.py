@@ -43,7 +43,7 @@ def build_ctb_gene(output_file1, output_dir, input_file, mount_point):
 def main():
     parser = argparse.ArgumentParser(description="Generate a BAM file from the Novo Align tool")
     parser.add_argument('output_file1')
-    parser.add_argument('--output_dir')
+    parser.add_argument('--outputdir')
     parser.add_argument('--input_file')
     parser.add_argument('--mount_point')
     parser.add_argument('--username')
@@ -58,7 +58,7 @@ def main():
     except:
         log.debug("Error exporting the NEO4J db environmental values")
 
-    build_ctb_gene(args.output_file1, args.output_dir, args.input_file, args.mount_point)
+    build_ctb_gene(args.output_file1, args.outputdir, args.input_file, args.mount_point)
 
 
 if __name__ == "__main__": main()
