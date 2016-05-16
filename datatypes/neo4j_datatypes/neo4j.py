@@ -70,37 +70,36 @@ class Neo4j(Html):
         """Returns the mime type of the datatype"""
         return 'text/html'
 
-    def set_meta( self, dataset, **kwd ):
-        """
-        for lped/pbed eg
-        """
-        Html.set_meta( self, dataset, **kwd )
-        if not kwd.get('overwrite'):
-            if verbose:
-                gal_Log.debug('@@@ neostore set_meta called with overwrite = False')
-            return True
-        try:
-            efp = dataset.extra_files_path
-        except:
-            if verbose:
-                gal_Log.debug('@@@neostore set_meta failed %s - dataset %s has no efp ?' % (sys.exc_info()[0], dataset.name))
-            return False
-        try:
-            flist = os.listdir(efp)
-        except:
-            if verbose:
-                gal_Log.debug('@@@neostore set_meta failed %s - dataset %s has no efp ?' % (sys.exc_info()[0], dataset.name))
-            return False
-        if len(flist) == 0:
-            if verbose:
-                gal_Log.debug('@@@neostore set_meta failed - %s efp %s is empty?' % (dataset.name, efp))
-            return False
-        self.regenerate_primary_file(dataset)
-        if not dataset.info:
-            dataset.info = 'Galaxy genotype datatype object'
-        if not dataset.blurb:
-            dataset.blurb = 'Composite file - Neo4j Galaxy toolkit'
-        return True
+    # def set_meta( self, dataset, **kwd ):
+    #     """
+    #     """
+    #     Html.set_meta( self, dataset, **kwd )
+    #     if not kwd.get('overwrite'):
+    #         if verbose:
+    #             gal_Log.debug('@@@ neostore set_meta called with overwrite = False')
+    #         return True
+    #     try:
+    #         efp = dataset.extra_files_path
+    #     except:
+    #         if verbose:
+    #             gal_Log.debug('@@@neostore set_meta failed %s - dataset %s has no efp ?' % (sys.exc_info()[0], dataset.name))
+    #         return False
+    #     try:
+    #         flist = os.listdir(efp)
+    #     except:
+    #         if verbose:
+    #             gal_Log.debug('@@@neostore set_meta failed %s - dataset %s has no efp ?' % (sys.exc_info()[0], dataset.name))
+    #         return False
+    #     if len(flist) == 0:
+    #         if verbose:
+    #             gal_Log.debug('@@@neostore set_meta failed - %s efp %s is empty?' % (dataset.name, efp))
+    #         return False
+    #     self.regenerate_primary_file(dataset)
+    #     if not dataset.info:
+    #         dataset.info = 'Galaxy genotype datatype object'
+    #     if not dataset.blurb:
+    #         dataset.blurb = 'Composite file - Neo4j Galaxy toolkit'
+    #     return True
 
     def set_peek(self, dataset, is_multi_byte=False):
         """Set the peek and blurb text"""
