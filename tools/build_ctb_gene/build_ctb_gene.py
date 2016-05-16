@@ -50,7 +50,7 @@ def main():
     parser.add_argument('--port')
     args = parser.parse_args()
 
-    export_cmd = "export NEO4J_REST_URL=http://${neo4j_db_username}:${neo4j_db_password}@${neo4j_db_url}:${neo4j_db_port}/db/data/"
+    export_cmd = "export NEO4J_REST_URL=http://${args.username}:${args.password}@${args.url}:${args.port}/db/data/"
     try:
         os.system(export_cmd)
     except:
