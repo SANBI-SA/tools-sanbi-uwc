@@ -21,43 +21,25 @@ class BuildCtbRunner(object):
         '''
 
         # Check whether the options are specified and saves them into the object
-        assert args != None
+        #assert args != None
         self.args = args
 
     def build_ctb_gene(self, output_file1, output_dir, input_file, mount_point):
-        # cmdline_str = "build_ctb_gene goterms ${}".format(input_file)
+        #cmdline_str = "build_ctb_gene goterms ${}".format(input_file)
+        #cmdline_str = "build_ctb_gene goterms --help"
         cmdline_str = "touch /tmp/foo.bar"
         build_ctb = False
         cmdline_str = self.newSplit(cmdline_str)
         try:
             check_call(cmdline_str)
-            build_ctb = True
+            #build_ctb = True
         except CalledProcessError:
             print("Error running the build_ctb_gene gotermS", file=sys.stderr)
 
-        # Read the files at the mount point and load the html file
-        if build_ctb:
-            files = glob.glob(mount_point)
-            output_file1 = """<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-                            <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
-                            <head> <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-                            <meta name="generator" content="Galaxy %s tool output - see http://g2.trac.bx.psu.edu/" />
-                            <title></title>
-                            <link rel="stylesheet" href="/static/style/base.css" type="text/css" />
-                            </head>
-                            <body>
-                            <div class="toolFormBody">
-                            <table>
-                                <th>Files</th>
-                            """
-            for f in files:
-                output_file1 += "<tr><td>" + f + "</td></tr>"
-            output_file1 += """</table></div></body></html>\n"""
-
         self.copy_output_file_to_dataset()
-        return output_file1
+        self.args.output_file1 = self.args.outputdir
 
-    def newSplit(value):
+    def newSplit(self, value):
         lex = shlex.shlex(value)
         lex.quotes = '"'
         lex.whitespace_split = True
@@ -71,9 +53,12 @@ class BuildCtbRunner(object):
 
         # retrieve neo4j files to the working gx directory
         result_file = glob.glob(self.args.mount_point + '/*')
-        with open(result_file[0], 'rb') as fsrc:
-            with open(self.args.outputdir, 'wb') as fdest:
-                shutil.copyfileobj(fsrc, fdest)
+        for file_name in result_file:
+            shutil.copy(file_name, self.args.outputdir)
+
+        #with open(result_file[0], 'rb') as fsrc:
+            #with open(self.args.outputdir, 'wb') as fdest:
+            #shutil.copy(fsrc, self.args.outputdir)
 
 
 def main():
@@ -103,3 +88,4 @@ def main():
 
 
 if __name__ == "__main__": main()
+

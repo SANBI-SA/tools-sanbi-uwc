@@ -2,13 +2,12 @@
 Neo4j Composite Dataset
 """
 import logging
-import os
 import sys
 
-from galaxy.datatypes.text import Html
+import os
+from galaxy.datatypes.data import Data
+from galaxy.datatypes.images import Html
 from galaxy.datatypes.metadata import MetadataElement
-from galaxy.datatypes.data import get_file_peek
-from galaxy.datatypes.data import Data, Text
 
 gal_Log = logging.getLogger(__name__)
 verbose = True
@@ -70,42 +69,11 @@ class Neo4j(Html):
         """Returns the mime type of the datatype"""
         return 'text/html'
 
-    # def set_meta( self, dataset, **kwd ):
-    #     """
-    #     """
-    #     Html.set_meta( self, dataset, **kwd )
-    #     if not kwd.get('overwrite'):
-    #         if verbose:
-    #             gal_Log.debug('@@@ neostore set_meta called with overwrite = False')
-    #         return True
-    #     try:
-    #         efp = dataset.extra_files_path
-    #     except:
-    #         if verbose:
-    #             gal_Log.debug('@@@neostore set_meta failed %s - dataset %s has no efp ?' % (sys.exc_info()[0], dataset.name))
-    #         return False
-    #     try:
-    #         flist = os.listdir(efp)
-    #     except:
-    #         if verbose:
-    #             gal_Log.debug('@@@neostore set_meta failed %s - dataset %s has no efp ?' % (sys.exc_info()[0], dataset.name))
-    #         return False
-    #     if len(flist) == 0:
-    #         if verbose:
-    #             gal_Log.debug('@@@neostore set_meta failed - %s efp %s is empty?' % (dataset.name, efp))
-    #         return False
-    #     self.regenerate_primary_file(dataset)
-    #     if not dataset.info:
-    #         dataset.info = 'Galaxy genotype datatype object'
-    #     if not dataset.blurb:
-    #         dataset.blurb = 'Composite file - Neo4j Galaxy toolkit'
-    #     return True
-
     def set_peek(self, dataset, is_multi_byte=False):
         """Set the peek and blurb text"""
         if not dataset.dataset.purged:
-            dataset.peek = get_file_peek(dataset.file_name, is_multi_byte=is_multi_byte)
-            dataset.blurb = 'Neo4j database data'
+            dataset.peek = 'Neo4j database (multiple files)'
+            dataset.blurb = 'Neo4j database (multiple files)'
         else:
             dataset.peek = 'file does not exist'
             dataset.blurb = 'file purged from disk'
@@ -126,7 +94,7 @@ class Neo4j(Html):
             # Change nothing - important for the unit tests to access child files:
             return Data.display_data(self, trans, data, preview, filename,
                                      to_ext, size, offset, **kwd)
-        if self.file_ext == "neo4j":
+        if self.file_ext == "neostore":
             title = "This is a NEO4J database"
         msg = ""
         try:
@@ -143,7 +111,7 @@ class Neo4j(Html):
 
 
 class Neo4jDB(Neo4j, Data):
-    """Class for nucleotide BLAST database files."""
+    """Class for neo4jDB database files."""
     file_ext = 'neostore'
 
     def __init__(self, **kwd):
@@ -176,8 +144,6 @@ class Neo4jDB(Neo4j, Data):
         self.add_composite_file('neostore.relationshipgroupstore.db.id', substitute_name_with_metadata='neostore_relationship_group_file', is_binary=True)
         self.add_composite_file('neostore.relationshipstore.db', substitute_name_with_metadata='neostore_relationship_file', is_binary=True)
         self.add_composite_file('neostore.relationshipstore.db.id', substitute_name_with_metadata='neostore_relationship_file', is_binary=True)
-        self.add_composite_file('neostore.relationshiptypestore.db', substitute_name_with_metadata='neostore_relationship_type_file', is_binary=True)
-        self.add_composite_file('neostore.relationshiptypestore.db.id', substitute_name_with_metadata='neostore_relationship_type_file', is_binary=True)
         self.add_composite_file('neostore.relationshiptypestore.db.names', substitute_name_with_metadata='neostore_relationship_type_file', is_binary=True)
         self.add_composite_file('neostore.relationshiptypestore.db.names.id', substitute_name_with_metadata='neostore_relationship_type_file', is_binary=True)
         self.add_composite_file('neostore.schemastore.db', substitute_name_with_metadata='neostore_schema_store_file', is_binary=True)
@@ -187,3 +153,5 @@ class Neo4jDB(Neo4j, Data):
 if __name__ == '__main__':
     import doctest
     doctest.testmod(sys.modules[__name__])
+
+
