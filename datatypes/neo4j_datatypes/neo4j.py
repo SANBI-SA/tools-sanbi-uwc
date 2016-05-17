@@ -29,7 +29,8 @@ class Neo4j(Html):
     MetadataElement( name="neostore_schema_store_file", default=None, desc="Neostore Schema Store File", readonly=True, visible=True, no_value=None)
     MetadataElement( name="neostore_transaction_db_file", default=None, desc="Neostore Transaction File", readonly=True, visible=True, no_value=None)
 
-    composite_type = 'auto_primary_file'
+    #composite_type = 'auto_primary_file'
+    composite_type = 'basic'
     allow_datatype_change = False
     file_ext = 'neo4j'
 

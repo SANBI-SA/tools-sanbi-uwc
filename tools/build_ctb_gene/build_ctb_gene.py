@@ -24,15 +24,13 @@ class BuildCtbRunner(object):
         #assert args != None
         self.args = args
 
-    def build_ctb_gene(self, output_file1, output_dir, input_file, mount_point):
+    def build_ctb_gene(self):
         #cmdline_str = "build_ctb_gene goterms ${}".format(input_file)
         #cmdline_str = "build_ctb_gene goterms --help"
-        cmdline_str = "touch /tmp/foo.bar"
-        build_ctb = False
+        cmdline_str = "touch /tmp/foo.bar >> %s" %self.args.outputdir
         cmdline_str = self.newSplit(cmdline_str)
         try:
             check_call(cmdline_str)
-            #build_ctb = True
         except CalledProcessError:
             print("Error running the build_ctb_gene gotermS", file=sys.stderr)
 
@@ -84,8 +82,7 @@ def main():
         os.makedirs(args.outputdir)
 
     ctb_gene_runner = BuildCtbRunner(args)
-    ctb_gene_runner.build_ctb_gene(args.output_file1, args.outputdir, args.input_file, args.mount_point)
-
+    ctb_gene_runner.build_ctb_gene()
 
 if __name__ == "__main__": main()
 
