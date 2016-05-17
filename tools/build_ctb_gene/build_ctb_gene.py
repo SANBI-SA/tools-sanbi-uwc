@@ -27,15 +27,18 @@ class BuildCtbRunner(object):
     def build_ctb_gene(self):
         #cmdline_str = "build_ctb_gene goterms ${}".format(input_file)
         #cmdline_str = "build_ctb_gene goterms --help"
-        cmdline_str = "touch /tmp/foo.bar >> %s" %self.args.outputdir
+        cmdline_str = "touch /tmp/foo.bar"
+        build_ctb = False
         cmdline_str = self.newSplit(cmdline_str)
         try:
             check_call(cmdline_str)
+            #build_ctb = True
         except CalledProcessError:
             print("Error running the build_ctb_gene gotermS", file=sys.stderr)
 
         self.copy_output_file_to_dataset()
-        self.args.output_file1 = self.args.outputdir
+        #self.args.outputdir = "<html><body>The Output of the Neo4J DB</body></html>"
+        #return self.args.outputdir
 
     def newSplit(self, value):
         lex = shlex.shlex(value)
@@ -48,7 +51,6 @@ class BuildCtbRunner(object):
         '''
         Retrieves the output files from the output directory and copies them to the Galaxy output files
         '''
-
         # retrieve neo4j files to the working gx directory
         result_file = glob.glob(self.args.mount_point + '/*')
         for file_name in result_file:
@@ -61,7 +63,7 @@ class BuildCtbRunner(object):
 
 def main():
     parser = argparse.ArgumentParser(description="Tool used to extract data about genes using locus_tags")
-    parser.add_argument('output_file1')
+    #parser.add_argument('--outputfile')
     parser.add_argument('--outputdir')
     parser.add_argument('--input_file')
     parser.add_argument('--mount_point')
@@ -84,5 +86,5 @@ def main():
     ctb_gene_runner = BuildCtbRunner(args)
     ctb_gene_runner.build_ctb_gene()
 
-if __name__ == "__main__": main()
 
+if __name__ == "__main__": main()

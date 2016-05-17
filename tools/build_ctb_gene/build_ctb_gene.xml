@@ -9,8 +9,7 @@
         <exit_code range="1:" />
     </stdio>
     <command interpreter="python">
-        build_ctb_gene.py '${outputFile1}' --outputdir ${outputFile2} --input_file ${input_file} --mount_point ${neo4j_data_mount_point} --username ${db_settings.neo4j_db_username} --password ${db_settings.neo4j_db_password} --url ${db_settings.neo4j_db_url} --port ${db_settings.neo4j_db_port}
-
+        build_ctb_gene.py --outputdir "${os.path.join($outputFile1.files_path,'neo4jdb')}" --input_file ${input_file} --mount_point ${neo4j_data_mount_point} --username ${db_settings.neo4j_db_username} --password ${db_settings.neo4j_db_password} --url ${db_settings.neo4j_db_url} --port ${db_settings.neo4j_db_port}
     </command>
     <inputs>
         <param name="input_file" type="data" format="gff" label="Choose the GFF file" help="Specify the GFF file" optional="False" />
@@ -23,8 +22,7 @@
         </section>
     </inputs>
     <outputs>
-        <data format="neo4j" name="outputFile1"/>
-        <data format="neostore" name="outputFile2"/>
+        <data format="neostore" name="outputFile1"/>
     </outputs>
     <help>Help!</help>
     <citations>
