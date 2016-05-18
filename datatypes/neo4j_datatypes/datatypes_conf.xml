@@ -4,8 +4,8 @@
         <datatype_file name="neo4j.py"/>
     </datatype_files>
     <registration>
-        <datatype extension="neo4j" type="galaxy.datatypes.neo4j:Neo4j" mimetype="text/html"  display_in_upload="false"/>
-        <datatype extension="neostore" type="galaxy.datatypes.neo4j:Neo4jDB" mimetype="text/html"  display_in_upload="false"/>
+        <datatype extension="neo4j" type="galaxy.datatypes.neo4j:Neo4j"  display_in_upload="false"/>
+        <datatype extension="neostore" type="galaxy.datatypes.neo4j:Neo4jDB"   display_in_upload="false"/>
     </registration>
     <sniffers>
         <sniffer type="galaxy.datatypes.neo4j:Neo4j"/>
