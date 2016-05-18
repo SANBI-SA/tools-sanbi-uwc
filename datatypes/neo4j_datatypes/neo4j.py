@@ -2,16 +2,13 @@
 Neo4j Composite Dataset
 """
 import logging
-import os
 import sys
 
-from galaxy.datatypes.images import Html
-from galaxy.datatypes.metadata import MetadataElement
-from galaxy.datatypes.data import get_file_peek
 from galaxy.datatypes.data import Data, Text
 
 gal_Log = logging.getLogger(__name__)
 verbose = True
+
 
 class Neo4j(object):
     """
@@ -19,6 +16,8 @@ class Neo4j(object):
     derived from html - composite datatype elements
     stored in extra files path
     """
+    file_ext = 'neo4j'
+
     def get_mime(self):
         """Returns the mime type of the datatype"""
         return 'text/html'
@@ -90,7 +89,7 @@ class Neo4jDB(Neo4j, Data):
         self.add_composite_file('neostore.propertystore.db.arrays', substitute_name_with_metadata='neostore_propertystore_file', is_binary=True)
         self.add_composite_file('neostore.propertystore.db.arrays.id', substitute_name_with_metadata='neostore_propertystore_file', is_binary=True)
         self.add_composite_file('neostore.propertystore.db.index', substitute_name_with_metadata='neostore_propertystore_file', is_binary=True)
-        self.add_composite_file('neostore.propertystore.db.index.id',substitute_name_with_metadata='neostore_propertystore_file', is_binary=True)
+        self.add_composite_file('neostore.propertystore.db.index.id', substitute_name_with_metadata='neostore_propertystore_file', is_binary=True)
         self.add_composite_file('neostore.propertystore.db.index.keys', substitute_name_with_metadata='neostore_propertystore_file', is_binary=True)
         self.add_composite_file('neostore.propertystore.db.index.keys.id', substitute_name_with_metadata='neostore_propertystore_file', is_binary=True)
         self.add_composite_file('neostore.propertystore.db.strings', substitute_name_with_metadata='neostore_propertystore_file', is_binary=True)
@@ -106,6 +105,8 @@ class Neo4jDB(Neo4j, Data):
         self.add_composite_file('neostore.schemastore.db.id', substitute_name_with_metadata='neostore_schema_store_file', is_binary=True)
         self.add_composite_file('neostore.transaction.db.0', substitute_name_with_metadata='neostore_count_file', is_binary=True)
 
+
 if __name__ == '__main__':
     import doctest
+
     doctest.testmod(sys.modules[__name__])
