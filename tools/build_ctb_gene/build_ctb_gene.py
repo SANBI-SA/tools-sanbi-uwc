@@ -55,6 +55,7 @@ class BuildCtbRunner(object):
 
 def main():
     parser = argparse.ArgumentParser(description="Tool used to extract data about genes using locus_tags")
+    parser.add_argument('--outputfile')
     parser.add_argument('--outputdir')
     parser.add_argument('--input_file')
     parser.add_argument('--mount_point')
