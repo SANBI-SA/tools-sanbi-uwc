@@ -7,17 +7,18 @@ import os
 
 from galaxy.datatypes.images import Html
 from galaxy.datatypes.data import Data, Text
-from galaxy.datatypes.metadata import MetadataElement
+#from galaxy.datatypes.metadata import MetadataElement
 
 gal_Log = logging.getLogger(__name__)
 verbose = True
 
 
-class Neo4j(object):
+class Neo4j(Html):
     """
     base class to use for neostore datatypes
     derived from html - composite datatype elements
     stored in extra files path
+    """
     """
     MetadataElement( name='neostore', default=None, desc='Neo4j NeoStore File', readonly=True, visible=True, set_in_upload=True, no_value=None )
     MetadataElement( name='neostore_count_file', default=None, desc='Neo4j Count File', readonly=True, visible=True, set_in_upload=True, no_value=None )
@@ -50,9 +51,9 @@ class Neo4j(object):
         return "\n".join( rval )
 
     def regenerate_primary_file(self, dataset):
-        """
+
         cannot do this until we are setting metadata
-        """
+
         efp = dataset.extra_files_path
         flist = os.listdir(efp)
         rval = ['<html><head><title>Files for Composite Dataset %s</title></head><body><p/>Composite %s contains:<p/><ul>' % (dataset.name, dataset.name)]
@@ -65,7 +66,7 @@ class Neo4j(object):
         f.write("\n".join( rval ))
         f.write('\n')
         f.close()
-
+    """
 
     def get_mime(self):
         """Returns the mime type of the datatype"""
@@ -115,6 +116,9 @@ class Neo4j(object):
 class Neo4jDB(Neo4j, Data):
     """Class for neo4jDB database files."""
     file_ext = 'neostore'
+    composite_type = 'basic'
+    allow_datatype_change = False
+
 
     def __init__(self, **kwd):
         Data.__init__(self, **kwd)
