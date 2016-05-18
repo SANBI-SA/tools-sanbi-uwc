@@ -4,13 +4,14 @@ Neo4j Composite Dataset
 import logging
 import sys
 
-from galaxy.datatypes.data import Data, Text
+from galaxy.datatypes.images import Html
+from galaxy.datatypes.data import Data, Text, Html
 
 gal_Log = logging.getLogger(__name__)
 verbose = True
 
 
-class Neo4j(object):
+class Neo4j(Html):
     """
     base class to use for neostore datatypes
     derived from html - composite datatype elements
@@ -108,5 +109,6 @@ class Neo4jDB(Neo4j, Data):
 
 if __name__ == '__main__':
     import doctest
+
 
     doctest.testmod(sys.modules[__name__])
