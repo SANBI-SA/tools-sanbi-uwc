@@ -6,6 +6,7 @@ import sys
 import glob
 import shlex
 import shutil
+import datetime
 from subprocess import check_call, CalledProcessError
 
 import logging
@@ -14,31 +15,26 @@ log = logging.getLogger(__name__)
 
 
 class BuildCtbRunner(object):
-
     def __init__(self, args=None):
         '''
         Initializes an object to run CtbRunner in Galaxy.
         '''
-
         # Check whether the options are specified and saves them into the object
-        #assert args != None
+        # assert args != None
         self.args = args
 
     def build_ctb_gene(self):
-        #cmdline_str = "build_ctb_gene goterms ${}".format(input_file)
-        #cmdline_str = "build_ctb_gene goterms --help"
+        # cmdline_str = "build_ctb_gene goterms ${}".format(input_file)
         cmdline_str = "touch /tmp/foo.bar"
-        build_ctb = False
         cmdline_str = self.newSplit(cmdline_str)
+        build_ctb_run = True
         try:
             check_call(cmdline_str)
-            #build_ctb = True
+            build_ctb_run = False
         except CalledProcessError:
-            print("Error running the build_ctb_gene gotermS", file=sys.stderr)
-
-        self.copy_output_file_to_dataset()
-        #self.args.outputdir = "<html><body>The Output of the Neo4J DB</body></html>"
-        #return self.args.outputdir
+            print("Error running the build_ctb_gene goterms", file=sys.stderr)
+        if build_ctb_run:
+            self.copy_output_file_to_dataset()
 
     def newSplit(self, value):
         lex = shlex.shlex(value)
@@ -56,14 +52,9 @@ class BuildCtbRunner(object):
         for file_name in result_file:
             shutil.copy(file_name, self.args.outputdir)
 
-        #with open(result_file[0], 'rb') as fsrc:
-            #with open(self.args.outputdir, 'wb') as fdest:
-            #shutil.copy(fsrc, self.args.outputdir)
-
 
 def main():
     parser = argparse.ArgumentParser(description="Tool used to extract data about genes using locus_tags")
-    #parser.add_argument('--outputfile')
     parser.add_argument('--outputdir')
     parser.add_argument('--input_file')
     parser.add_argument('--mount_point')
@@ -76,15 +67,18 @@ def main():
     export_cmd = "export NEO4J_REST_URL=http://${args.username}:${args.password}@${args.url}:${args.port}/db/data/"
     try:
         os.system(export_cmd)
-    except:
-        log.debug("Error exporting the NEO4J db environmental values")
+    except (OSError, ValueError), e:
+        print("Error exporting the NEO4J db environmental values", e)
 
     # make the output directory
     if not os.path.exists(args.outputdir):
         os.makedirs(args.outputdir)
 
     ctb_gene_runner = BuildCtbRunner(args)
-    ctb_gene_runner.build_ctb_gene()
+    if ctb_gene_runner.build_ctb_gene():
+        print("Building a new DB, current time: %s" % str(datetime.date.today()))
+        print("Noe4j Database Name: http://%s:%s@%s:%s/db/data/" % (args.username, args.password, args.url, args.port))
+        print("GFF File - Input: %s" % str(args.input_file))
 
 
 if __name__ == "__main__": main()
