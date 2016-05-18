@@ -11,7 +11,7 @@ gal_Log = logging.getLogger(__name__)
 verbose = True
 
 
-class Neo4j(Html):
+class Neo4j(object):
     """
     base class to use for neostore datatypes
     derived from html - composite datatype elements
