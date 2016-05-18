@@ -5,8 +5,8 @@ import logging
 import sys
 import os
 
-#from galaxy.datatypes.images import Html
-from galaxy.datatypes.data import Data, Text, Html
+from galaxy.datatypes.images import Html
+from galaxy.datatypes.data import Data, Text
 from galaxy.datatypes.metadata import MetadataElement
 
 gal_Log = logging.getLogger(__name__)
