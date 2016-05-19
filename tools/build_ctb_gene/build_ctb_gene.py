@@ -76,10 +76,10 @@ def main():
         os.makedirs(args.outputdir)
 
     ctb_gene_runner = BuildCtbRunner(args)
-    if ctb_gene_runner.build_ctb_gene():
-        print("Building a new DB, current time: %s" % str(datetime.date.today()))
-        print("Noe4j Database Name: http://%s:%s@%s:%s/db/data/" % (args.username, args.password, args.url, args.port))
-        print("GFF File - Input: %s" % str(args.input_file))
+    ctb_gene_runner.build_ctb_gene()
+    print("Building a new DB, current time: %s" % str(datetime.date.today()))
+    print("Noe4j Database Name: http://%s:%s@%s:%s/db/data/" % (args.username, args.password, args.url, args.port))
+    print("GFF File - Input: %s" % str(args.input_file))
 
 
 if __name__ == "__main__": main()
