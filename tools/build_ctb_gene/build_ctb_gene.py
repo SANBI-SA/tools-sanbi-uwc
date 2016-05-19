@@ -36,7 +36,8 @@ class BuildCtbRunner(object):
         if build_ctb_run:
             self.copy_output_file_to_dataset()
             print("Building a new DB, current time: %s" % str(datetime.date.today()))
-            print("Noe4j Database Name: http://%s:%s@%s:%s/db/data/" % (self.args.username, self.args.password, self.args.url, self.args.port))
+            print("Noe4j Database Name: http://%s:%s@%s:%s/db/data/" % (
+                self.args.username, self.args.password, self.args.url, self.args.port))
             print("GFF File - Input: %s" % str(self.args.input_file))
 
     def newSplit(self, value):
@@ -56,7 +57,9 @@ class BuildCtbRunner(object):
             if os.path.isfile(file_name):
                 shutil.copy2(file_name, self.args.outputdir)
             elif os.path.isdir(file_name):
-                shutil.copytree(file_name, self.args.outputdir)
+                # create the parent dir before copytree
+                os.chdir(self.args.outputdir)
+                shutil.copytree(file_name, file_name.rsplit('/', 1)[-1])
 
 
 def main():
