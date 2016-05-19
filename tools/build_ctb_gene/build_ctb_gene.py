@@ -56,7 +56,7 @@ class BuildCtbRunner(object):
             if os.path.isdir(file_name):
                 shutil.copytree(file_name, self.args.outputdir)
             elif os.path.isfile(file_name):
-                shutil.copy(file_name, self.args.outputdir)
+                shutil.copy2(file_name, self.args.outputdir)
 
 
 def main():
