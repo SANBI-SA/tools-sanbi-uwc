@@ -53,10 +53,10 @@ class BuildCtbRunner(object):
         # retrieve neo4j files to the working gx directory
         result_file = glob.glob(self.args.mount_point + '/*')
         for file_name in result_file:
-            if os.path.isfile(file_name):
-                shutil.copy(file_name, self.args.outputdir)
-            else:
+            if os.path.isdir(file_name):
                 shutil.copytree(file_name, self.args.outputdir)
+            elif os.path.isfile(file_name):
+                shutil.copy(file_name, self.args.outputdir)
 
 
 def main():
