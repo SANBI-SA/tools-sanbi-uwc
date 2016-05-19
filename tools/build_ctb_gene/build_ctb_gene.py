@@ -35,6 +35,9 @@ class BuildCtbRunner(object):
             print("Error running the build_ctb_gene goterms", file=sys.stderr)
         if build_ctb_run:
             self.copy_output_file_to_dataset()
+            print("Building a new DB, current time: %s" % str(datetime.date.today()))
+            print("Noe4j Database Name: http://%s:%s@%s:%s/db/data/" % (self.args.username, self.args.password, self.args.url, self.args.port))
+            print("GFF File - Input: %s" % str(self.args.input_file))
 
     def newSplit(self, value):
         lex = shlex.shlex(value)
@@ -77,9 +80,6 @@ def main():
 
     ctb_gene_runner = BuildCtbRunner(args)
     ctb_gene_runner.build_ctb_gene()
-    print("Building a new DB, current time: %s" % str(datetime.date.today()))
-    print("Noe4j Database Name: http://%s:%s@%s:%s/db/data/" % (args.username, args.password, args.url, args.port))
-    print("GFF File - Input: %s" % str(args.input_file))
 
 
 if __name__ == "__main__": main()
