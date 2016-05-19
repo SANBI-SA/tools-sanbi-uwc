@@ -27,10 +27,10 @@ class BuildCtbRunner(object):
         # cmdline_str = "build_ctb_gene goterms ${}".format(input_file)
         cmdline_str = "touch /tmp/foo.bar"
         cmdline_str = self.newSplit(cmdline_str)
-        build_ctb_run = True
+        build_ctb_run = False
         try:
             check_call(cmdline_str)
-            build_ctb_run = False
+            build_ctb_run = True
         except CalledProcessError:
             print("Error running the build_ctb_gene goterms", file=sys.stderr)
         if build_ctb_run:
@@ -50,7 +50,7 @@ class BuildCtbRunner(object):
         # retrieve neo4j files to the working gx directory
         result_file = glob.glob(self.args.mount_point + '/*')
         for file_name in result_file:
-            shutil.copy(file_name, self.args.outputdir)
+            shutil.copytree(file_name, self.args.outputdir)
 
 
 def main():
