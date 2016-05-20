@@ -24,8 +24,8 @@ class BuildCtbRunner(object):
         self.args = args
 
     def build_ctb_gene(self):
-        # cmdline_str = "build_ctb_gene goterms ${}".format(input_file)
-        cmdline_str = "touch /tmp/foo.bar"
+        cmdline_str = "build_ctb_gene goterms ${}".format(input_file)
+        #cmdline_str = "touch /tmp/foo.bar"
         cmdline_str = self.newSplit(cmdline_str)
         build_ctb_run = False
         try:
