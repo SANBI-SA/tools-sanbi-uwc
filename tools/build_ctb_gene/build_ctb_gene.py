@@ -61,6 +61,9 @@ class BuildCtbRunner(object):
                 os.chdir(self.args.outputdir)
                 shutil.copytree(file_name, file_name.rsplit('/', 1)[-1])
 
+    def docker_boot(self):
+        cmd = 'docker run -d --name build_ctb_gene thoba/neo4j_galaxy_ie'
+        check_call(cmd)
 
 def main():
     parser = argparse.ArgumentParser(description="Tool used to extract data about genes using locus_tags")
@@ -74,6 +77,14 @@ def main():
     parser.add_argument('--port')
     args = parser.parse_args()
 
+    ctb_gene_runner = BuildCtbRunner(args)
+    ctb_gene_runner.build_ctb_gene()
+
+    # boot up a neo4j docker container
+    ctb_gene_runner.docker_boot()
+
+    # docker_cmd = 'docker run '
+
     export_cmd = "export NEO4J_REST_URL=http://${args.username}:${args.password}@${args.url}:${args.port}/db/data/"
     try:
         os.system(export_cmd)
@@ -84,8 +95,6 @@ def main():
     if not os.path.exists(args.outputdir):
         os.makedirs(args.outputdir)
 
-    ctb_gene_runner = BuildCtbRunner(args)
-    ctb_gene_runner.build_ctb_gene()
 
 
 if __name__ == "__main__": main()

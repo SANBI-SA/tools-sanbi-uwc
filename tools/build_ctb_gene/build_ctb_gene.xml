@@ -13,13 +13,13 @@
     </command>
     <inputs>
         <param name="input_file" type="data" format="gff" label="Choose the GFF file" help="Specify the GFF file" optional="False" />
-        <param type="text" name="neo4j_data_mount_point" value="" label="Neo4j data mount point" place-holder="/mnt/neo4j/data/lib" optional="False" />
-        <section name="db_settings" title="Neo4j Backend Database Settings" expanded="True">
+        <!--<param type="text" name="neo4j_data_mount_point" value="" label="Neo4j data mount point" place-holder="/mnt/neo4j/data/lib" optional="False" /> -->
+        <!--<section name="db_settings" title="Neo4j Backend Database Settings" expanded="True">
             <param type="text" name="neo4j_db_url" value="" label="Neo4j database URL" optional="False" />
             <param type="text" name="neo4j_db_port" value="" label="Neo4j database port" optional="False" />
             <param type="text" name="neo4j_db_username" value="" label="Neo4j database username" optional="False" />
             <param type="text" name="neo4j_db_password" value="" label="Neo4j database password" optional="False" />
-        </section>
+        </section>-->
     </inputs>
     <outputs>
         <data format="neostore" name="outputFile1"/>
