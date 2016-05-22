@@ -24,10 +24,10 @@ class BuildCtbRunner(object):
         # Check whether the options are specified and saves them into the object
         # assert args != None
         self.args = args
-        self.mount_point = "database/neo4j/data"
+        self.mount_point = None
 
     def build_ctb_gene(self):
-        #cmdline_str = "build_ctb_gene goterms {}".format(self.args.input_file)
+        # cmdline_str = "build_ctb_gene goterms {}".format(self.args.input_file)
         cmdline_str = "touch /tmp/foo.bar"
         cmdline_str = self.newSplit(cmdline_str)
         build_ctb_run = False
@@ -39,7 +39,7 @@ class BuildCtbRunner(object):
         if build_ctb_run:
             self.copy_output_file_to_dataset()
             print("Building a new DB, current time: %s" % str(datetime.date.today()))
-            #print("Noe4j Database Name: http://%s:%s@%s:%s/db/data/" % (
+            # print("Noe4j Database Name: http://%s:%s@%s:%s/db/data/" % (
             #    self.args.username, self.args.password, self.args.url, self.args.port))
             print("GFF File - Input: %s" % str(self.args.input_file))
 
@@ -55,8 +55,8 @@ class BuildCtbRunner(object):
         Retrieves the output files from the output directory and copies them to the Galaxy output files
         '''
         # retrieve neo4j files to the working gx directory
-        mount_point = str(os.getcwd) + "/neo4j/data/graph.db"
-        result_file = glob.glob( mount_point + '/*')
+        mp = self.mount_point + "/graph.db"
+        result_file = glob.glob(mp + '/*')
         for file_name in result_file:
             if os.path.isfile(file_name):
                 shutil.copy2(file_name, self.args.outputdir)
@@ -72,15 +72,16 @@ class BuildCtbRunner(object):
             check_call(stop_cmd_str)
         except CalledProcessError:
             print("Error running docker stop build_ctb_gene", file=sys.stderr)
-        
+
     def docker_rm(self):
         cmd_str = 'docker rm build_ctb_gene'
         cmd = self.newSplit(cmd_str)
         check_call(cmd)
 
     def docker_run(self):
-        rand_number = random.randrange(0, 1000, 2)
-        cmd_str = "docker run -d -p 7474:7474 -v {}/neo4j/data:/data -e NEO4J_AUTH=none --name build_ctb_gene neo4j:2.3".format(os.getcwd())
+        self.mount_point = "{}/neo4j/data".format(os.getcwd())
+        cmd_str = "docker run -d -p 7474:7474 -v {}:/data -e NEO4J_AUTH=none --name build_ctb_gene neo4j:2.3".format(
+            self.mount_point)
         cmd = self.newSplit(cmd_str)
         check_call(cmd)
 
@@ -95,16 +96,17 @@ class BuildCtbRunner(object):
             return True
         return False
 
+
 def main():
     parser = argparse.ArgumentParser(description="Tool used to extract data about genes using locus_tags")
-    #parser.add_argument('--outputfile')
+    # parser.add_argument('--outputfile')
     parser.add_argument('--outputdir')
     parser.add_argument('--input_file')
-    #parser.add_argument('--mount_point')
-    #parser.add_argument('--username')
-    #parser.add_argument('--password')
-    #parser.add_argument('--url')
-    #parser.add_argument('--port')
+    # parser.add_argument('--mount_point')
+    # parser.add_argument('--username')
+    # parser.add_argument('--password')
+    # parser.add_argument('--url')
+    # parser.add_argument('--port')
     args = parser.parse_args()
 
     ctb_gene_runner = BuildCtbRunner(args)
@@ -114,7 +116,7 @@ def main():
         ctb_gene_runner.docker_stop()
         ctb_gene_runner.docker_rm()
     ctb_gene_runner.docker_run()
-    
+
     # TODO: randomise the ports/names/mount_point and use the autokill image
     export_cmd = "export NEO4J_REST_URL=http://localhost:7474/db/data/"
     try:
