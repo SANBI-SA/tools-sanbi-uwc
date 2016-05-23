@@ -8,7 +8,6 @@ import shlex
 import shutil
 import datetime
 import time
-import random
 from subprocess import check_call, check_output, CalledProcessError
 
 import logging
@@ -99,14 +98,8 @@ class BuildCtbRunner(object):
 
 def main():
     parser = argparse.ArgumentParser(description="Tool used to extract data about genes using locus_tags")
-    # parser.add_argument('--outputfile')
     parser.add_argument('--outputdir')
     parser.add_argument('--input_file')
-    # parser.add_argument('--mount_point')
-    # parser.add_argument('--username')
-    # parser.add_argument('--password')
-    # parser.add_argument('--url')
-    # parser.add_argument('--port')
     args = parser.parse_args()
 
     ctb_gene_runner = BuildCtbRunner(args)
