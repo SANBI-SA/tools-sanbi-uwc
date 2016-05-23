@@ -86,7 +86,7 @@ class BuildCtbRunner(object):
     def docker_run(self):
         self.mount_point = "{}/neo4j/data".format(os.getcwd())
 
-        cmd_str = "docker run -d -P -v {}:/data -e NEO4J_AUTH=none --name {} thoba/neo4j_galaxy_ie".format(
+        cmd_str = "docker run -d -p 7474:7474 -v {}:/data -e NEO4J_AUTH=none --name {} thoba/neo4j_galaxy_ie".format(
             self.mount_point, self.docker_instance_name)
         cmd = self.newSplit(cmd_str)
         try:
@@ -107,12 +107,11 @@ def main():
     ctb_gene_runner.docker_run()
 
     # get the port of the docker container
-    cmd_str = 'docker inspect --format=\'{{(index (index .NetworkSettings.Ports "7474/tcp") 0).HostPort}}\' {}'.format(
+    cmd_str = "docker inspect --format='{{(index (index .NetworkSettings.Ports \"7474/tcp\") 0).HostPort}}' {}".format(
         ctb_gene_runner.docker_instance_name)
 
     # TODO: randomise the ports/names/mount_point and use the autokill image
-    export_cmd = 'export NEO4J_REST_URL=http://localhost:{}/db/data/'.format(
-        inspect_docker(cmd_str)[:-1])
+    export_cmd = 'export NEO4J_REST_URL=http://localhost:7474/db/data/'
     try:
         os.system(export_cmd)
     except (OSError, ValueError), e:
