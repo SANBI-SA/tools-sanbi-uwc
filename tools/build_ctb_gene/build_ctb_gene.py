@@ -8,6 +8,7 @@ import shlex
 import shutil
 import datetime
 import time
+import random
 from subprocess import check_call, check_output, CalledProcessError
 
 import logging
@@ -24,6 +25,7 @@ class BuildCtbRunner(object):
         # assert args != None
         self.args = args
         self.mount_point = None
+        self.docker_instance_name = "build_ctb_gene_" + str(random.randrange(0, 1000, 2))
 
     def build_ctb_gene(self):
         # cmdline_str = "build_ctb_gene goterms {}".format(self.args.input_file)
@@ -72,28 +74,27 @@ class BuildCtbRunner(object):
         except CalledProcessError:
             print("Error running docker stop build_ctb_gene", file=sys.stderr)
 
-    def docker_rm(self):
-        cmd_str = 'docker rm build_ctb_gene'
-        cmd = self.newSplit(cmd_str)
-        check_call(cmd)
-
     def docker_run(self):
         self.mount_point = "{}/neo4j/data".format(os.getcwd())
-        cmd_str = "docker run -d -p 7474:7474 -v {}:/data -e NEO4J_AUTH=none --name build_ctb_gene neo4j:2.3".format(
-            self.mount_point)
-        cmd = self.newSplit(cmd_str)
-        check_call(cmd)
 
-    def docker_container_check(self):
-        cmd_str = 'docker ps -a -f name=build_ctb_gene | grep build_ctb_gene'
-        output = False
+        cmd_str = "docker run -d -P -v {}:/data -e NEO4J_AUTH=none --name {} thoba/neo4j_galaxy_ie".format(
+            self.mount_point, self.docker_instance_name)
+        cmd = self.newSplit(cmd_str)
+        try:
+            check_call(cmd)
+        except CalledProcessError:
+            print("Error running docker run by build_ctb_gene", file=sys.stderr)
+
+    def inspect_docker(self, cmd_str):
+        cmd_str = "docker inspect --format='{{(index (index .NetworkSettings.Ports {}) 0).HostPort}}' {}".format(
+            "7474/tcp", self.docker_instance_name
+        )
+        output = None
         try:
             output = check_output(cmd_str, shell=True)
         except CalledProcessError:
-            print("Error running docker container check", file=sys.stderr)
-        if output:
-            return True
-        return False
+            print("Error running get_docker_port by build_ctb_gene", file=sys.stderr)
+        return output
 
 
 def main():
@@ -105,13 +106,15 @@ def main():
     ctb_gene_runner = BuildCtbRunner(args)
 
     # boot up a neo4j docker container
-    if ctb_gene_runner.docker_container_check():
-        ctb_gene_runner.docker_stop()
-        ctb_gene_runner.docker_rm()
     ctb_gene_runner.docker_run()
 
+    # get the port of the docker container
+    cmd_str = 'docker inspect --format=\'{{(index (index .NetworkSettings.Ports "7474/tcp") 0).HostPort}}\' {}'.format(
+        ctb_gene_runner.docker_instance_name)
+
     # TODO: randomise the ports/names/mount_point and use the autokill image
-    export_cmd = "export NEO4J_REST_URL=http://localhost:7474/db/data/"
+    export_cmd = 'export NEO4J_REST_URL=http://localhost:{}/db/data/'.format(
+        ctb_gene_runner.inspect_docker(cmd_str)[:-1])
     try:
         os.system(export_cmd)
     except (OSError, ValueError), e:
