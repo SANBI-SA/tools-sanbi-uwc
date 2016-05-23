@@ -16,6 +16,15 @@ import logging
 log = logging.getLogger(__name__)
 
 
+def inspect_docker(cmd_str):
+    output = None
+    try:
+        output = check_output(cmd_str, shell=True)
+    except CalledProcessError:
+        print("Error running get_docker_port by build_ctb_gene", file=sys.stderr)
+    return output
+
+
 class BuildCtbRunner(object):
     def __init__(self, args=None):
         '''
@@ -85,17 +94,6 @@ class BuildCtbRunner(object):
         except CalledProcessError:
             print("Error running docker run by build_ctb_gene", file=sys.stderr)
 
-    def inspect_docker(self, cmd_str):
-        cmd_str = "docker inspect --format='{{(index (index .NetworkSettings.Ports {}) 0).HostPort}}' {}".format(
-            "7474/tcp", self.docker_instance_name
-        )
-        output = None
-        try:
-            output = check_output(cmd_str, shell=True)
-        except CalledProcessError:
-            print("Error running get_docker_port by build_ctb_gene", file=sys.stderr)
-        return output
-
 
 def main():
     parser = argparse.ArgumentParser(description="Tool used to extract data about genes using locus_tags")
@@ -114,7 +112,7 @@ def main():
 
     # TODO: randomise the ports/names/mount_point and use the autokill image
     export_cmd = 'export NEO4J_REST_URL=http://localhost:{}/db/data/'.format(
-        ctb_gene_runner.inspect_docker(cmd_str)[:-1])
+        inspect_docker(cmd_str)[:-1])
     try:
         os.system(export_cmd)
     except (OSError, ValueError), e:
