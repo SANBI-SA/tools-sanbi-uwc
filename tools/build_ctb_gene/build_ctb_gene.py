@@ -37,8 +37,8 @@ class BuildCtbRunner(object):
         self.docker_instance_name = "build_ctb_gene_" + str(random.randrange(0, 1000, 2))
 
     def build_ctb_gene(self):
-        # cmdline_str = "build_ctb_gene goterms {}".format(self.args.input_file)
-        cmdline_str = "touch /tmp/foo.bar"
+        cmdline_str = "build_ctb_gene goterms {}".format(self.args.input_file)
+        #cmdline_str = "touch /tmp/foo.bar"
         cmdline_str = self.newSplit(cmdline_str)
         build_ctb_run = False
         try:
@@ -46,12 +46,12 @@ class BuildCtbRunner(object):
             build_ctb_run = True
         except CalledProcessError:
             print("Error running the build_ctb_gene goterms", file=sys.stderr)
-        if build_ctb_run:
-            self.copy_output_file_to_dataset()
-            print("Building a new DB, current time: %s" % str(datetime.date.today()))
-            # print("Noe4j Database Name: http://%s:%s@%s:%s/db/data/" % (
-            #    self.args.username, self.args.password, self.args.url, self.args.port))
-            print("GFF File - Input: %s" % str(self.args.input_file))
+            if build_ctb_run:
+                self.copy_output_file_to_dataset()
+                print("Building a new DB, current time: %s" % str(datetime.date.today()))
+                # print("Noe4j Database Name: http://%s:%s@%s:%s/db/data/" % (
+                #    self.args.username, self.args.password, self.args.url, self.args.port))
+                print("GFF File - Input: %s" % str(self.args.input_file))
 
     def newSplit(self, value):
         lex = shlex.shlex(value)
@@ -110,12 +110,12 @@ def main():
     cmd_str = "docker inspect --format='{{(index (index .NetworkSettings.Ports \"7474/tcp\") 0).HostPort}}' %s" % ctb_gene_runner.docker_instance_name
 
     # TODO: randomise the ports/names/mount_point and use the autokill image
-    export_cmd = 'export NEO4J_REST_URL=http://localhost:{}/db/data/'.format(
+    neo4j_url = 'http://localhost:{}/db/data/'.format(
               inspect_docker(cmd_str)[:-1])
     try:
-        os.system(export_cmd)
+        os.environ["NEO4J_REST_URL"] = neo4j_url
     except (OSError, ValueError), e:
-        print("Error exporting the NEO4J db environmental values", e)
+        print("Error setting the NEO4J db environmental values", e)
 
     # make the output directory
     if not os.path.exists(args.outputdir):
