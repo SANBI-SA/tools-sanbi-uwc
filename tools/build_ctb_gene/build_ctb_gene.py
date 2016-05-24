@@ -86,7 +86,7 @@ class BuildCtbRunner(object):
     def docker_run(self):
         self.mount_point = "{}/neo4j/data".format(os.getcwd())
 
-        cmd_str = "docker run -d -P -v {}:/data -e NEO4J_AUTH=none --name {} thoba/neo4j_galaxy_ie".format(
+        cmd_str = "docker run -d -P -v {}:/data -e NEO4J_AUTH=none --name {} neo4j:2.3".format(
             self.mount_point, self.docker_instance_name)
         cmd = self.newSplit(cmd_str)
         try:
