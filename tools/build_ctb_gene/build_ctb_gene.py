@@ -27,9 +27,9 @@ def inspect_docker(cmd_str):
 
 class BuildCtbRunner(object):
     def __init__(self, args=None):
-        '''
+        """
         Initializes an object to run CtbRunner in Galaxy.
-        '''
+        """
         # Check whether the options are specified and saves them into the object
         # assert args != None
         self.args = args
@@ -38,7 +38,6 @@ class BuildCtbRunner(object):
 
     def build_ctb_gene(self):
         cmdline_str = "build_ctb_gene test {}".format(self.args.input_file)
-        #cmdline_str = "touch /tmp/foo.bar"
         cmdline_str = self.newSplit(cmdline_str)
         build_ctb_run = False
         try:
@@ -46,12 +45,10 @@ class BuildCtbRunner(object):
             build_ctb_run = True
         except CalledProcessError:
             print("Error running the build_ctb_gene goterms", file=sys.stderr)
-            if build_ctb_run:
-                self.copy_output_file_to_dataset()
-                print("Building a new DB, current time: %s" % str(datetime.date.today()))
-                # print("Noe4j Database Name: http://%s:%s@%s:%s/db/data/" % (
-                #    self.args.username, self.args.password, self.args.url, self.args.port))
-                print("GFF File - Input: %s" % str(self.args.input_file))
+        if build_ctb_run:
+            self.copy_output_file_to_dataset()
+            print("Building a new DB, current time: %s" % str(datetime.date.today()))
+            print("GFF File - Input: %s" % str(self.args.input_file))
 
     def newSplit(self, value):
         lex = shlex.shlex(value)
@@ -61,9 +58,9 @@ class BuildCtbRunner(object):
         return list(lex)
 
     def copy_output_file_to_dataset(self):
-        '''
-        Retrieves the output files from the output directory and copies them to the Galaxy output files
-        '''
+        """
+        Retrieves the output files from the gx working directory and copy them to the Galaxy output directory
+        """
         # retrieve neo4j files to the working gx directory
         mp = self.mount_point + "/graph.db"
         result_file = glob.glob(mp + '/*')
@@ -86,7 +83,7 @@ class BuildCtbRunner(object):
     def docker_run(self):
         self.mount_point = "{}/neo4j/data".format(os.getcwd())
 
-        cmd_str = "docker run -d -P -v {}:/data -e NEO4J_AUTH=none --name {} neo4j:2.3".format(
+        cmd_str = "docker run -d -P -v {}:/data -e NEO4J_AUTH=none --name {} thoba/galaxy_neo4j_ie".format(
             self.mount_point, self.docker_instance_name)
         cmd = self.newSplit(cmd_str)
         try:
@@ -109,7 +106,7 @@ def main():
     # get the port of the docker container
     cmd_str = "docker inspect --format='{{(index (index .NetworkSettings.Ports \"7474/tcp\") 0).HostPort}}' %s" % ctb_gene_runner.docker_instance_name
 
-    # TODO: randomise the ports/names/mount_point and use the autokill image
+    # TODO: randomise the ports/names/mount_point and use the auto kill image
     neo4j_url = 'http://localhost:{}/db/data/'.format(
               inspect_docker(cmd_str)[:-1])
     try:
@@ -120,6 +117,7 @@ def main():
     # make the output directory
     if not os.path.exists(args.outputdir):
         os.makedirs(args.outputdir)
+
     time.sleep(60)
     ctb_gene_runner.build_ctb_gene()
 
