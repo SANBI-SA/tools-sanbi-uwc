@@ -10,7 +10,11 @@ import datetime
 import time
 import random
 from subprocess import check_call, check_output, CalledProcessError
-
+import socket
+try:
+    from urllib.parse import urlparse
+except ImportError:
+    from urlparse import urlparse
 import logging
 
 log = logging.getLogger(__name__)
@@ -22,6 +26,7 @@ def inspect_docker(cmd_str):
         output = check_output(cmd_str, shell=True)
     except CalledProcessError:
         print("Error running get_docker_port by build_ctb_gene", file=sys.stderr)
+        exit(1)
     return output
 
 
@@ -39,13 +44,12 @@ class BuildCtbRunner(object):
     def build_ctb_gene(self):
         cmdline_str = "build_ctb_gene test {}".format(self.args.input_file)
         cmdline_str = self.newSplit(cmdline_str)
-        build_ctb_run = False
         try:
             check_call(cmdline_str)
-            build_ctb_run = True
         except CalledProcessError:
             print("Error running the build_ctb_gene goterms", file=sys.stderr)
-        if build_ctb_run:
+            exit(1)
+        else:
             self.copy_output_file_to_dataset()
             print("Building a new DB, current time: %s" % str(datetime.date.today()))
             print("GFF File - Input: %s" % str(self.args.input_file))
@@ -79,9 +83,14 @@ class BuildCtbRunner(object):
             check_call(stop_cmd_str)
         except CalledProcessError:
             print("Error running docker stop build_ctb_gene", file=sys.stderr)
+            exit(1)
 
     def docker_run(self):
         self.mount_point = "{}/neo4j/data".format(os.getcwd())
+        try:
+            os.makedirs(self.mount_point)
+        except os.error as e:
+            print("Error creating mount point {mount_point}: {error}".format(mount_point=self.mount_point, error=e.strerror))
 
         cmd_str = "docker run -d -P -v {}:/data -e NEO4J_AUTH=none --name {} thoba/neo4j_galaxy_ie".format(
             self.mount_point, self.docker_instance_name)
@@ -118,7 +127,26 @@ def main():
     if not os.path.exists(args.outputdir):
         os.makedirs(args.outputdir)
 
-    time.sleep(60)
+    url = urlparse(neo4j_url)
+    if '@' in url.netloc:
+        (host, port) = url.netloc.split('@')[1].split(':')
+    else:
+        (host, port) = url.netloc.split(':')
+    timeout = int(os.environ.get('NEO4J_WAIT_TIMEOUT', 30)) # time to wait till neo4j
+    connected = False
+    #print('host, port', host, port)
+    while timeout > 0:
+        try:
+            socket.create_connection((host, port), 1)
+        except socket.error:
+            timeout -= 1
+            time.sleep(1)
+        else:
+            connected = True
+            break
+    if not connected:
+        sys.exit('timed out trying to connect to {}'.format(neo4j_url))        
+
     ctb_gene_runner.build_ctb_gene()
 
 
