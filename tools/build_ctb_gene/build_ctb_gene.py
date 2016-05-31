@@ -26,7 +26,7 @@ def inspect_docker(cmd_str):
         output = check_output(cmd_str, shell=True)
     except CalledProcessError:
         print("Error running get_docker_port by build_ctb_gene", file=sys.stderr)
-        exit(1)
+        return None
     return output
 
 
@@ -48,11 +48,12 @@ class BuildCtbRunner(object):
             check_call(cmdline_str)
         except CalledProcessError:
             print("Error running the build_ctb_gene goterms", file=sys.stderr)
-            exit(1)
+            return None
         else:
             self.copy_output_file_to_dataset()
             print("Building a new DB, current time: %s" % str(datetime.date.today()))
             print("GFF File - Input: %s" % str(self.args.input_file))
+            return True
 
     def newSplit(self, value):
         lex = shlex.shlex(value)
@@ -83,7 +84,9 @@ class BuildCtbRunner(object):
             check_call(stop_cmd_str)
         except CalledProcessError:
             print("Error running docker stop build_ctb_gene", file=sys.stderr)
-            exit(1)
+            return None
+        else:
+            return True
 
     def docker_run(self):
         self.mount_point = "{}/neo4j/data".format(os.getcwd())
@@ -116,8 +119,12 @@ def main():
     cmd_str = "docker inspect --format='{{(index (index .NetworkSettings.Ports \"7474/tcp\") 0).HostPort}}' %s" % ctb_gene_runner.docker_instance_name
 
     # TODO: randomise the ports/names/mount_point and use the auto kill image
-    neo4j_url = 'http://localhost:{}/db/data/'.format(
-              inspect_docker(cmd_str)[:-1])
+    neo4j_container_info = inspect_docker(cmd_str)
+    if neo4j_container_info is None:
+        exit(1)
+    else:
+        neo4j_port = neo4j_container_info[:-1]
+    neo4j_url = 'http://localhost:{}/db/data/'.format(neo4j_port)
     try:
         os.environ["NEO4J_REST_URL"] = neo4j_url
     except (OSError, ValueError), e:
@@ -147,7 +154,9 @@ def main():
     if not connected:
         sys.exit('timed out trying to connect to {}'.format(neo4j_url))        
 
-    ctb_gene_runner.build_ctb_gene()
+    status = ctb_gene_runner.build_ctb_gene()
+    if status is None:
+        exit(1)
 
 
 if __name__ == "__main__": main()
