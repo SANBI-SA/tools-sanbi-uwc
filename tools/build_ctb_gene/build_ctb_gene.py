@@ -38,6 +38,7 @@ class BuildCtbRunner(object):
         # Check whether the options are specified and saves them into the object
         # assert args != None
         self.args = args
+        self.outputdir = args.outputdir
         self.mount_point = None
         self.docker_instance_name = "build_ctb_gene_" + str(random.randrange(0, 1000, 2))
 
@@ -50,7 +51,7 @@ class BuildCtbRunner(object):
             print("Error running the build_ctb_gene goterms", file=sys.stderr)
             return None
         else:
-            self.copy_output_file_to_dataset()
+            # self.copy_output_file_to_dataset()
             print("Building a new DB, current time: %s" % str(datetime.date.today()))
             print("GFF File - Input: %s" % str(self.args.input_file))
             return True
@@ -89,7 +90,7 @@ class BuildCtbRunner(object):
             return True
 
     def docker_run(self):
-        self.mount_point = "{}/neo4j/data".format(os.getcwd())
+        self.mount_point = "{}".format(self.outputdir)
         try:
             os.makedirs(self.mount_point)
         except os.error as e:
