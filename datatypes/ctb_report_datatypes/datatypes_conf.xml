@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<datatypes>
+    <datatype_files>
+        <datatype_file name="ctb_report.py"/>
+    </datatype_files>
+    <registration>
+        <datatype extension="ctbreportneo4j" type="galaxy.datatypes.ctb_report:CtbReportsNeo4j" mimetype="text/html"  display_in_upload="false"/>
+        <datatype extension="ctbreportjbrowse" type="galaxy.datatypes.ctb_report:CtbReportsJBrowse" mimetype="text/html"  display_in_upload="false"/>
+    </registration>
+    <sniffers>
+        <sniffer type="galaxy.datatypes.ctb_report:CtbReportsNeo4j"/>
+        <sniffer type="galaxy.datatypes.ctb_report:CtbReportsJBrowse"/>
+    </sniffers>
+</datatypes>

@@ -3,11 +3,10 @@ Neo4j Composite Dataset
 """
 import logging
 import sys
-import os
 
 from galaxy.datatypes.images import Html
 from galaxy.datatypes.data import Data, Text
-#from galaxy.datatypes.metadata import MetadataElement
+from galaxy.datatypes.metadata import MetadataElement
 
 gal_Log = logging.getLogger(__name__)
 verbose = True
@@ -19,6 +18,16 @@ class Neo4j(Html):
     derived from html - composite datatype elements
     stored in extra files path
     """
+    MetadataElement( name='neostore', default=None, desc='Neo4j NeoStore File', readonly=True, visible=True, set_in_upload=True, no_value=None )
+    MetadataElement( name='neostore_count_file', default=None, desc='Neo4j Count File', readonly=True, visible=True, set_in_upload=True, no_value=None )
+    MetadataElement( name="neostore_labeltokenstore_db_file", default=None, desc="Neostore LabelTokenStore File", readonly=True, visible=True, no_value=None )
+    MetadataElement( name="neostore_nodestore_file", default=None, desc="Neostore NodeStore File", readonly=True, visible=True, no_value=None)
+    MetadataElement( name="neostore_propertystore_file", default=None, desc="Neostore Property Store File", readonly=True, visible=True, no_value=None)
+    MetadataElement( name="neostore_relationship_group_file", default=None, desc="Neostore Relationship Group File", readonly=True, visible=True, no_value=None)
+    MetadataElement( name="neostore_relationship_file", default=None, desc="Neostore Relationship File", readonly=True, visible=True, no_value=None)
+    MetadataElement( name="neostore_relationship_type_file", default=None, desc="Neostore Relationship Type File", readonly=True, visible=True, no_value=None)
+    MetadataElement( name="neostore_schema_store_file", default=None, desc="Neostore Schema Store File", readonly=True, visible=True, no_value=None)
+    MetadataElement( name="neostore_transaction_db_file", default=None, desc="Neostore Transaction File", readonly=True, visible=True, no_value=None)
 
     def get_mime(self):
         """Returns the mime type of the datatype"""

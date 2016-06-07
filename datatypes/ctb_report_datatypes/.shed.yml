@@ -1,0 +1,8 @@
+categories:
+- Sequence Analysis
+description: Datatypes for the combat-tb report database.
+long_description: ''
+name: ctb_report_datatypes
+owner: sanbi-uwc
+remote_repository_url: https://github.com/SANBI-SA/tools-sanbi-uwc/tree/master/datatypes/neo4j_datatypes 
+type: unrestricted
