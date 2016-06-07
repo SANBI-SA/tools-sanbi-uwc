@@ -4,9 +4,9 @@
         <datatype_file name="ctb_report.py"/>
     </datatype_files>
     <registration>
-        <datatype extension="ctbreport" type="galaxy.datatypes.ctb_report:CtbReports" mimetype="text/html"  display_in_upload="false"/>
+        <datatype extension="ctbreport" type="galaxy.datatypes.ctb_report:CtbReportSet" mimetype="text/html"  display_in_upload="false"/>
     </registration>
     <sniffers>
-        <sniffer type="galaxy.datatypes.ctb_report:CtbReports"/>
+        <sniffer type="galaxy.datatypes.ctb_report:CtbReportSet"/>
     </sniffers>
 </datatypes>
