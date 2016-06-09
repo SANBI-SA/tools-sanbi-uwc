@@ -7,6 +7,8 @@ import sys
 from galaxy.datatypes.images import Html
 from galaxy.datatypes.data import Data, Text
 from galaxy.datatypes.metadata import MetadataElement
+import shutil
+import os
 
 gal_Log = logging.getLogger(__name__)
 verbose = True
@@ -54,25 +56,26 @@ class Neo4j(Html):
         """Documented as an old display method, but still gets called via tests etc
         This allows us to format the data shown in the central pane via the "eye" icon.
         """
-        if filename is not None and filename != "index":
-            # Change nothing - important for the unit tests to access child files:
-            return Data.display_data(self, trans, data, preview, filename,
-                                     to_ext, size, offset, **kwd)
-        if self.file_ext == "neostore":
-            title = "This is a NEO4J database"
-        msg = ""
-        try:
-            # Try to use any text recorded in the dummy index file:
-            handle = open(data.file_name, "rU")
-            msg = handle.read().strip()
-            handle.close()
-        except Exception:
-            pass
-        if not msg:
-            msg = title
-        # Galaxy assumes HTML for the display of composite datatypes,
-        return "<html><head><title>%s</title></head><body><pre>%s</pre></body></html>" % (title, msg)
+        trans.response.set_content_type(data.get_mime())
+        trans.log_event( "Display dataset id: %s" % str( data.id ) )
 
+        # the target directory name
+        dir_name = str(os.path.dirname( trans.app.object_store.get_filename(data.dataset) )) + '/dataset_{}_files/neo4jdb'.format( data.dataset.id )
+
+        # generate unique filename for this dataset
+        valid_chars = '.,^_-()[]0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'
+        fname = ''.join(c in valid_chars and c or '_' for c in data.name)[0:150]
+
+        # zip the target directory (dir_name) using the fname
+        shutil.make_archive(fname, 'zip', dir_name)
+        download_zip = fname + '.zip'
+
+        # setup headers for the download
+        trans.response.headers['Content-Length'] = int( os.stat( download_zip ).st_size )
+        trans.response.set_content_type( "application/octet-stream" )  # force octet-stream so Safari doesn't append mime extensions to filename
+        trans.response.headers["Content-Disposition"] = 'attachment; filename="Galaxy%s-[%s].%s"' % (data.hid, download_zip , "zip")
+
+        return open( download_zip )
 
 class Neo4jDB(Neo4j, Data):
     """Class for neo4jDB database files."""
