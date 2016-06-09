@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<tool id="build_ctb_explorer" name="Build_ctb_explorer Tool" version="1.0.3">
+    <description> build_ctb_explorer is the tool used to extract data about genes using locus_tags </description>
+    <stdio>
+        <exit_code range=":-1" />
+        <exit_code range="1:" />
+    </stdio>
+    <command interpreter="python">
+        build_ctb_explorer.py --outputdir1 "${os.path.join($outputFile1.files_path,'neo4jdb')}"\
+        --outputdir2 "${os.path.join($outputFile1.files_path,'jbrowser')}" --input_file1 "${input_file1}" --input_file2 "${input_file2}" &gt; ${outputFile1}
+    </command>
+    <inputs>
+        <param name="input_file1" type="data" format="neostore" label="Choose the neo4jdb dataset" help="Specify the neo4jdb file" optional="False" />
+        <param name="input_file2" type="data" format="ctbreport" label="Choose the ctb report dataset" help="Specify the ctb report file" optional="False" />
+    </inputs>
+    <outputs>
+        <data format="ctbreport" name="outputFile1"/>
+    </outputs>
+    <help>Help!</help>
+    <citations>
+        <citation></citation>
+    </citations>
+    <tests>
+        <test>
+        </test>
+    </tests>
+</tool>

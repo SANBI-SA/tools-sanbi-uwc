@@ -1,0 +1,10 @@
+categories:
+- Variant Analysis
+description: build_ctb_explorer s the tool used to explore tb related genes.
+long_description: |
+   build_ctb_explorer is the tool used to explore tb related genes
+   http://www.sanbi.ac.za/combact_tb
+name: build_ctb_explorer
+owner: sanbi-uwc
+remote_repository_url: https://github.com/SANBI-SA/tools-sanbi-uwc/tree/master/tools/build_ctb_explorer
+type: unrestricted
