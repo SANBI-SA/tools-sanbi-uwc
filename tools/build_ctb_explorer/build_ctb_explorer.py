@@ -76,7 +76,7 @@ class BuildCtbExplorerRunner(object):
 
             """Copy the jbrowser input data file to the outputdir @TODO: investigate altenatives"""
             try:
-                shutil.copy2(self.input_jbrowser, self.output_jbrowser)
+                shutil.copy2(self.input_jbrowser, os.path.join(self.output_jbrowser, 'index.html'))
             except shutil.Error as e:
                 log.debug('Error: %s' % e)
             # eg. source or destination doesn't exist
