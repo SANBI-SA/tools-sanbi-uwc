@@ -22,7 +22,7 @@ def copy_output_file_to_dataset(dir_name, input_dir, dt_type=None):
     Copy the datasets file to the news dataset cbt_browser
     :param dir_name: the target output directory for the ctb_explorer dataset
     :param input_dir: the input files
-    :param dt_type: the type of input dataset (neo4jdb, jbrowse - default to None)
+    :param dt_type: the type of input dataset (neo4jdb, jbrowser - default to None)
     :return: boolean
     """
     dt_loc = input_dir.rpartition('/')[2].replace(".dat", "_files")
