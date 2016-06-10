@@ -35,11 +35,23 @@ def copy_output_file_to_dataset(dir_name, input_dir, dt_type=None):
         return False
     for file_name in src_files:
         if os.path.isfile(file_name):
-            shutil.copy2(file_name, dir_name)
+            try:
+                shutil.copy2(file_name, dir_name)
+            except shutil.Error as e:
+                log.debug('Error: %s' % e)
+            # eg. source or destination doesn't exist
+            except IOError as e:
+                log.debug('Error: %s' % e.strerror)
         elif os.path.isdir(file_name):
             # create the parent dir before copytree
-            os.chdir(dir_name)
-            shutil.copytree(file_name, file_name.rsplit('/', 1)[-1])
+            try:
+                os.chdir(dir_name)
+                shutil.copytree(file_name, file_name.rsplit('/', 1)[-1])
+            except shutil.Error as e:
+                log.debug('Error: %s' % e)
+            # eg. source or destination doesn't exist
+            except IOError as e:
+                log.debug('Error: %s' % e.strerror)
     return True
 
 
@@ -61,6 +73,15 @@ class BuildCtbExplorerRunner(object):
         """
         if copy_output_file_to_dataset(self.output_neo4jdb, self.input_neo4jdb, dt_type="neo4jdb") and \
                 copy_output_file_to_dataset(self.output_jbrowser, self.input_jbrowser, dt_type="jbrowser"):
+
+            """Copy the jbrowser input data file to the outputdir @TODO: investigate altenatives"""
+            try:
+                shutil.copy2(self.input_jbrowser, self.output_jbrowser)
+            except shutil.Error as e:
+                log.debug('Error: %s' % e)
+            # eg. source or destination doesn't exist
+            except IOError as e:
+                log.debug('Error: %s' % e.strerror)
             print("CTB Report run time: %s" % str(datetime.date.today()))
             print("Neo4jDB - Input: %s" % str(self.args.input_neo4jdb))
             print("JBrowser - Input: %s" % str(self.args.input_jbrowser))
