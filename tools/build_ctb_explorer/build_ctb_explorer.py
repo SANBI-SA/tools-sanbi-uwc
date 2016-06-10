@@ -1,16 +1,12 @@
 #!/usr/bin/env python
 from __future__ import print_function
+
 import argparse
-import os
-import sys
-import glob
-import shlex
-import shutil
 import datetime
-import time
-import random
-from subprocess import check_call, check_output, CalledProcessError
-import socket
+import glob
+import shutil
+
+import os
 
 try:
     from urllib.parse import urlparse
@@ -21,6 +17,32 @@ import logging
 log = logging.getLogger(__name__)
 
 
+def copy_output_file_to_dataset(dir_name, input_dir, dt_type=None):
+    """
+    Copy the datasets file to the news dataset cbt_browser
+    :param dir_name: the target output directory for the ctb_explorer dataset
+    :param input_dir: the input files
+    :param dt_type: the type of input dataset (neo4jdb, jbrowse - default to None)
+    :return: boolean
+    """
+    dt_loc = input_dir.rpartition('/')[2].replace(".dat", "_files")
+    if dt_type:
+        if dt_type == "neo4jdb":
+            src_files = glob.glob(os.path.dirname(input_dir) + '/{}/{}'.format(dt_loc, dt_type) + "/*" )
+        else:
+            src_files = glob.glob(os.path.dirname(input_dir) + '/{}'.format(dt_loc) + "/*" )
+    else:
+        return False
+    for file_name in src_files:
+        if os.path.isfile(file_name):
+            shutil.copy2(file_name, dir_name)
+        elif os.path.isdir(file_name):
+            # create the parent dir before copytree
+            os.chdir(dir_name)
+            shutil.copytree(file_name, file_name.rsplit('/', 1)[-1])
+    return True
+
+
 class BuildCtbExplorerRunner(object):
     def __init__(self, args=None):
         """
@@ -28,50 +50,42 @@ class BuildCtbExplorerRunner(object):
         """
         # Check whether the options are specified and saves them into the object
         self.args = args
-        self.outputdir1 = args.outputdir1
-        self.outputdir2 = args.outputdir2
-        self.input_file1 = args.input_file1
-        self.input_file2 = args.input_file2
+        self.output_neo4jdb = args.output_neo4jdb
+        self.output_jbrowser = args.output_jbrowser
+        self.input_neo4jdb = args.input_neo4jdb
+        self.input_jbrowser = args.input_jbrowser
 
     def build_ctb_explorer(self):
         """
         :rtype: boolean
         """
-        self.copy_output_file_to_dataset(self.outputdir1, self.input_file1)
-        self.copy_output_file_to_dataset(self.outputdir2, self.input_file2)
+        if copy_output_file_to_dataset(self.output_neo4jdb, self.input_neo4jdb, dt_type="neo4jdb") and \
+                copy_output_file_to_dataset(self.output_jbrowser, self.input_jbrowser, dt_type="jbrowser"):
+            print("CTB Report run time: %s" % str(datetime.date.today()))
+            print("Neo4jDB - Input: %s" % str(self.args.input_neo4jdb))
+            print("JBrowser - Input: %s" % str(self.args.input_jbrowser))
+        else:
+            return False
         return True
-
-    def copy_output_file_to_dataset(self, dir, input_dir):
-        """
-        Retrieves the output files from the gx working directory and copy them to the Galaxy output directory
-        """
-        result_file = glob.glob(input_dir + '/*')
-        for file_name in result_file:
-            if os.path.isfile(file_name):
-                shutil.copy2(file_name, dir)
-            elif os.path.isdir(file_name):
-                # create the parent dir before copytree
-                os.chdir(dir)
-                shutil.copytree(file_name, file_name.rsplit('/', 1)[-1])
 
 
 def main():
     parser = argparse.ArgumentParser(description="Tool used to build a combat-tb explorer dataset")
-    parser.add_argument('--outputdir1')
-    parser.add_argument('--outputdir2')
-    parser.add_argument('--input_file1')
-    parser.add_argument('--input_file2')
+    parser.add_argument('--output_neo4jdb')
+    parser.add_argument('--output_jbrowser')
+    parser.add_argument('--input_neo4jdb')
+    parser.add_argument('--input_jbrowser')
     args = parser.parse_args()
 
     ctb_explorer_runner = BuildCtbExplorerRunner(args)
 
     # make the output directory (neo4j)
-    if not os.path.exists(args.outputdir1):
-        os.makedirs(args.outputdir1)
+    if not os.path.exists(args.output_neo4jdb):
+        os.makedirs(args.output_neo4jdb)
 
     # make the output directory (jbrowser)
-    if not os.path.exists(args.outputdir2):
-        os.makedirs(args.outputdir2)
+    if not os.path.exists(args.output_jbrowser):
+        os.makedirs(args.output_jbrowser)
 
     status = ctb_explorer_runner.build_ctb_explorer()
 

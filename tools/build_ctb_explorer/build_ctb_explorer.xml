@@ -6,12 +6,12 @@
         <exit_code range="1:" />
     </stdio>
     <command interpreter="python">
-        build_ctb_explorer.py --outputdir1 "${os.path.join($outputFile1.files_path,'neo4jdb')}"\
-        --outputdir2 "${os.path.join($outputFile1.files_path,'jbrowser')}" --input_file1 "${input_file1}" --input_file2 "${input_file2}" &gt; ${outputFile1}
+        build_ctb_explorer.py --output_neo4jdb "${os.path.join($outputFile1.files_path,'neo4jdb')}"\
+        --output_jbrowser "${os.path.join($outputFile1.files_path,'jbrowser')}" --input_neo4jdb "${input_neo4jdb}" --input_jbrowser "${input_jbrowser}" &gt; ${outputFile1}
     </command>
     <inputs>
-        <param name="input_file1" type="data" format="neostore" label="Choose the neo4jdb dataset" help="Specify the neo4jdb file" optional="False" />
-        <param name="input_file2" type="data" format="ctbreport" label="Choose the ctb report dataset" help="Specify the ctb report file" optional="False" />
+        <param name="input_neo4jdb" type="data" format="neostore" label="Choose the neo4jdb dataset" help="Specify the neo4jdb file" optional="False" />
+        <param name="input_jbrowser" type="data" format="ctbreport" label="Choose the ctb report dataset" help="Specify the ctb report file" optional="False" />
     </inputs>
     <outputs>
         <data format="ctbreport" name="outputFile1"/>
