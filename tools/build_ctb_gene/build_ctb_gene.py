@@ -43,7 +43,7 @@ class BuildCtbRunner(object):
         self.docker_instance_name = "build_ctb_gene_" + str(random.randrange(0, 1000, 2))
 
     def build_ctb_gene(self):
-        cmdline_str = "build_ctb_gene goterms {}".format(self.args.input_file)
+        cmdline_str = "goget goterms {}".format(self.args.input_file)
         cmdline_str = self.newSplit(cmdline_str)
         try:
             check_call(cmdline_str)
