@@ -96,7 +96,7 @@ class BuildCtbRunner(object):
         except os.error as e:
             print("Error creating mount point {mount_point}: {error}".format(mount_point=self.mount_point, error=e.strerror))
 
-        cmd_str = "docker run --rm -P -v {mount_point}:/data -e NEO4J_UID={uid} -e NEO4J_GID={gid} -e NEO4J_AUTH=none --name {name} thoba/neo4j_galaxy_ie".format(
+        cmd_str = "docker run --rm -P -v {mount_point}:/data -e NEO4J_UID={uid} -e NEO4J_GID={gid} -e NEO4J_AUTH=none --name {name} thoba/neo4j_galaxy_ie:latest".format(
             mount_point=self.mount_point,
             name=self.docker_instance_name,
             uid=os.getuid(),
