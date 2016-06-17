@@ -9,7 +9,7 @@ import shutil
 import datetime
 import time
 import random
-from subprocess import check_call, check_output, CalledProcessError
+from subprocess import check_call, check_output, CalledProcessError, Popen, STDOUT, PIPE
 import socket
 try:
     from urllib.parse import urlparse
@@ -41,6 +41,7 @@ class BuildCtbRunner(object):
         self.outputdir = args.outputdir
         self.mount_point = None
         self.docker_instance_name = "build_ctb_gene_" + str(random.randrange(0, 1000, 2))
+        self.neo4j_proc = None
 
     def build_ctb_gene(self):
         cmdline_str = "goget goterms {}".format(self.args.input_file)
@@ -89,6 +90,16 @@ class BuildCtbRunner(object):
         else:
             return True
 
+    def get_docker_output(self):
+        if self.neo4j_proc is not None:
+            return_code = self.neo4j_proc.wait()
+            (output, _) = self.neo4j_proc.communicate()
+            return 'Return code: {rc}\n{output}'.format(rc=return_code, output=output)
+
+    def shutdown_docker(self):
+        if self.neo4j_proc is not None:
+            self.neo4j_proc.terminate()
+
     def docker_run(self):
         self.mount_point = "{}".format(self.outputdir)
         try:
@@ -96,18 +107,17 @@ class BuildCtbRunner(object):
         except os.error as e:
             print("Error creating mount point {mount_point}: {error}".format(mount_point=self.mount_point, error=e.strerror))
 
-        cmd_str = "docker run -d -P -v {mount_point}:/data -e NEO4J_UID={uid} -e NEO4J_GID={gid} -e NEO4J_AUTH=none --name {name} thoba/neo4j_galaxy_ie:latest".format(
+        cmd_str = "docker run --rm -P -v {mount_point}:/data -e NEO4J_UID={uid} -e NEO4J_GID={gid} -e NEO4J_AUTH=none -e NEO4J_MONITOR_TRAFFIC=false --name {name} thoba/neo4j_galaxy_ie:latest".format(
             mount_point=self.mount_point,
             name=self.docker_instance_name,
             uid=os.getuid(),
             gid=os.getgid(),
         )
         cmd = self.newSplit(cmd_str)
-        try:
-            check_call(cmd)
-        except CalledProcessError:
-            print("Error running docker run by build_ctb_gene", file=sys.stderr)
-
+        self.neo4j_proc = Popen(cmd, stdout=PIPE, stderr=STDOUT)
+        time.sleep(30) # give the container time to wake up
+        if self.neo4j_proc.poll() is not None:
+            raise CalledProcessError("Error running docker run by build_ctb_gene:\n", self.get_docker_output)
 
 def main():
     parser = argparse.ArgumentParser(description="Tool used to extract data about genes using locus_tags")
@@ -119,9 +129,7 @@ def main():
 
     # boot up a neo4j docker container
     ctb_gene_runner.docker_run()
-    # wait for docker containter to be ready
-    time.sleep(30)
-    
+
     # get the port of the docker container
     cmd_str = "docker inspect --format='{{(index (index .NetworkSettings.Ports \"7474/tcp\") 0).HostPort}}' %s" % ctb_gene_runner.docker_instance_name
 
@@ -134,7 +142,7 @@ def main():
     neo4j_url = 'http://localhost:{}/db/data/'.format(neo4j_port)
     try:
         os.environ["NEO4J_REST_URL"] = neo4j_url
-    except (OSError, ValueError), e:
+    except (OSError, ValueError) as e:
         print("Error setting the NEO4J db environmental values", e)
 
     # make the output directory
@@ -162,6 +170,8 @@ def main():
         sys.exit('timed out trying to connect to {}'.format(neo4j_url))        
 
     status = ctb_gene_runner.build_ctb_gene()
+    ctb_gene_runner.shutdown_docker()
+
     if status is None:
         exit(1)
 
