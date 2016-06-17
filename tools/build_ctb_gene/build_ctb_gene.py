@@ -119,7 +119,9 @@ def main():
 
     # boot up a neo4j docker container
     ctb_gene_runner.docker_run()
-
+    # wait for docker containter to be ready
+    time.sleep(30)
+    
     # get the port of the docker container
     cmd_str = "docker inspect --format='{{(index (index .NetworkSettings.Ports \"7474/tcp\") 0).HostPort}}' %s" % ctb_gene_runner.docker_instance_name
 
