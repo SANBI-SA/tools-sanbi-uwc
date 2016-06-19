@@ -44,7 +44,7 @@ class BuildCtbRunner(object):
         self.neo4j_proc = None
 
     def build_ctb_gene(self):
-        cmdline_str = "goget goterms {}".format(self.args.input_file)
+        cmdline_str = "goget goterms {} {}".format(self.args.input_file, self.args.human_interactions)
         cmdline_str = self.newSplit(cmdline_str)
         try:
             check_call(cmdline_str)
@@ -123,6 +123,7 @@ def main():
     parser = argparse.ArgumentParser(description="Tool used to extract data about genes using locus_tags")
     parser.add_argument('--outputdir')
     parser.add_argument('--input_file')
+    parser.add_argument('--human_interactions')
     args = parser.parse_args()
 
     ctb_gene_runner = BuildCtbRunner(args)
