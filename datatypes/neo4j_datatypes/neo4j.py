@@ -20,6 +20,8 @@ class Neo4j(Html):
     derived from html - composite datatype elements
     stored in extra files path
     """
+    def __init__(self):
+         Html.__init__( self, **kwd )
 
     def get_mime(self):
         """Returns the mime type of the datatype"""
@@ -46,26 +48,38 @@ class Neo4j(Html):
         """Documented as an old display method, but still gets called via tests etc
         This allows us to format the data shown in the central pane via the "eye" icon.
         """
-        trans.response.set_content_type(data.get_mime())
-        trans.log_event( "Display dataset id: %s" % str( data.id ) )
+        if preview == False:
+            trans.response.set_content_type(data.get_mime())
+            trans.log_event( "Display dataset id: %s" % str( data.id ) )
 
-        # the target directory name
-        dir_name = str(os.path.dirname( trans.app.object_store.get_filename(data.dataset) )) + '/dataset_{}_files/neo4jdb'.format( data.dataset.id )
+            # the target directory name
+            dir_name = str(os.path.dirname( trans.app.object_store.get_filename(data.dataset) )) + '/dataset_{}_files/neo4jdb'.format( data.dataset.id )
 
-        # generate unique filename for this dataset
-        valid_chars = '.,^_-()[]0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'
-        fname = ''.join(c in valid_chars and c or '_' for c in data.name)[0:150]
+            # generate unique filename for this dataset
+            valid_chars = '.,^_-()[]0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'
+            fname = ''.join(c in valid_chars and c or '_' for c in data.name)[0:150]
 
-        # zip the target directory (dir_name) using the fname
-        shutil.make_archive(fname, 'zip', dir_name)
-        download_zip = fname + '.zip'
+            # zip the target directory (dir_name) using the fname
+            shutil.make_archive(fname, 'zip', dir_name)
+            download_zip = fname + '.zip'
 
-        # setup headers for the download
-        trans.response.headers['Content-Length'] = int( os.stat( download_zip ).st_size )
-        trans.response.set_content_type( "application/octet-stream" )  # force octet-stream so Safari doesn't append mime extensions to filename
-        trans.response.headers["Content-Disposition"] = 'attachment; filename="Galaxy%s-[%s].%s"' % (data.hid, download_zip , "zip")
+            # setup headers for the download
+            trans.response.headers['Content-Length'] = int( os.stat( download_zip ).st_size )
+            trans.response.set_content_type( "application/octet-stream" )  # force octet-stream so Safari doesn't append mime extensions to filename
+            trans.response.headers["Content-Disposition"] = 'attachment; filename="Galaxy%s-[%s].%s"' % (data.hid, download_zip , "zip")
 
-        return open( download_zip )
+            return open( download_zip )
+        else:
+             rval = [
+                '<html><head><title>Files for Composite Dataset (%s)</title></head><p/>\
+                This composite dataset is composed of the following files:<p/><ul>' % (self.file_ext)]
+            for composite_name, composite_file in self.get_composite_files(dataset=data).iteritems():
+                opt_text = ''
+                if composite_file.optional:
+                    opt_text = ' (optional)'
+                rval.append('<li><a href="%s">%s</a>%s' % (composite_name, composite_name, opt_text))
+            rval.append('</ul></html>')
+            return "\n".join(rval)
 
 class Neo4jDB(Neo4j, Data):
     """Class for neo4jDB database files."""
