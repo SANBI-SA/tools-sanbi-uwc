@@ -23,6 +23,23 @@ class Neo4j(Html):
     def __init__(self):
          Html.__init__( self, **kwd )
 
+    def generate_primary_file( self, dataset=None ):
+        """
+        This is called only at upload to write the html file
+        cannot rename the datasets here - they come with the default unfortunately
+        """
+        rval = [
+            '<html><head><title>Files for Composite Dataset (%s)</title></head><p/>\
+            This composite dataset is composed of the following files:<p/><ul>' % (
+                self.file_ext)]
+        for composite_name, composite_file in self.get_composite_files(dataset=dataset).iteritems():
+            opt_text = ''
+            if composite_file.optional:
+                opt_text = ' (optional)'
+            rval.append('<li><a href="%s">%s</a>%s' % (composite_name, composite_name, opt_text))
+        rval.append('</ul></html>')
+        return "\n".join(rval)
+
     def get_mime(self):
         """Returns the mime type of the datatype"""
         return 'text/html'
@@ -69,17 +86,6 @@ class Neo4j(Html):
             trans.response.headers["Content-Disposition"] = 'attachment; filename="Galaxy%s-[%s].%s"' % (data.hid, download_zip , "zip")
 
             return open( download_zip )
-        else:
-             rval = [
-                '<html><head><title>Files for Composite Dataset (%s)</title></head><p/>\
-                This composite dataset is composed of the following files:<p/><ul>' % (self.file_ext)]
-            for composite_name, composite_file in self.get_composite_files(dataset=data).iteritems():
-                opt_text = ''
-                if composite_file.optional:
-                    opt_text = ' (optional)'
-                rval.append('<li><a href="%s">%s</a>%s' % (composite_name, composite_name, opt_text))
-            rval.append('</ul></html>')
-            return "\n".join(rval)
 
 class Neo4jDB(Neo4j, Data):
     """Class for neo4jDB database files."""
