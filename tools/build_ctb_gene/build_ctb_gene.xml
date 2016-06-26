@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<tool id="build_ctb_gene" name="Build_ctb_gene Tool" version="1.0.3">
+<tool id="build_ctb_gene" name="Build_ctb_gene Tool" version="1.2.0">
     <requirements>
-       <requirement type="package" version="0.1">build_ctb_gene_neo4j</requirement>
+       <requirement type="package" version="0.0.3">goget</requirement>
     </requirements>
     <description> build_ctb_gene is the tool used to extract data about genes using locus_tags </description>
     <stdio>
@@ -9,10 +9,11 @@
         <exit_code range="1:" />
     </stdio>
     <command interpreter="python">
-        build_ctb_gene.py --outputdir "${os.path.join($outputFile1.files_path,'neo4jdb')}" --input_file "${input_file}" &gt; ${outputFile1}
+        build_ctb_gene.py --outputdir "${os.path.join($outputFile1.files_path,'neo4jdb')}" --input_file "${input_file}" --human_interactions "${human_interactions}" &gt; ${outputFile1}
     </command>
     <inputs>
         <param name="input_file" type="data" format="gff" label="Choose the GFF file" help="Specify the GFF file" optional="False" />
+        <param name="human_interactions" type="data" format="tabular" label="Choose Human-MTB interation file" optional="False" />
     </inputs>
     <outputs>
         <data format="neostore" name="outputFile1"/>
