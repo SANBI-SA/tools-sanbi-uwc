@@ -90,7 +90,7 @@ class Neo4j(Html):
 class Neo4jDB(Neo4j, Data):
     """Class for neo4jDB database files."""
     file_ext = 'neostore'
-    composite_type = 'basic'
+    composite_type = 'auto_primary_file'
     allow_datatype_change = False
 
 
