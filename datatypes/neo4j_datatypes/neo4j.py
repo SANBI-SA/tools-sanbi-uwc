@@ -20,8 +20,8 @@ class Neo4j(Html):
     derived from html - composite datatype elements
     stored in extra files path
     """
-    def __init__(self):
-         Html.__init__( self, **kwd )
+    #def __init__(self):
+    #     Html.__init__( self, **kwd )
 
     def generate_primary_file( self, dataset=None ):
         """
