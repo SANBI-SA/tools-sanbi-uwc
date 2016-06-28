@@ -9,7 +9,7 @@
         <exit_code range="1:" />
     </stdio>
     <command><![CDATA[
-        python build_ctb_gene.py --outputdir "${os.path.join($outputFile1.files_path,'neo4jdb')}" --input_file "${input_file}" --human_interactions "${human_interactions}" > ${outputFile1}
+        python $__tool_directory__/build_ctb_gene.py --outputdir "${os.path.join($outputFile1.files_path,'neo4jdb')}" --input_file "${input_file}" --human_interactions "${human_interactions}" > ${outputFile1}
         ]]>
     </command>
     <inputs>
