@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<tool id="build_ctb_gene" name="Build_ctb_gene Tool" version="1.2.0">
+<tool id="build_ctb_gene" name="Build_ctb_gene Tool" version="0.0.3">
     <requirements>
        <requirement type="package" version="0.0.3">goget</requirement>
     </requirements>
@@ -8,8 +8,9 @@
         <exit_code range=":-1" />
         <exit_code range="1:" />
     </stdio>
-    <command interpreter="python">
-        build_ctb_gene.py --outputdir "${os.path.join($outputFile1.files_path,'neo4jdb')}" --input_file "${input_file}" --human_interactions "${human_interactions}" &gt; ${outputFile1}
+    <command><![CDATA[
+        python build_ctb_gene.py --outputdir "${os.path.join($outputFile1.files_path,'neo4jdb')}" --input_file "${input_file}" --human_interactions "${human_interactions}" > ${outputFile1}
+        ]]>
     </command>
     <inputs>
         <param name="input_file" type="data" format="gff" label="Choose the GFF file" help="Specify the GFF file" optional="False" />
@@ -24,6 +25,9 @@
     </citations>
     <tests>
         <test>
+            <param name="input_file" value="test.gff" />
+            <param name="human_interactions" value="test.gff" />
+            <output name="outputFile1" file="test_output" />
         </test>
     </tests>
 </tool>

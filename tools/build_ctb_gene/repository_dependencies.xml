@@ -1,6 +1,4 @@
-<!--
 <?xml version="1.0"?>
 <repositories description="This requires the Neo4J store datatypes definitions">
     <repository name="neo4j_datatypes" owner="sanbi-uwc" />
 </repositories> 
--->
