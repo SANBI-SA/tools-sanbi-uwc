@@ -1,0 +1,261 @@
+<tool id="pilon" name="pilon" version="0.1">
+    <description>An automated genome assembly improvement and variant detection tool</description>
+    <requirements>
+      <requirement type="package" version="1.18">pilon</requirement>
+      <requirement type="set_environment">CLASSPATH</requirement>
+    </requirements>
+    <stdio>
+        <exit_code range="1:" />
+    </stdio>
+    <command><![CDATA[
+      #for $input_bam in $input_bams
+        ln -f -s "${input_bam.metadata.bam_index}" "${input_bam}.bai" &&
+      #end for
+      #if $options.selection_mode == "advanced"
+        #for $bam in $options.input_frag_bams + $options.input_jump_bams + $options.input_unpaired_bams
+          ln -s -f "${bam.metadata.bam_index}" "${bam}.bai" &&
+        #end for
+      #end if
+        ln -s -f
+          #if $reference_genome.reference_genome_source == "history"
+            $reference_genome.history_item
+          #else
+            $reference_genome.builtin.fields.path
+          #end if
+          reference.fasta &&
+        java com.simontuffs.onejar.Boot
+        --genome reference.fasta
+        #for $input_bam in $input_bams
+          --bam $input_bam
+        #end for
+        $variant_calling
+        $changes
+        #if $options.selection_mode == "advanced"
+          $options.vcfqe
+          $options.vcf_output
+          $options.tracks
+          --chunksize $options.chunk_size
+          $options.diploid
+          $options.duplicates
+          $options.iupac
+          $options.nonpf
+          #if len($options.targetlist.strip()) > 0
+            --targetlist $options.targetlist
+          #end if
+          $options.verbose
+          --defaultqual $options.defaultqual
+          --flank $options.flank
+          --gapmargin $options.gapmargin
+          --K $options.kmersize
+          --mindepth $options.mindepth
+          --mingap $options.mingap
+          --minmq $options.minmq
+          --minqual $options.minqual
+          $options.nostrays
+        #end if
+        --threads \${GALAXY_SLOTS:-1}
+        --output pilon &&
+        mv pilon.fasta $output_fasta &&
+        if [ -f pilon.vcf ] ; then mv pilon.vcf $output_vcf ; fi &&
+        if [ -f pilon.changes ] ; then mv pilon.changes $output_changes ; fi &&
+        if [ -f pilonPilon.bed ] ; then mv pilonPilon.bed $output_pilon_bed ; fi &&
+        if [ -f pilonChanges.wig ] ; then mv pilonChanges.wig $output_changes_wig ; fi &&
+        if [ -f pilonUnconfirmed.wig ] ; then mv pilonUnconfirmed.wig $output_unconfirmed_wig ; fi &&
+        if [ -f pilonCopyNumber.wig ] ; then mv pilonCopyNumber.wig $output_copynumber_wig ; fi &&
+        if [ -f pilonCoverage.wig ] ; then mv pilonCoverage.wig $output_coverage_wig ; fi &&
+        if [ -f pilonBadCoverage.wig ] ; then mv pilonBadCoverage.wig $output_badcoverage_wig ; fi &&
+        if [ -f pilonPctBad.wig ] ; then mv pilonPctBad.wig $output_pctbad_wig ; fi &&
+        if [ -f pilonDeltaCoverage.wig ] ; then mv pilonDeltaCoverage.wig $output_deltacoverage_wig ; fi &&
+        if [ -f pilonDipCoverage.wig ] ; then mv pilonDipCoverage.wig $output_dipcoverage_wig ; fi &&
+        if [ -f pilonPhysicalCoverage.wig ] ; then mv pilonPhysicalCoverage.wig $output_physicalcoverage_wig ; fi &&
+        if [ -f pilonClippedAlignments.wig ] ; then mv pilonClippedAlignments.wig $output_clippedalignments_wig ; fi &&
+        if [ -f pilonWeightedQual.wig ] ; then mv pilonWeightedQual.wig $output_weightedqual_wig ; fi &&
+        if [ -f pilonWeightedMq.wig ] ; then mv pilonWeightedMq.wig $output_weightedmq_wig ; fi &&
+        if [ -f pilonGC.wig ] ; then mv pilonGC.wig $output_gc_wig ; fi
+    ]]></command>
+    <inputs>
+      <conditional name="reference_genome">
+        <param label="Source for reference genome used for BAM alignments" name="reference_genome_source" type="select">
+          <option selected="True" value="history">Use a genome from history</option>
+          <option value="builtin">Use a built-in genome"</option>
+        </param>
+        <when value="history">
+          <param format="fasta" type="data" metadata_name="dbkey" name="history_item" />
+        </when>
+        <when value="builtin">
+          <param label="Select a reference genome" name="builtin" type="select">
+            <options from_data_table="all_fasta">
+              <filter column="2" type="sort_by" />
+              <validator message="No genomes are available for the selected input dataset" type="no_options" />
+            </options>
+          </param>
+        </when>
+      </conditional>
+      <param label="Input BAM file" multiple="true" type="data" format="bam" name="input_bams"/>
+      <param name="variant_calling" type="boolean" label="Variant calling mode" checked="true" truevalue="--variant" falsevalue="" />
+      <param name="changes" type="boolean" label="Output file describing changes in FASTA output" truevalue="--changes" falsevalue="" />
+      <conditional name="options">
+        <param label="Use advanced options" name="selection_mode" type="select">
+          <option selected="True" value="defaults">Use default options</option>
+          <option value="advanced">Use advanced options</option>
+        </param>
+        <when value="defaults"> </when>
+        <when value="advanced">
+          <param name="vcf_output" type="boolean" checked="false" label="VCF output (even if 'Variant calling mode' is off)"
+            truevalue="--vcf" falsevalue="" />
+          <param name="tracks" type="boolean" checked="false" label="Output annotation tracks"
+            help="Write many track files (*.bed, *.wig) suitable for viewing in a genome browser."
+            truevalue="--tracks" falsevalue="" />
+          <param name="chunk_size" type="integer" min="1" value="10000000" label="Chunk size"
+            help="Input FASTA elements larger than this will be processed in smaller pieces not to
+            exceed this size." />
+          <param name="vcfqe" type="boolean" checked="false" label="QE (not QP) in VCF" help="If specified the VCF will contain a QE (quality-weighted evidence) field rather
+          than the default QP (quality-weighted percentage of evidence) field." truevalue="--vcfqe" falsevalue="" />
+          <param name="input_frag_bams" label="Input BAM file (paired end fragments)" multiple="true" type="data" format="bam"
+            help="BAM file consisting of fragment paired-end alignments." />
+          <param name="input_jump_bams" label="Input BAM file (mate pairs)" multiple="true" type="data" format="bam"
+            help="BAM file consisting of jump (mate pair) paired-end alignments." />
+          <param name="input_unpaired_bams" label="Input BAM file (unpaired)" multiple="true" type="data" format="bam"
+            help="BAM file consisting of unpaired alignments." />
+          <param name="diploid" label="Organism is diploid" type="boolean" checked="false"
+            help="Sample is from diploid organism; will eventually affect calling of heterozygous SNPs"
+            truevalue="--diploid" falsevalue="" />
+          <param name="duplicates" label="Use duplicates" type="boolean" checked="false"
+            help="Use reads marked as duplicates in the input BAMs"
+            truevalue="--duplicates" falsevalue="" />
+          <param name="iupac" label="Use IUPAC codes in FASTA output" type="boolean" checked="false"
+            help="Output IUPAC ambiguous base codes in the output FASTA file when appropriate"
+            truevalue="--iupac" falsevalue="" />
+          <param name="nonpf" label="Use low quality reads" type="boolean" checked="false"
+            help="Use reads which failed sequencer quality filtering"
+            truevalue="--nonpf" falsevalue="" />
+          <param name="targetlist" label="List of targets to process (leave blank for all)" default="" type="text" length="40"
+            help="Only process the specified target(s).  Targets are comma-separated, and each target is a fasta element name optionally followed by a base range." />
+          <param name="verbose" label="Verbose output (in tool log)" type="boolean" check="false"
+            truevalue="--verbose" falsevalue="" />
+          <param name="defaultqual" label="Default base quality" type="integer" min="1" value="15"
+            help="Assumes bases are of this quality if quals are no present in input BAMs" />
+          <param name="flank" label="Flanking bases to ignore" type="integer" min="1" value="10"
+            help="This many bases at each end of the good reads will be ignored." />
+          <param name="gapmargin" label="Allowable gap margin" type="integer" min="1" value="100000"
+            help="Closed gaps must be within this number of bases of true size to be closed" />
+          <param name="kmersize" label="Kmer size" type="integer" min="1" value="47"
+            help="Kmer size used by internal assembler" />
+          <param name="mindepth" label="Minimum depth" type="float" value="0.1"
+            help="Minimum depth of coverage required for variants to be called. See complete documentation below." />
+          <param name="mingap" label="Mininum gap size" type="integer" value="10"
+            help="Minimum size for unclosed gaps" />
+          <param name="minmq" label="Minimum mapping quality" type="integer" value="0"
+            help="Minimum alignment mapping quality for a read to count in pileups" />
+          <param name="minqual" label="Minimum base quality" type="integer" value="0"
+            help="Minimum base quality to consider for pileups" />
+          <param name="nostrays" label="Disable 'stray read filtering'" type="boolean" checked="false"
+            help="See documentation below"
+            truevalue="--nostrays" falsevalue="" />
+        </when>
+      </conditional>
+    </inputs>
+    <outputs>
+      <data format="vcf" label="VCF from ${tool.name} on ${on_string}" name="output_vcf">
+        <filter>bool(variant_calling) == True or bool(options.vcf_output) == True</filter>
+      </data>
+      <data format="txt" label="Changes in FASTA from ${tool.name} on ${on_string}" name="output_changes">
+        <filter>bool(changes) == True</filter>
+      </data>
+      <data format="fasta" label="FASTA from ${tool.name} on ${on_string}" name="output_fasta" />
+      <data format="bed" label="Features from ${tool.name} on ${on_string} (BED format)" name="output_pilon_bed">
+        <filter>bool(tracks) == True</filter>
+      </data>
+      <data format="wig" label="${tool.name} changes track on ${on_string} (WIG format)" name="output_changes_wig">
+        <filter>bool(tracks) == True</filter>
+      </data>
+      <data format="wig" label="${tool.name} unconfirmed track on ${on_string}" name="output_unconfirmed_wig">
+        <filter>bool(tracks) == True</filter>
+      </data>
+      <data format="wig" label="${tool.name} copy number track on ${on_string}" name="output_copynumber_wig">
+        <filter>bool(tracks) == True</filter>
+      </data>
+      <data format="wig" label="${tool.name} coverage track on ${on_string}" name="output_coverage_wig">
+        <filter>bool(tracks) == True</filter>
+      </data>
+      <data format="wig" label="${tool.name} bad coverage track on ${on_string}" name="output_badcoverage_wig">
+        <filter>bool(tracks) == True</filter>
+      </data>
+      <data format="wig" label="${tool.name} pct bad track on ${on_string}" name="output_pctbad_wig">
+        <filter>bool(tracks) == True</filter>
+      </data>
+      <data format="wig" label="${tool.name} delta coverage track on ${on_string}" name="output_deltacoverage_wig">
+        <filter>bool(tracks) == True</filter>
+      </data>
+      <data format="wig" label="${tool.name} dip coverage track on ${on_string}" name="output_dipcoverage_wig">
+        <filter>bool(tracks) == True</filter>
+      </data>
+      <data format="wig" label="${tool.name} physical coverage track on ${on_string}" name="output_physicalcoverage_wig">
+        <filter>bool(tracks) == True</filter>
+      </data>
+      <data format="wig" label="${tool.name} clipped alignments track on ${on_string}" name="output_clippedalignments_wig">
+        <filter>bool(tracks) == True</filter>
+      </data>
+      <data format="wig" label="${tool.name} weighted quality track on ${on_string}" name="output_weightedqual_wig">
+        <filter>bool(tracks) == True</filter>
+      </data>
+      <data format="wig" label="${tool.name} weighted MQ track on ${on_string}" name="output_weightedmq_wig">
+        <filter>bool(tracks) == True</filter>
+      </data>
+      <data format="wig" label="${tool.name} GC track on ${on_string}" name="output_gc_wig">
+        <filter>bool(tracks) == True</filter>
+      </data>
+    </outputs>
+    <tests>
+      <test>
+        <param name="reference_genome_source" value="history" />
+        <param ftype="fasta" name="history_item" value="test1.fasta" />
+        <param name="input_bams" value="test1.bam" />
+        <param name="variant_calling" value="true" />
+        <output file="test1.vcf" ftype="vcf" name="output_vcf" lines_diff="4" />
+        <output file="test_output1.fasta" ftype="fasta" name="output_fasta" />
+      </test>
+    </tests>
+    <help><![CDATA[
+  Pilon is a software tool which can be used to:
+
+  * Automatically improve draft assemblies
+
+  * Find variation among strains, including large event detection
+
+  Pilon requires as input a FASTA file of the genome along with one or more BAM files of reads aligned to the input FASTA file. Pilon uses read alignment analysis to identify inconsistencies between the input genome and the evidence in the reads. It then attempts to make improvements to the input genome, including:
+
+  * Single base differences
+
+  * Small indels
+
+  * Larger indel or block substitution events
+
+  * Gap filling
+
+  * Identification of local misassemblies, including optional opening of new gaps
+
+  Pilon then outputs a FASTA file containing an improved representation of the genome from the read data and an optional VCF file detailing variation seen between the read data and the input genome.
+
+  To aid manual inspection and improvement by an analyst, Pilon can optionally produce tracks that can be displayed in genome viewers such as IGV and GenomeView, and it reports other events (such as possible large collapsed repeat regions) in its standard output.
+
+  Note on **mindepth**:
+
+  Variants (snps and indels) will only be called if there is coverage of good pairs
+  at the value set for *mindepth* depth or more; if this value is >= 1, it is an absolute depth, if it is a
+  fraction < 1, then minimum depth is computed by multiplying this value by the mean
+  coverage for the region, with a minumum value of 5 (default 0.1: min depth to call
+  is 10% of mean coverage or 5, whichever is greater).
+
+  Note on **stray read filtering**
+
+  By default a pass is made through the input BAM files to identify stray pairs, that is,
+  those pairs in which both reads are aligned but not marked valid because they have
+  inconsistent orientation or separation. Identifying stray pairs can help fill gaps
+  and assemble larger insertions, especially of repeat content.  However, doing so
+  sometimes consumes considerable memory.
+    ]]></help>
+    <citations>
+        <citation type="doi">10.1371/journal.pone.0112963</citation>
+    </citations>
+</tool>
