@@ -42,6 +42,7 @@
           #if len($options.targetlist.strip()) > 0
             --targetlist $options.targetlist
           #end if
+          --fix $options.fixes
           $options.verbose
           --defaultqual $options.defaultqual
           --flank $options.flank
@@ -55,7 +56,7 @@
         #end if
         --threads \${GALAXY_SLOTS:-1}
         --output pilon &&
-        mv pilon.fasta $output_fasta &&
+        if [ -f pilon.fasta ] ; then mv pilon.fasta $output_fasta ; fi &&
         if [ -f pilon.vcf ] ; then mv pilon.vcf $output_vcf ; fi &&
         if [ -f pilon.changes ] ; then mv pilon.changes $output_changes ; fi &&
         if [ -f pilonPilon.bed ] ; then mv pilonPilon.bed $output_pilon_bed ; fi &&
@@ -117,6 +118,16 @@
             help="BAM file consisting of jump (mate pair) paired-end alignments." />
           <param name="input_unpaired_bams" label="Input BAM file (unpaired)" multiple="true" type="data" format="bam"
             help="BAM file consisting of unpaired alignments." />
+          <param name="fixes" label="Issues that pilon should try and fix" type="select" multiple="true">
+            <option value="all" selected="true">All non-experimental fixes</option>
+            <option value="bases">Individual bases and small indels</option>
+            <option value="gaps">Fill gaps</option>
+            <option value="local">Detect and fix local misassemblies</option>
+            <option value="none">Do none of these fixes (no FASTA will be written)</option>
+            <option value="amb">Fix ambigious bases in FASTA output (experimental)</option>
+            <option value="breaks">Allow local reassembly to open new gaps (experimental, requires local assembly fixing to be selected)</option>
+            <option value="novel">Assemble novel sequence from unaligned non-jump reads (experimental)</option>
+          </param>
           <param name="diploid" label="Organism is diploid" type="boolean" checked="false"
             help="Sample is from diploid organism; will eventually affect calling of heterozygous SNPs"
             truevalue="--diploid" falsevalue="" />
@@ -162,48 +173,50 @@
       <data format="txt" label="Changes in FASTA from ${tool.name} on ${on_string}" name="output_changes">
         <filter>bool(changes) == True</filter>
       </data>
-      <data format="fasta" label="FASTA from ${tool.name} on ${on_string}" name="output_fasta" />
+      <data format="fasta" label="FASTA from ${tool.name} on ${on_string}" name="output_fasta">
+        <filter>'none' not in options.fixes</filter>
+      </data>
       <data format="bed" label="Features from ${tool.name} on ${on_string} (BED format)" name="output_pilon_bed">
-        <filter>bool(tracks) == True</filter>
+        <filter>bool(options.tracks) == True</filter>
       </data>
       <data format="wig" label="${tool.name} changes track on ${on_string} (WIG format)" name="output_changes_wig">
-        <filter>bool(tracks) == True</filter>
+        <filter>bool(options.tracks) == True</filter>
       </data>
       <data format="wig" label="${tool.name} unconfirmed track on ${on_string}" name="output_unconfirmed_wig">
-        <filter>bool(tracks) == True</filter>
+        <filter>bool(options.tracks) == True</filter>
       </data>
       <data format="wig" label="${tool.name} copy number track on ${on_string}" name="output_copynumber_wig">
-        <filter>bool(tracks) == True</filter>
+        <filter>bool(options.tracks) == True</filter>
       </data>
       <data format="wig" label="${tool.name} coverage track on ${on_string}" name="output_coverage_wig">
-        <filter>bool(tracks) == True</filter>
+        <filter>bool(options.tracks) == True</filter>
       </data>
       <data format="wig" label="${tool.name} bad coverage track on ${on_string}" name="output_badcoverage_wig">
-        <filter>bool(tracks) == True</filter>
+        <filter>bool(options.tracks) == True</filter>
       </data>
       <data format="wig" label="${tool.name} pct bad track on ${on_string}" name="output_pctbad_wig">
-        <filter>bool(tracks) == True</filter>
+        <filter>bool(options.tracks) == True</filter>
       </data>
       <data format="wig" label="${tool.name} delta coverage track on ${on_string}" name="output_deltacoverage_wig">
-        <filter>bool(tracks) == True</filter>
+        <filter>bool(options.tracks) == True</filter>
       </data>
       <data format="wig" label="${tool.name} dip coverage track on ${on_string}" name="output_dipcoverage_wig">
-        <filter>bool(tracks) == True</filter>
+        <filter>bool(options.tracks) == True</filter>
       </data>
       <data format="wig" label="${tool.name} physical coverage track on ${on_string}" name="output_physicalcoverage_wig">
-        <filter>bool(tracks) == True</filter>
+        <filter>bool(options.tracks) == True</filter>
       </data>
       <data format="wig" label="${tool.name} clipped alignments track on ${on_string}" name="output_clippedalignments_wig">
-        <filter>bool(tracks) == True</filter>
+        <filter>bool(options.tracks) == True</filter>
       </data>
       <data format="wig" label="${tool.name} weighted quality track on ${on_string}" name="output_weightedqual_wig">
-        <filter>bool(tracks) == True</filter>
+        <filter>bool(options.tracks) == True</filter>
       </data>
       <data format="wig" label="${tool.name} weighted MQ track on ${on_string}" name="output_weightedmq_wig">
-        <filter>bool(tracks) == True</filter>
+        <filter>bool(options.tracks) == True</filter>
       </data>
       <data format="wig" label="${tool.name} GC track on ${on_string}" name="output_gc_wig">
-        <filter>bool(tracks) == True</filter>
+        <filter>bool(options.tracks) == True</filter>
       </data>
     </outputs>
     <tests>
