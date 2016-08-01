@@ -2,7 +2,9 @@
     <description>An automated genome assembly improvement and variant detection tool</description>
     <requirements>
       <requirement type="package" version="1.18">pilon</requirement>
-      <requirement type="set_environment">CLASSPATH</requirement>
+      <!--<requirement type="set_environment">CLASSPATH</requirement>-->
+      <!-- if CLASSPATH is set to include pilon jar, you can call pilon with
+           java com.simontuffs.onejar.Boot -->>
     </requirements>
     <stdio>
         <exit_code range="1:" />
@@ -23,7 +25,7 @@
             $reference_genome.builtin.fields.path
           #end if
           reference.fasta &&
-        java com.simontuffs.onejar.Boot
+        pilon
         --genome reference.fasta
         #for $input_bam in $input_bams
           --bam $input_bam
@@ -97,10 +99,10 @@
       <param name="changes" type="boolean" label="Output file describing changes in FASTA output" truevalue="--changes" falsevalue="" />
       <conditional name="options">
         <param label="Use advanced options" name="selection_mode" type="select">
-          <option selected="True" value="defaults">Use default options</option>
+          <option selected="True" value="default">Use default options</option>
           <option value="advanced">Use advanced options</option>
         </param>
-        <when value="defaults"> </when>
+        <when value="default"> </when>
         <when value="advanced">
           <param name="vcf_output" type="boolean" checked="false" label="VCF output (even if 'Variant calling mode' is off)"
             truevalue="--vcf" falsevalue="" />
@@ -168,55 +170,55 @@
     </inputs>
     <outputs>
       <data format="vcf" label="VCF from ${tool.name} on ${on_string}" name="output_vcf">
-        <filter>bool(variant_calling) == True or bool(options.vcf_output) == True</filter>
+        <filter>variant_calling or (options['selection_mode'] == 'advanced' and options['vcf_output'])</filter>
       </data>
       <data format="txt" label="Changes in FASTA from ${tool.name} on ${on_string}" name="output_changes">
-        <filter>bool(changes) == True</filter>
+        <filter>changes</filter>
       </data>
       <data format="fasta" label="FASTA from ${tool.name} on ${on_string}" name="output_fasta">
-        <filter>'none' not in options.fixes</filter>
+        <filter>options['selection_mode'] == 'default' or (options['selection_mode'] == 'advanced' and 'none' not in options['fixes'])</filter>
       </data>
       <data format="bed" label="Features from ${tool.name} on ${on_string} (BED format)" name="output_pilon_bed">
-        <filter>bool(options.tracks) == True</filter>
+        <filter>options['selection_mode'] == 'advanced' and options['tracks']</filter>
       </data>
       <data format="wig" label="${tool.name} changes track on ${on_string} (WIG format)" name="output_changes_wig">
-        <filter>bool(options.tracks) == True</filter>
+        <filter>options['selection_mode'] == 'advanced' and options['tracks']</filter>
       </data>
       <data format="wig" label="${tool.name} unconfirmed track on ${on_string}" name="output_unconfirmed_wig">
-        <filter>bool(options.tracks) == True</filter>
+        <filter>options['selection_mode'] == 'advanced' and options['tracks']</filter>
       </data>
       <data format="wig" label="${tool.name} copy number track on ${on_string}" name="output_copynumber_wig">
-        <filter>bool(options.tracks) == True</filter>
+        <filter>options['selection_mode'] == 'advanced' and options['tracks']</filter>
       </data>
       <data format="wig" label="${tool.name} coverage track on ${on_string}" name="output_coverage_wig">
-        <filter>bool(options.tracks) == True</filter>
+        <filter>options['selection_mode'] == 'advanced' and options['tracks']</filter>
       </data>
       <data format="wig" label="${tool.name} bad coverage track on ${on_string}" name="output_badcoverage_wig">
-        <filter>bool(options.tracks) == True</filter>
+        <filter>options['selection_mode'] == 'advanced' and options['tracks']</filter>
       </data>
       <data format="wig" label="${tool.name} pct bad track on ${on_string}" name="output_pctbad_wig">
-        <filter>bool(options.tracks) == True</filter>
+        <filter>options['selection_mode'] == 'advanced' and options['tracks']</filter>
       </data>
       <data format="wig" label="${tool.name} delta coverage track on ${on_string}" name="output_deltacoverage_wig">
-        <filter>bool(options.tracks) == True</filter>
+        <filter>options['selection_mode'] == 'advanced' and options['tracks']</filter>
       </data>
       <data format="wig" label="${tool.name} dip coverage track on ${on_string}" name="output_dipcoverage_wig">
-        <filter>bool(options.tracks) == True</filter>
+        <filter>options['selection_mode'] == 'advanced' and options['tracks']</filter>
       </data>
       <data format="wig" label="${tool.name} physical coverage track on ${on_string}" name="output_physicalcoverage_wig">
-        <filter>bool(options.tracks) == True</filter>
+        <filter>options['selection_mode'] == 'advanced' and options['tracks']</filter>
       </data>
       <data format="wig" label="${tool.name} clipped alignments track on ${on_string}" name="output_clippedalignments_wig">
-        <filter>bool(options.tracks) == True</filter>
+        <filter>options['selection_mode'] == 'advanced' and options['tracks']</filter>
       </data>
       <data format="wig" label="${tool.name} weighted quality track on ${on_string}" name="output_weightedqual_wig">
-        <filter>bool(options.tracks) == True</filter>
+        <filter>options['selection_mode'] == 'advanced' and options['tracks']</filter>
       </data>
       <data format="wig" label="${tool.name} weighted MQ track on ${on_string}" name="output_weightedmq_wig">
-        <filter>bool(options.tracks) == True</filter>
+        <filter>options['selection_mode'] == 'advanced' and options['tracks']</filter>
       </data>
       <data format="wig" label="${tool.name} GC track on ${on_string}" name="output_gc_wig">
-        <filter>bool(options.tracks) == True</filter>
+        <filter>options['selection_mode'] == 'advanced' and options['tracks']</filter>
       </data>
     </outputs>
     <tests>
@@ -225,7 +227,7 @@
         <param ftype="fasta" name="history_item" value="test1.fasta" />
         <param name="input_bams" value="test1.bam" />
         <param name="variant_calling" value="true" />
-        <output file="test1.vcf" ftype="vcf" name="output_vcf" lines_diff="4" />
+        <output file="test1.vcf" ftype="vcf" name="output_vcf" lines_diff="6" />
         <output file="test_output1.fasta" ftype="fasta" name="output_fasta" />
       </test>
     </tests>
