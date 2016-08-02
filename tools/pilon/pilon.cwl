@@ -8,7 +8,7 @@ requirements:
   - class: EnvVarRequirement
     envDef:
       - envName: CLASSPATH
-        envValue: pilon-1.18.jar
+        envValue: /home/pvh/Documents/code/SANBI/pilon/pilon-1.18.jar
 #  - class: InlineJavascriptRequirement
 
 inputs:
@@ -26,44 +26,57 @@ inputs:
       position: 5
       prefix: "--genome"
   frags:
-    type: File?
+    type:
+      - 'null'
+      - type: array
+        items: File
+        inputBinding:
+          prefix: --frags
+          position: 6
     doc: |
       A bam file consisting of fragment paired-end alignments, aligned to the --genome
       argument using bwa or bowtie2.  This argument may be specifed more than once.
-    inputBinding:
-      prefix: --frags
-      position: 6
     secondaryFiles:
       - ".bai"
   jumps:
-    type: File?
+    type:
+      - 'null'
+      - type: array
+        items: File
+        inputBinding:
+          prefix: --jumps
+          position: 6
     doc: |
       A bam file consisting of fragment paired-end alignments, aligned to the --genome
       argument using bwa or bowtie2.  This argument may be specifed more than once.
-    inputBinding:
-      prefix: --jumps
-      position: 6
     secondaryFiles:
       - ".bai"
   unpaired:
-    type: File?
+    type:
+      - 'null'
+      - type: array
+        items: File
+        inputBinding:
+          prefix: --unpaired
+          position: 6
     doc: |
       A bam file consisting of unpaired alignments, aligned to the --genome argument
       using bwa or bowtie2.  This argument may be specifed more than once.
-    inputBinding:
-      prefix: --unpaired
     secondaryFiles:
       - ".bai"
   bam:
-    type: File?
+    type:
+      - 'null'
+      - type: array
+        items: File
+        inputBinding:
+          prefix: "--bam"
+          position: 6
+    secondaryFiles:
+      - ".bai"
     doc: |
       A bam file of unknown type; Pilon will scan it and attempt to classify it as one
       of the above bam types.
-    inputBinding:
-      prefix: "--bam"
-      position: 6
-    secondaryFiles:
-      - ".bai"
   vcf_output:
     type: boolean
     default: false
