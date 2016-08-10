@@ -51,5 +51,3 @@ after_success:
       while read -r DIR; do planemo shed_update --shed_target testtoolshed --shed_email $SHED_EMAIL --shed_password $SHED_PASSWORD --force_repository_creation "$DIR" || exit 1; done < "$CHUNK"
       while read -r DIR; do planemo shed_update --shed_target toolshed --shed_email $SHED_EMAIL --shed_password $SHED_PASSWORD --force_repository_creation "$DIR" || exit 1; done < "$CHUNK"
     fi
-
-
