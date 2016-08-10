@@ -8,10 +8,9 @@ import logging
 import argparse
 import shlex
 from subprocess import check_call, CalledProcessError
+from json import loads, dumps
 
 log = logging.getLogger(__name__)
-
-from json import loads, dumps
 
 DEFAULT_DATA_TABLE_NAME = "novocraft_index"
 

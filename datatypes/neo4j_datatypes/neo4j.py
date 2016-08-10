@@ -5,7 +5,7 @@ import logging
 import sys
 
 from galaxy.datatypes.images import Html
-from galaxy.datatypes.data import Data, Text
+from galaxy.datatypes.data import Data
 
 import shutil
 import os
@@ -65,7 +65,7 @@ class Neo4j(Html):
         """Documented as an old display method, but still gets called via tests etc
         This allows us to format the data shown in the central pane via the "eye" icon.
         """
-        if preview == False:
+        if not preview:
             trans.response.set_content_type(data.get_mime())
             trans.log_event( "Display dataset id: %s" % str( data.id ) )
 

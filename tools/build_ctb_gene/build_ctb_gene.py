@@ -159,7 +159,7 @@ def main():
         (host, port) = url.netloc.split(':')
     timeout = int(os.environ.get('NEO4J_WAIT_TIMEOUT', 30))  # time to wait till neo4j
     connected = False
-    #print('host, port', host, port)
+    # print('host, port', host, port)
     while timeout > 0:
         try:
             socket.create_connection((host, port), 1)

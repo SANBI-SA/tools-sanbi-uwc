@@ -2,10 +2,10 @@
 CtbReports Composite Dataset
 """
 import logging
-import sys
+# import sys
 
 from galaxy.datatypes.data import Data
-#from galaxy.datatypes.images import Html
+# from galaxy.datatypes.images import Html
 
 gal_Log = logging.getLogger(__name__)
 verbose = True

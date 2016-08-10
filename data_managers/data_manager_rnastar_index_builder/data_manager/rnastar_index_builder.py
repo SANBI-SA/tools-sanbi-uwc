@@ -3,7 +3,7 @@
 from __future__ import print_function
 import argparse
 from subprocess import check_call, CalledProcessError
-from json import load, dump, dumps
+from json import load, dumps
 from os import environ, mkdir, makedirs
 from os.path import isdir, exists
 import shlex
