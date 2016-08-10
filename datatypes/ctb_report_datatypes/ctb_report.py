@@ -71,5 +71,5 @@ class CtbReportSet(CtbReport, Data):
 
     def __init__(self, **kwd):
         Data.__init__(self, **kwd)
-        self.add_composite_file('neo4j/',  is_binary=True)
+        self.add_composite_file('neo4j/', is_binary=True)
         self.add_composite_file('jbrowser/', is_binary=True)

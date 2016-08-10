@@ -20,7 +20,7 @@ class Neo4j(Html):
     derived from html - composite datatype elements
     stored in extra files path
     """
-    #def __init__(self):
+    # def __init__(self):
     #     Html.__init__( self, **kwd )
 
     def generate_primary_file( self, dataset=None ):
@@ -83,16 +83,16 @@ class Neo4j(Html):
             # setup headers for the download
             trans.response.headers['Content-Length'] = int( os.stat( download_zip ).st_size )
             trans.response.set_content_type( "application/octet-stream" )  # force octet-stream so Safari doesn't append mime extensions to filename
-            trans.response.headers["Content-Disposition"] = 'attachment; filename="Galaxy%s-[%s].%s"' % (data.hid, download_zip , "zip")
+            trans.response.headers["Content-Disposition"] = 'attachment; filename="Galaxy%s-[%s].%s"' % (data.hid, download_zip, "zip")
 
             return open( download_zip )
+
 
 class Neo4jDB(Neo4j, Data):
     """Class for neo4jDB database files."""
     file_ext = 'neostore'
     composite_type = 'auto_primary_file'
     allow_datatype_change = False
-
 
     def __init__(self, **kwd):
         Data.__init__(self, **kwd)
@@ -103,7 +103,7 @@ class Neo4jDB(Neo4j, Data):
         self.add_composite_file('neostore.labeltokenstore.db', is_binary=True)
         self.add_composite_file('neostore.labeltokenstore.db.id', is_binary=True)
         self.add_composite_file('neostore.labeltokenstore.db.names', is_binary=True)
-        self.add_composite_file('neostore.labeltokenstore.db.names.id',  is_binary=True)
+        self.add_composite_file('neostore.labeltokenstore.db.names.id', is_binary=True)
         self.add_composite_file('neostore.nodestore.db', is_binary=True)
         self.add_composite_file('neostore.nodestore.db.id', is_binary=True)
         self.add_composite_file('neostore.nodestore.db.labels', is_binary=True)
@@ -114,16 +114,16 @@ class Neo4jDB(Neo4j, Data):
         self.add_composite_file('neostore.propertystore.db.arrays', is_binary=True)
         self.add_composite_file('neostore.propertystore.db.arrays.id', is_binary=True)
         self.add_composite_file('neostore.propertystore.db.index', is_binary=True)
-        self.add_composite_file('neostore.propertystore.db.index.id',  is_binary=True)
+        self.add_composite_file('neostore.propertystore.db.index.id', is_binary=True)
         self.add_composite_file('neostore.propertystore.db.index.keys', is_binary=True)
         self.add_composite_file('neostore.propertystore.db.index.keys.id', is_binary=True)
-        self.add_composite_file('neostore.propertystore.db.strings',  is_binary=True)
+        self.add_composite_file('neostore.propertystore.db.strings', is_binary=True)
         self.add_composite_file('neostore.propertystore.db.strings.id', is_binary=True)
 
         self.add_composite_file('neostore.relationshipgroupstore.db', is_binary=True)
         self.add_composite_file('neostore.relationshipgroupstore.db.id', is_binary=True)
-        self.add_composite_file('neostore.relationshipstore.db',  is_binary=True)
-        self.add_composite_file('neostore.relationshipstore.db.id',  is_binary=True)
+        self.add_composite_file('neostore.relationshipstore.db', is_binary=True)
+        self.add_composite_file('neostore.relationshipstore.db.id', is_binary=True)
         self.add_composite_file('neostore.relationshiptypestore.db.names', is_binary=True)
         self.add_composite_file('neostore.relationshiptypestore.db.names.id', is_binary=True)
         self.add_composite_file('neostore.schemastore.db', is_binary=True)

@@ -31,6 +31,7 @@ def inspect_docker(cmd_str):
 
 
 class BuildCtbRunner(object):
+
     def __init__(self, args=None):
         """
         Initializes an object to run CtbRunner in Galaxy.
@@ -115,9 +116,10 @@ class BuildCtbRunner(object):
         )
         cmd = self.newSplit(cmd_str)
         self.neo4j_proc = Popen(cmd, stdout=PIPE, stderr=STDOUT)
-        time.sleep(30) # give the container time to wake up
+        time.sleep(30)  # give the container time to wake up
         if self.neo4j_proc.poll() is not None:
             raise CalledProcessError("Error running docker run by build_ctb_gene:\n", self.get_docker_output)
+
 
 def main():
     parser = argparse.ArgumentParser(description="Tool used to extract data about genes using locus_tags")
@@ -155,7 +157,7 @@ def main():
         (host, port) = url.netloc.split('@')[1].split(':')
     else:
         (host, port) = url.netloc.split(':')
-    timeout = int(os.environ.get('NEO4J_WAIT_TIMEOUT', 30)) # time to wait till neo4j
+    timeout = int(os.environ.get('NEO4J_WAIT_TIMEOUT', 30))  # time to wait till neo4j
     connected = False
     #print('host, port', host, port)
     while timeout > 0:
@@ -168,7 +170,7 @@ def main():
             connected = True
             break
     if not connected:
-        sys.exit('timed out trying to connect to {}'.format(neo4j_url))        
+        sys.exit('timed out trying to connect to {}'.format(neo4j_url))
 
     status = ctb_gene_runner.build_ctb_gene()
     ctb_gene_runner.shutdown_docker()
@@ -177,4 +179,5 @@ def main():
         exit(1)
 
 
-if __name__ == "__main__": main()
+if __name__ == "__main__":
+    main()

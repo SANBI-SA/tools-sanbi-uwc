@@ -70,4 +70,5 @@ def main():
     output_datatable_dict = dict(data_tables={args.data_table_name: [data_table_entry]})
     open(filename, 'wb').write(dumps(output_datatable_dict))
 
-if __name__ == "__main__": main()
+if __name__ == "__main__":
+    main()

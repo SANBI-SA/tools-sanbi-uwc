@@ -56,6 +56,7 @@ def copy_output_file_to_dataset(dir_name, input_dir, dt_type=None):
 
 
 class BuildCtbExplorerRunner(object):
+
     def __init__(self, args=None):
         """
         Initializes an object to run CtbRunner in Galaxy.
@@ -113,4 +114,5 @@ def main():
     if status is None:
         exit(1)
 
-if __name__ == "__main__": main()
+if __name__ == "__main__":
+    main()
