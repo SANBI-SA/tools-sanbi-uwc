@@ -41,11 +41,13 @@ class BuildCtbRunner(object):
         self.args = args
         self.outputdir = args.outputdir
         self.mount_point = None
-        self.docker_instance_name = "build_ctb_gene_" + str(random.randrange(0, 1000, 2))
+        self.docker_instance_name = "build_ctb_gene_" + \
+            str(random.randrange(0, 1000, 2))
         self.neo4j_proc = None
 
     def build_ctb_gene(self):
-        cmdline_str = "goget goterms {} {}".format(self.args.input_file, self.args.human_interactions)
+        cmdline_str = "goget goterms {} {}".format(
+            self.args.input_file, self.args.human_interactions)
         cmdline_str = self.newSplit(cmdline_str)
         try:
             check_call(cmdline_str)
@@ -54,7 +56,8 @@ class BuildCtbRunner(object):
             return None
         else:
             # self.copy_output_file_to_dataset()
-            print("Building a new DB, current time: %s" % str(datetime.date.today()))
+            print("Building a new DB, current time: %s" %
+                  str(datetime.date.today()))
             print("GFF File - Input: %s" % str(self.args.input_file))
             return True
 
@@ -106,9 +109,10 @@ class BuildCtbRunner(object):
         try:
             os.makedirs(self.mount_point)
         except os.error as e:
-            print("Error creating mount point {mount_point}: {error}".format(mount_point=self.mount_point, error=e.strerror))
+            print("Error creating mount point {mount_point}: {error}".format(
+                mount_point=self.mount_point, error=e.strerror))
 
-        cmd_str = "docker run --rm -P -v {mount_point}:/data -e NEO4J_UID={uid} -e NEO4J_GID={gid} -e NEO4J_AUTH=none -e NEO4J_MONITOR_TRAFFIC=false --name {name} thoba/neo4j_galaxy_ie:latest".format(
+        cmd_str = "docker run --rm -P -v {mount_point}:/data -e NEO4J_UID={uid} -e NEO4J_GID={gid} -e NEO4J_AUTH=none -e NEO4J_MONITOR_TRAFFIC=false --name {name} thoba/neo4j_galaxy_ie:v1".format(
             mount_point=self.mount_point,
             name=self.docker_instance_name,
             uid=os.getuid(),
@@ -118,11 +122,13 @@ class BuildCtbRunner(object):
         self.neo4j_proc = Popen(cmd, stdout=PIPE, stderr=STDOUT)
         time.sleep(30)  # give the container time to wake up
         if self.neo4j_proc.poll() is not None:
-            raise CalledProcessError("Error running docker run by build_ctb_gene:\n", self.get_docker_output)
+            raise CalledProcessError(
+                "Error running docker run by build_ctb_gene:\n", self.get_docker_output)
 
 
 def main():
-    parser = argparse.ArgumentParser(description="Tool used to extract data about genes using locus_tags")
+    parser = argparse.ArgumentParser(
+        description="Tool used to extract data about genes using locus_tags")
     parser.add_argument('--outputdir')
     parser.add_argument('--input_file')
     parser.add_argument('--human_interactions')
@@ -157,7 +163,8 @@ def main():
         (host, port) = url.netloc.split('@')[1].split(':')
     else:
         (host, port) = url.netloc.split(':')
-    timeout = int(os.environ.get('NEO4J_WAIT_TIMEOUT', 30))  # time to wait till neo4j
+    # time to wait till neo4j
+    timeout = int(os.environ.get('NEO4J_WAIT_TIMEOUT', 30))
     connected = False
     # print('host, port', host, port)
     while timeout > 0:
