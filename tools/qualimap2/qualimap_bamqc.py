@@ -41,4 +41,5 @@ def main():
     qualimap_bamqc(args.input_file, args.out_genome_file, args.out_dir, args.java_mem_size)
 
 
-if __name__ == "__main__": main()
+if __name__ == "__main__":
+    main()

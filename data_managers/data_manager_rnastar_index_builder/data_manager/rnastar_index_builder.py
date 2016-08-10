@@ -3,7 +3,7 @@
 from __future__ import print_function
 import argparse
 from subprocess import check_call, CalledProcessError
-from json import load, dump, dumps
+from json import load, dumps
 from os import environ, mkdir, makedirs
 from os.path import isdir, exists
 import shlex
@@ -70,4 +70,5 @@ def main():
     output_datatable_dict = dict(data_tables={args.data_table_name: [data_table_entry]})
     open(filename, 'wb').write(dumps(output_datatable_dict))
 
-if __name__ == "__main__": main()
+if __name__ == "__main__":
+    main()
