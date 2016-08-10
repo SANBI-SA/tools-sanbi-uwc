@@ -271,6 +271,14 @@
   sometimes consumes considerable memory.
     ]]></help>
     <citations>
-        <citation type="doi">10.1371/journal.pone.0112963</citation>
+        <citation type="bibtex">@article{Walker_2014, 
+          title={Pilon: An Integrated Tool for Comprehensive Microbial Variant Detection and Genome Assembly Improvement},
+          volume={9}, ISSN={1932-6203}, url={http://dx.doi.org/10.1371/journal.pone.0112963},
+          DOI={10.1371/journal.pone.0112963}, number={11}, journal={PLoS ONE},
+          publisher={Public Library of Science (PLoS)},
+          author={Walker, Bruce J. and Abeel, Thomas and Shea, Terrance and
+          Priest, Margaret and Abouelliel, Amr and Sakthikumar, Sharadha and Cuomo, Christina A. and
+          Zeng, Qiandong and Wortman, Jennifer and Young, Sarah K. and et al.},
+          editor={Wang, Junwen}, year={2014}, month={Nov}, pages={e112963}}</citation>
     </citations>
 </tool>
