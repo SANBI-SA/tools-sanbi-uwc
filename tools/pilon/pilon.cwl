@@ -320,3 +320,11 @@ baseCommand: [java]
 arguments:
     - valueFrom: "com.simontuffs.onejar.Boot"
       position: 2
+
+doc: |
+  Pilon is a software tool which can be used to:
+
+      * Automatically improve draft assemblies
+      * Find variation among strains, including large event detection
+
+  For more info: https://github.com/broadinstitute/pilon/wiki
