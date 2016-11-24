@@ -4,5 +4,5 @@ description: Apply VCF variants to a fasta file to create consensus sequence
 name: vcftools_consensus
 owner: sanbi-uwc
 homepage_url: https://vcftools.github.io/
-remote_repository_url:
+remote_repository_url: https://github.com/SANBI-SA/tools-sanbi-uwc/tree/master/tools/vcftools_consensus
 type: unrestricted
