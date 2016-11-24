@@ -1,0 +1,8 @@
+categories:
+- Variant Analysis
+description: Apply VCF variants to a fasta file to create consensus sequence
+name: vcftools_consensus
+owner: sanbi-uwc
+homepage_url: https://vcftools.github.io/
+remote_repository_url:
+type: unrestricted
