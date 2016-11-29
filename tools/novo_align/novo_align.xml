@@ -9,16 +9,95 @@
         <exit_code range=":-1" />
         <exit_code range="1:" />
     </stdio>
-    <command interpreter="python">
-        novo_align.py '${out_file}' --index_file ${index1.fields.path} --forward_file ${fastq_input1} --reverse_file ${fastq_input2}
-    </command>
+    <command><![CDATA[
+        #set $paired_input_type = $paired_end.paired_input_type_conditional.paired_input_type
+        #if $paired_end.is_paired_end
+            #if $paired_input_type == "pair_of_files"
+                #if $paired_end.paired_input_type_conditional.fastq_r1_in.metadata.is_gzipped
+                    ln -s "${$paired_end.paired_input_type_conditional.fastq_r1_in}" ./input_mate1.gz;
+                    ln -s "${$paired_end.paired_input_type_conditional.fastq_r2_in}" ./input_mate2.gz;
+                #else
+                    ln -s "${$paired_end.paired_input_type_conditional.fastq_r1_in}" ./input_mate1;
+                    ln -s "${$paired_end.paired_input_type_conditional.fastq_r2_in}" ./input_mate2;
+                #end if
+            #else:
+                #if $paired_end.paired_input_type_conditional.fastq_pair.forward.metadata.is_gzipped
+                    ln -s "${paired_end.paired_input_type_conditional.fastq_pair.forward}" ./input_mate1.gz;
+                    ln -s "${paired_end.paired_input_type_conditional.fastq_pair.reverse}" ./input_mate2.gz;
+                #else
+                    ln -s "${paired_end.paired_input_type_conditional.fastq_pair.forward}" ./input_mate1;
+                    ln -s "${paired_end.paired_input_type_conditional.fastq_pair.reverse}" ./input_mate2;
+                #end if
+            #end if
+        #else
+            #if $fastq_in.metadata.is_gzipped
+                ln -s "${fastq_in}" ./input_singles.gz;
+            #else
+                ln -s "${fastq_in}" ./input_singles;
+            #end if
+        #end if
+
+
+        $__tool_directory__/novo_align.py
+            '${out_file}'
+            --index_file ${index1.fields.path}
+            #if $paired_end.is_paired_end
+                #if $paired_input_type == "pair_of_files"
+                    #if $paired_end.paired_input_type_conditional.fastq_r1_in.metadata.is_gzipped
+                        --forward_file ./input_mate1.gz
+                        --reverse_file ./input_mate2.gz
+                    #else
+                        --forward_file ./input_mate1
+                        --reverse_file ./input_mate2
+                    #end if
+                #else
+                    #if $paired_end.paired_input_type_conditional.fastq_pair.forward.metadata.is_gzipped:
+                        --forward_file ./input_mate1.gz
+                        --reverse_file ./input_mate2.gz
+                    #else
+                        --forward_file ./input_mate1
+                        --reverse_file ./input_mate2
+                    #end if
+                #end if
+            #else
+                --forward_file ${fastq_in} --reverse_file ${fastq_in}
+            #end if
+    ]]></command>
     <inputs>
+    <conditional name="paired_end">
+    <param name="is_paired_end" type="boolean" label="Paired end data?" truevalue="yes" falsevalue="no" checked="on" />
+    <when value="no">
+      <param name="fastq_in" type="data" format="fastqsanger" label="Input FASTQ file" />
+    </when>
+    <when value="yes">
+      <conditional name="paired_input_type_conditional">
+        <param name="paired_input_type" type="select" label="Input Type">
+          <option value="pair_of_files" selected="true">Pair of datasets</option>
+          <option value="collection">Dataset collection pair</option>
+        </param>
+        <when value="pair_of_files">
+      <param name="fastq_r1_in" type="data" format="fastqsanger" label="Input FASTQ file (R1/first of pair)" />
+      <param name="fastq_r2_in" type="data" format="fastqsanger" label="Input FASTQ file (R2/second of pair)" />
+    </when>
+        <when value="collection">
+          <param name="fastq_pair" format="fastqsanger" type="data_collection"
+         collection_type="paired"
+         label="Select FASTQ dataset collection with R1/R2 pair" />
+        </when>
+      </conditional>
+    </when>
+    </conditional>
+        <param name="index1" type="select" label="Novo-Align Index(FASTA format)">
+            <options from_data_table="novocraft_index"/>
+        </param>
+    </inputs>
+    <!--<inputs>
         <param name="fastq_input1" type="data" format="fastqsanger" label="Select first set of reads" help="Specify dataset with forward reads"/>
         <param name="fastq_input2" type="data" format="fastqsanger" label="Select second set of reads" help="Specify dataset with reverse reads"/>
         <param name="index1" type="select" label="Novo-Align Index(FASTA format)">
             <options from_data_table="novocraft_index"/>
         </param>
-    </inputs>
+    </inputs>-->
     <outputs>
         <data format="bam" name="out_file" />
     </outputs>
