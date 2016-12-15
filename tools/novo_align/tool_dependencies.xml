@@ -3,4 +3,7 @@
     <package name="novocraft" version="3.04.01">
         <repository name="package_novocraft_3_04_01" owner="sanbi-uwc" />
     </package>
+    <package name="samtools" version="0.1.19">
+        <repository name="package_samtools_0_1_19" owner="iuc" />
+    </package>
 </tool_dependency>
