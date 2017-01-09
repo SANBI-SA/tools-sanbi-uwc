@@ -42,5 +42,6 @@ def main():
     index_file_path = args.index_filename + "/" + args.index_filename.split("/")[-1]
     novo_align(args.output_filename, index_file_path, args.forward_filename, args.reverse_filename)
 
+
 if __name__ == "__main__":
     main()

@@ -33,5 +33,6 @@ def main():
 
     novo_sort(args.bam_filename, args.output_filename)
 
+
 if __name__ == "__main__":
     main()
