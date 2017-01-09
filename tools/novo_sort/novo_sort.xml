@@ -1,29 +1,32 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<tool id="novo_sort" name="NOVO SORT" version="0.0.1">
+<tool id="novo_sort" name="NOVO SORT" version="0.0.2">
     <description>Tool to run the Novo Sort mapping tool</description>
     <requirements>
         <requirement type="package" version="1.2">samtools</requirement>
-        <requirement type="package" version="3.04.01">novocraft</requirement>
+        <requirement type="package" version="3.04.04">novoalign</requirement>
     </requirements>
-    <stdio>
-        <exit_code range=":-1" />
-        <exit_code range="1:" />
-    </stdio>
-    <command interpreter="python">
-        novo_sort.py '${out_file}' --bam_filename ${input1}
+    <command detect_errors="aggressive"><![CDATA[
+        python $__tool_directory__/novo_sort.py '${out_file}' --bam_filename '${input1}'
+    ]]>
     </command>
     <inputs>
-        <param name="input1" type="data" format="bam" label="Select first set of reads" help="Specify dataset with forward reads"/>
+        <param name="input1" type="data" format="bam" label="BAM file" help="a BAM file that requires sorting"/>
     </inputs>
     <outputs>
         <data format="bam" name="out_file" />
     </outputs>
-    <help>Help!</help>
+    <help><![CDATA[
+      Novosort is part of the `Novoalign`_ tool suite.
+
+      .. _Novoalign: http://www.novocraft.com/products/novoalign/
+    ]]></help>
     <citations>
         <citation></citation>
     </citations>
     <tests>
         <test>
+          <param name="input1" value="input1.bam" ftype="bam" />
+          <param name="out_file" value="output1.bam" ftype="bam" />
         </test>
     </tests>
 </tool>

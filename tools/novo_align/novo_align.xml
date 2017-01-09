@@ -1,15 +1,11 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<tool id="novo_align" name="NOVO ALIGN" version="0.0.4">
+<tool id="novo_align" name="NOVO ALIGN" version="0.0.5">
     <description>Tool to run the Novo Align mapping tool</description>
     <requirements>
         <requirement type="package" version="1.2">samtools</requirement>
         <requirement type="package" version="3.04.04">novoalign</requirement>
     </requirements>
-    <stdio>
-        <exit_code range=":-1" />
-        <exit_code range="1:" />
-    </stdio>
-    <command><![CDATA[
+    <command detect_errors="aggressive"><![CDATA[
         #set $paired_input_type = $paired_end.paired_input_type_conditional.paired_input_type
         #if $paired_end.is_paired_end
             #if $paired_input_type == "pair_of_files"
