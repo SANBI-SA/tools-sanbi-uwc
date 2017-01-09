@@ -1,0 +1,12 @@
+name: fasttree
+owner: sanbi-uwc
+description: FastTree builds phylogenetic trees from alignments of nucleotide or protein sequences.
+homepage_url: http://www.microbesonline.org/fasttree/
+long_description: |
+    FastTree infers approximately-maximum-likelihood phylogenetic trees from alignments of
+    nucleotide or protein sequences. FastTree can handle alignments with up to a million of
+    sequences in a reasonable amount of time and memory.
+remote_repository_url: https://github.com/sanbi-sa/tools-sanbi-uwc/tree/master/tools/fasttree
+type: unrestricted
+categories:
+  - Phylogenetics
