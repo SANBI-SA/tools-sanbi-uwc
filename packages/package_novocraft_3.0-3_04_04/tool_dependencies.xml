@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+<tool_dependency>
+    <package name="novocraft" version="3.04.04">
+        <install version="1.0">
+            <actions_group>
+                <actions>
+                    <action type="download_by_url">http://intranet.sanbi.ac.za/novocraftV3.04.04.Linux3.0_with_lic.tar.gz</action>
+                    <action type="move_directory_files">
+                        <source_directory>.</source_directory>
+                        <destination_directory>$INSTALL_DIR</destination_directory>
+                    </action>
+                </actions>
+                <action type="set_environment">
+                    <environment_variable name="PATH" action="prepend_to">$INSTALL_DIR</environment_variable>
+                </action>
+            </actions_group>
+        </install>
+        <readme>
+            <![CDATA[
+                Release Novoalign V3.04.04, NovoalignCS V1.06.04, Novomethyl V1.02, Novosort V1.03.09. 24 March 2016
+
+                Changes:
+                Novoalign*
+                      1. Fix: NovoalignMPI may hang if Illumina chastity filter flag is set to Y on a read.
+                      2. Fix: Novoalign can produce invalid CIGARs for multi-mapped reads when using -r Random or -r All (from V3.04.00)
+            ]]>
+        </readme>
+    </package>
+</tool_dependency>

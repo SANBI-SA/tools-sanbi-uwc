@@ -39,7 +39,7 @@ def main():
     args = parser.parse_args()
 
     # a dirty way of referencing the file
-    index_file_path = args.index_filename + "/" + args.index_filename.split("/")[-1]
+    index_file_path = args.index_filename # not sure of the logic here: + "/" + args.index_filename.split("/")[-1]
     novo_align(args.output_filename, index_file_path, args.forward_filename, args.reverse_filename)
 
 

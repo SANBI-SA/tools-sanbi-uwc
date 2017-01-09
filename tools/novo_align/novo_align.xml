@@ -3,7 +3,7 @@
     <description>Tool to run the Novo Align mapping tool</description>
     <requirements>
         <requirement type="package" version="1.2">samtools</requirement>
-        <requirement type="package" version="3.04.01">novocraft</requirement>
+        <requirement type="package" version="3.04.04">novoalign</requirement>
     </requirements>
     <stdio>
         <exit_code range=":-1" />
@@ -14,33 +14,41 @@
         #if $paired_end.is_paired_end
             #if $paired_input_type == "pair_of_files"
                 #if $paired_end.paired_input_type_conditional.fastq_r1_in.metadata.is_gzipped
-                    ln -s "${$paired_end.paired_input_type_conditional.fastq_r1_in}" ./input_mate1.gz;
-                    ln -s "${$paired_end.paired_input_type_conditional.fastq_r2_in}" ./input_mate2.gz;
+                    ln -s "${$paired_end.paired_input_type_conditional.fastq_r1_in}" ./input_mate1.gz &&
+                    ln -s "${$paired_end.paired_input_type_conditional.fastq_r2_in}" ./input_mate2.gz &&
                 #else
-                    ln -s "${$paired_end.paired_input_type_conditional.fastq_r1_in}" ./input_mate1;
-                    ln -s "${$paired_end.paired_input_type_conditional.fastq_r2_in}" ./input_mate2;
+                    ln -s "${$paired_end.paired_input_type_conditional.fastq_r1_in}" ./input_mate1 &&
+                    ln -s "${$paired_end.paired_input_type_conditional.fastq_r2_in}" ./input_mate2 &&
                 #end if
             #else:
                 #if $paired_end.paired_input_type_conditional.fastq_pair.forward.metadata.is_gzipped
-                    ln -s "${paired_end.paired_input_type_conditional.fastq_pair.forward}" ./input_mate1.gz;
-                    ln -s "${paired_end.paired_input_type_conditional.fastq_pair.reverse}" ./input_mate2.gz;
+                    ln -s "${paired_end.paired_input_type_conditional.fastq_pair.forward}" ./input_mate1.gz &&
+                    ln -s "${paired_end.paired_input_type_conditional.fastq_pair.reverse}" ./input_mate2.gz &&
                 #else
-                    ln -s "${paired_end.paired_input_type_conditional.fastq_pair.forward}" ./input_mate1;
-                    ln -s "${paired_end.paired_input_type_conditional.fastq_pair.reverse}" ./input_mate2;
+                    ln -s "${paired_end.paired_input_type_conditional.fastq_pair.forward}" ./input_mate1 &&
+                    ln -s "${paired_end.paired_input_type_conditional.fastq_pair.reverse}" ./input_mate2 &&
                 #end if
             #end if
         #else
             #if $fastq_in.metadata.is_gzipped
-                ln -s "${fastq_in}" ./input_singles.gz;
+                ln -s "${fastq_in}" ./input_singles.gz &&
             #else
-                ln -s "${fastq_in}" ./input_singles;
+                ln -s "${fastq_in}" ./input_singles &&
             #end if
         #end if
 
-
+        #if str($index.source) == 'history':
+          ln -s '${index.reference}' reference.fasta &&
+          novoindex -m reference.nix reference.fasta &&
+        #end if
         python $__tool_directory__/novo_align.py
             '${out_file}'
-            --index_file ${index1.fields.path}
+            --index
+            #if str($index.source) == 'builtin':
+              '${index.index1}'
+            #else
+              reference.nix
+            #end if
             #if $paired_end.is_paired_end
                 #if $paired_input_type == "pair_of_files"
                     #if $paired_end.paired_input_type_conditional.fastq_r1_in.metadata.is_gzipped
@@ -87,9 +95,20 @@
       </conditional>
     </when>
     </conditional>
+    <conditional name="index" label="Index source">
+      <param name="source" type="select">
+        <option value="builtin" selected="True">Built-in</option>
+        <option value="history">History</option>
+      </param>
+      <when value="builtin">
         <param name="index1" type="select" label="Novo-Align Index(FASTA format)">
             <options from_data_table="novocraft_index"/>
         </param>
+      </when>
+      <when value="history">
+        <param name="reference" type="data" format="fasta" label="Reference sequence" />
+      </when>
+    </conditional>
     </inputs>
     <!--<inputs>
         <param name="fastq_input1" type="data" format="fastqsanger" label="Select first set of reads" help="Specify dataset with forward reads"/>
@@ -101,11 +120,25 @@
     <outputs>
         <data format="bam" name="out_file" />
     </outputs>
-    <help>Help!</help>
     <tests>
         <test>
+          <param name="is_paired_end" value="yes" />
+          <param name="paired_input_type" value="pair_of_files" />
+          <param name="fastq_r1_in" ftype="fastqsanger" value="sample_r1.fastq" />
+          <param name="fastq_r2_in" ftype="fastqsanger" value="sample_r2.fastq" />
+          <param name="source" value="history" />
+          <param name="reference" ftype="fasta" value="reference.fasta" />
+          <assert_stderr>
+            <has_text text="# Fragment Length Distribution" />
+          </assert_stderr>
         </test>
     </tests>
+    <help><![CDATA[
+      `Novoalign`_ is a powerful tool designed for mapping of short reads onto a reference genome from Illumina,
+      Ion Torrent, and 454 NGS platforms.
+
+      .. _Novoalign: http://www.novocraft.com/products/novoalign/
+    ]]></help>
     <citations>
         <citation type="bibtex">
 @ARTICLE{hercus2012novoalign,

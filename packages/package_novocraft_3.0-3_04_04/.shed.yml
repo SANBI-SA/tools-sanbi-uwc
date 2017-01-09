@@ -1,0 +1,11 @@
+categories:
+- Next Gen Mappers
+- Tool Dependency Packages
+description: Contains a tool dependency definition that downloads and compiles version 3.04.04 of Novocraft's Novoalign.
+long_description: |
+    Powerful tool designed for mapping of short reads onto a reference genome from Illumina, Ion Torrent, and 454 NGS platforms.
+    http://www.novocraft.com/
+name: package_novocraft_3_04_04
+owner: sanbi-uwc
+remote_repository_url: https://github.com/sanbi-sa/tools-sanbi-uwc/tree/master/packages/package_novocraft_3.0-3_04_04
+type: tool_dependency_definition
