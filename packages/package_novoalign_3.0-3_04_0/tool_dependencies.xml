@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <tool_dependency>
-    <package name="novocraft" version="3.04.04">
+    <package name="novoalign" version="3.04.04">
         <install version="1.0">
             <actions_group>
                 <actions>
