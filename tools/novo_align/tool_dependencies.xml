@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <tool_dependency>
-    <package name="novocraft" version="3.04.01">
+    <package name="novoalign" version="3.04.04">
         <repository name="package_novoalign_3_04_04" owner="sanbi-uwc" />
     </package>
     <package name="samtools" version="1.2">
