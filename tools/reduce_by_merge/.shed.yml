@@ -1,0 +1,9 @@
+categories:
+- Fasta Manipulation
+description: Concatenate FASTA collection into single dataset
+long_description: |
+   Concatenate a collection of FASTA datasets into a single FASTA dataset.
+name: reduce_by_merge
+owner: sanbi-uwc
+remote_repository_url: https://github.com/sanbi-sa/tools-sanbi-uwc
+type: unrestricted

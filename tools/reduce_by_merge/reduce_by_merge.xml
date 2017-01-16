@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<tool id="reduce_by_merge" name="Reduce by Merge" version="0.0.1">
+  <description>Concatenate a collection of FASTA datasets into a single FASTA dataset</description>
+  <command detect_errors="aggressive"><![CDATA[
+    cat
+    #for $input in $input_datasets
+      '${input}'
+    #end for
+    > '${output}'
+    ]]>
+  </command>
+  <inputs>
+    <param name="input_datasets" format="fasta" type="data_collection" collection_type="list" label="Input collection of datasets" />
+  </inputs>
+  <outputs>
+    <data name="output" label="Merge ${on_string}" format="fasta"/>
+  </outputs>
+  <tests>
+    <test>
+      <param name="input_datasets">
+        <collection type="list">
+          <element name="input_datasets.input1" value="input1.fasta" />
+          <element name="input_datasets.input2" value="input2.fasta" />
+          <element name="input_datasets.input3" value="input3.fasta" />
+        </collection>
+      </param>
+      <output name="output" value="output1.fasta" />
+    </test>
+  </tests>
+  <help><![CDATA[
+    Merge all elements of the input collection into a single output dataset by concatenating them together.
+    ]]>
+  </help>
+  <citations>
+  </citations>
+</tool>
