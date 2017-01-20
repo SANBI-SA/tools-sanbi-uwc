@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<tool id="novo_align" name="NOVO ALIGN" version="0.0.7">
+<tool id="novo_align" name="NOVO ALIGN" version="0.0.8">
     <description>Tool to run the Novo Align mapping tool</description>
     <requirements>
         <requirement type="package" version="1.2">samtools</requirement>
         <requirement type="package" version="3.04.04">novoalign</requirement>
+        <requirement type="package" version="04.2016">novoalign-license</requirement>
     </requirements>
     <command detect_errors="aggressive"><![CDATA[
         #set $paired_input_type = $paired_end.paired_input_type_conditional.paired_input_type
@@ -13,23 +14,27 @@
                     ln -s "${$paired_end.paired_input_type_conditional.fastq_r1_in}" ./input_mate1.gz &&
                     ln -s "${$paired_end.paired_input_type_conditional.fastq_r2_in}" ./input_mate2.gz &&
                 #else
-                    ln -s "${$paired_end.paired_input_type_conditional.fastq_r1_in}" ./input_mate1 &&
-                    ln -s "${$paired_end.paired_input_type_conditional.fastq_r2_in}" ./input_mate2 &&
+                    #set $r1_ext = $paired_end.paired_input_type_conditional.fastq_r1_in.ext
+                    #set $r2_ext = $paired_end.paired_input_type_conditional.fastq_r2_in.ext
+                    ln -s "${$paired_end.paired_input_type_conditional.fastq_r1_in}" ./input_mate1.$r1_ext &&
+                    ln -s "${$paired_end.paired_input_type_conditional.fastq_r2_in}" ./input_mate2.$r2_ext &&
                 #end if
             #else:
                 #if $paired_end.paired_input_type_conditional.fastq_pair.forward.metadata.is_gzipped
                     ln -s "${paired_end.paired_input_type_conditional.fastq_pair.forward}" ./input_mate1.gz &&
                     ln -s "${paired_end.paired_input_type_conditional.fastq_pair.reverse}" ./input_mate2.gz &&
                 #else
-                    ln -s "${paired_end.paired_input_type_conditional.fastq_pair.forward}" ./input_mate1 &&
-                    ln -s "${paired_end.paired_input_type_conditional.fastq_pair.reverse}" ./input_mate2 &&
+                    #set $r1_ext = $paired_end.paired_input_type_conditional.fastq_pair.forward.ext
+                    #set $r2_ext = $paired_end.paired_input_type_conditional.fastq_pair.reverse.ext
+                    ln -s "${paired_end.paired_input_type_conditional.fastq_pair.forward}" ./input_mate1.$r1_ext &&
+                    ln -s "${paired_end.paired_input_type_conditional.fastq_pair.reverse}" ./input_mate2.$r2_ext &&
                 #end if
             #end if
         #else
             #if $fastq_in.metadata.is_gzipped
                 ln -s "${fastq_in}" ./input_singles.gz &&
             #else
-                ln -s "${fastq_in}" ./input_singles &&
+                ln -s "${fastq_in}" ./input_singles.${fastq_in.ext} &&
             #end if
         #end if
 
@@ -51,27 +56,28 @@
                         --forward_file ./input_mate1.gz
                         --reverse_file ./input_mate2.gz
                     #else
-                        --forward_file ./input_mate1
-                        --reverse_file ./input_mate2
+                        --forward_file ./input_mate1.$r1_ext
+                        --reverse_file ./input_mate2.$r2_ext
                     #end if
                 #else
                     #if $paired_end.paired_input_type_conditional.fastq_pair.forward.metadata.is_gzipped:
                         --forward_file ./input_mate1.gz
                         --reverse_file ./input_mate2.gz
                     #else
-                        --forward_file ./input_mate1
-                        --reverse_file ./input_mate2
+                        --forward_file ./input_mate1.$r1_ext
+                        --reverse_file ./input_mate2.$r2_ext
                     #end if
                 #end if
             #else
-                --forward_file ${fastq_in} --reverse_file ${fastq_in}
+                --forward_file ${fastq_in}.${fastq_in.ext} --reverse_file ${fastq_in}.${fastq_in.ext}
             #end if
+
     ]]></command>
     <inputs>
     <conditional name="paired_end">
     <param name="is_paired_end" type="boolean" label="Paired end data?" truevalue="yes" falsevalue="no" checked="yes" />
     <when value="no">
-      <param name="fastq_in" type="data" format="fastqsanger" label="Input FASTQ file" />
+      <param name="fastq_in" type="data" format="fastqsanger|fastqsanger.gz" label="Input FASTQ file" />
     </when>
     <when value="yes">
       <conditional name="paired_input_type_conditional">
@@ -80,11 +86,11 @@
           <option value="collection">Dataset collection pair</option>
         </param>
         <when value="pair_of_files">
-      <param name="fastq_r1_in" type="data" format="fastqsanger" label="Input FASTQ file (R1/first of pair)" />
-      <param name="fastq_r2_in" type="data" format="fastqsanger" label="Input FASTQ file (R2/second of pair)" />
+      <param name="fastq_r1_in" type="data" format="fastqsanger|fastqsanger.gz" label="Input FASTQ file (R1/first of pair)" />
+      <param name="fastq_r2_in" type="data" format="fastqsanger|fastqsanger.gz" label="Input FASTQ file (R2/second of pair)" />
     </when>
         <when value="collection">
-          <param name="fastq_pair" format="fastqsanger" type="data_collection"
+          <param name="fastq_pair" format="fastqsanger|fastqsanger.gz" type="data_collection"
          collection_type="paired"
          label="Select FASTQ dataset collection with R1/R2 pair" />
         </when>
@@ -122,6 +128,17 @@
           <param name="paired_input_type" value="pair_of_files" />
           <param name="fastq_r1_in" ftype="fastqsanger" value="sample_r1.fastq" />
           <param name="fastq_r2_in" ftype="fastqsanger" value="sample_r2.fastq" />
+          <param name="source" value="history" />
+          <param name="reference" ftype="fasta" value="reference.fasta" />
+          <assert_stderr>
+            <has_text text="# Fragment Length Distribution" />
+          </assert_stderr>
+        </test>
+        <test>
+          <param name="is_paired_end" value="yes" />
+          <param name="paired_input_type" value="pair_of_files" />
+          <param name="fastq_r1_in" ftype="fastqsanger.gz" value="sample_r1.fastq.gz" />
+          <param name="fastq_r2_in" ftype="fastqsanger.gz" value="sample_r2.fastq.gz" />
           <param name="source" value="history" />
           <param name="reference" ftype="fasta" value="reference.fasta" />
           <assert_stderr>
