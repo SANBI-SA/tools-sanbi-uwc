@@ -10,7 +10,7 @@ long_description: |
   on projects of any size.
 
   http://www.broadinstitute.org/gatk/about/
-name: sanbi_gatk2
+name: gatk2
 owner: sanbi-uwc
-remote_repository_url: https://github.com/galaxyproject/tools-iuc/tree/master/tools/gatk2
+remote_repository_url: https://github.com/SANBI-SA/tools-sanbi-uwc/tree/master/tools/gatk2
 type: unrestricted
