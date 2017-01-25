@@ -14,6 +14,10 @@
         <environment_variable name="GATK2_SITE_OPTIONS" action="set_to"> </environment_variable>
     </set_environment>
 
+    <set_environment version="1.0">
+        <environment_variable name="GATK2_JAVA_OPTIONS" action="set_to"> </environment_variable>
+    </set_environment>
+
     <package name="samtools" version="0.1.19">
         <repository name="package_samtools_0_1_19" owner="iuc" />
     </package>

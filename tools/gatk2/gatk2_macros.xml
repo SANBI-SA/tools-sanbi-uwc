@@ -6,6 +6,7 @@
       <requirement type="package" version="1.56.0">picard</requirement>
       <requirement type="set_environment">GATK2_PATH</requirement>
       <requirement type="set_environment">GATK2_SITE_OPTIONS</requirement>
+      <requirement type="set_environment">GATK2_JAVA_OPTIONS</requirement>
       <yield />
     </requirements>
   </xml>
@@ -20,7 +21,7 @@
   </token>
   <token name="@VERSION@">2.8</token>
   <token name="@JAR_PATH@">
-    java -jar "\$GATK2_PATH/GenomeAnalysisTK.jar"
+    java \$GATK2_JAVA_OPTIONS -jar "\$GATK2_PATH/GenomeAnalysisTK.jar"
   </token>
   <token name="@DBSNP_OPTIONS@">
     #if $dbsnp_rod_bind_type.dbsnp_rod_bind_type_selector == 'set_dbsnp'
