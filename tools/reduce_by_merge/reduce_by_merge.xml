@@ -1,19 +1,18 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<tool id="reduce_by_merge" name="Reduce by Merge" version="0.0.1">
+<tool id="reduce_by_merge" name="Merge FASTA collection" version="0.0.2">
   <description>Concatenate a collection of FASTA datasets into a single FASTA dataset</description>
   <command detect_errors="aggressive"><![CDATA[
-    cat
     #for $input in $input_datasets
-      '${input}'
+      awk 'BEGIN {counter=1} /^>.*/ {print ">${input.element_identifier}_" counter; counter = counter + 1}; /^[^>]/ {print}' '${input}' >> '${output}' &&
     #end for
-    > '${output}'
+    true
     ]]>
   </command>
   <inputs>
     <param name="input_datasets" format="fasta" type="data_collection" collection_type="list" label="Input collection of datasets" />
   </inputs>
   <outputs>
-    <data name="output" label="Merge ${on_string}" format="fasta"/>
+    <data name="output" label="Merge ${on_string}" format="fasta" />
   </outputs>
   <tests>
     <test>
