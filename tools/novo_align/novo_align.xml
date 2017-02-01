@@ -46,7 +46,7 @@
             '${out_file}'
             --index
             #if str($index.source) == 'builtin':
-              '${index.index1}'
+              '${index.index1.fields.path}'
             #else
               reference.nix
             #end if

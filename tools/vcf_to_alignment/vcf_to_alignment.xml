@@ -18,7 +18,7 @@
     #if str($reference.source) == 'history':
       reference.fasta
     #else
-      '${reference.builtin}'
+      '${reference.builtin.fields.path}'
     #end if
     --output_file '${output_alignment}'
     ]]>
@@ -36,6 +36,7 @@
       <when value="builtin">
         <param name="builtin" type="select" label="Reference sequence (FASTA format)">
           <options from_data_table="all_fasta" />
+          <validator type="no_options" message="No FASTA datasets are available for the selected input dataset" />
         </param>
       </when>
     </conditional>
