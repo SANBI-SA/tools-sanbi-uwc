@@ -1,0 +1,11 @@
+categories:
+- Phylogenetics
+description: Generate a multiple sequence alignment given a collection of variants and a reference sequence
+long_description: |
+  Using the SNPs identified by the VCF files given as input, generates a sequence including the
+  SNPs by combining them with the reference and then combines the sequences into a FASTA
+  format alignment file.
+name: vcf_to_alignment
+owner: sanbi-uwc
+remote_repository_url: https://github.com/sanbi-sa/tools-sanbi-uwc
+type: unrestricted
