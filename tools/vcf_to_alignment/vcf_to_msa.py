@@ -32,11 +32,14 @@ parser = argparse.ArgumentParser()
 parser.add_argument('--vcf_files', nargs="+")
 parser.add_argument('--reference_file', type=argparse.FileType())
 parser.add_argument('--output_file', type=argparse.FileType('w'))
+parser.add_argument('--remove_invariant', action='store_true', default=False)
 args = parser.parse_args()
 
 do_inserts = False
 do_deletes = False
 do_snps = True
+if (do_inserts or do_deletes) and args.remove_invariant:
+    exit("Cannot combine indel processing with 'remove_invariant' argument")
 # reference = str(SeqIO.read(os.path.expanduser("~/Data/fasta/NC_000962.fna"), "fasta").seq)
 # print(reference, file=open('/tmp/reference.txt', 'w'))
 # vcf_files_dir = os.path.expanduser("~/Data/vcf")
@@ -50,6 +53,8 @@ insertion_sites = []
 tree = intervaltree.IntervalTree()
 sequence_names = []
 sequences = {}
+if args.remove_invariant:
+    variant_sites = set()
 for i, vcf_descriptor in enumerate(args.vcf_files):
     # seqname = os.path.splitext(os.path.basename(vcf_filename))[0]
     (seqname,vcf_filename) = vcf_descriptor.split('^^^')
@@ -69,6 +74,8 @@ for i, vcf_descriptor in enumerate(args.vcf_files):
                 sequence[record.affected_start] = str(record.alleles[1]) # SNP, simply insert alt allele
             except IndexError as e:
                 print("snp: Error assigning to {}:{}: {}".format(record.affected_start, record.affected_end, str(e)), file=sys.stderr)
+            if args.remove_invariant:
+                variant_sites.add(record.affected_start)
             count += 1
         elif record.is_indel:
             length = record.affected_end - record.affected_start
@@ -98,10 +105,18 @@ for i, vcf_descriptor in enumerate(args.vcf_files):
                     #     new_interval = intervaltree.Interval(start, end, existing_interval.data + interval.data)
                     #     tree.add(new_interval)
 
-SeqIO.write(reference_seq, args.output_file, "fasta")
+if args.remove_invariant:
+    reference_str = ''.join([c for (i, c) in enumerate(reference) if i in variant_sites])
+    reference_seq_variant = SeqRecord(Seq(reference_str), id=reference_seq.id, description=reference_seq.description)
+    SeqIO.write(reference_seq_variant, args.output_file, "fasta")
+else:
+    SeqIO.write(reference_seq, args.output_file, "fasta")
+
 offset = 0
+sequence_length = 0
 for name in sequence_names:
     sequence = sequences[name]
+    sequence_length = len(sequence)
     for site in sorted(insertion_sites, key=itemgetter(0)):
         (start, end, allele, seqname) = site
         # print(start, allele, seqname)
@@ -116,7 +131,12 @@ for name in sequence_names:
                 sequence[start:end] = ['-'] * length
         except IndexError as e:
             print("ins: Error assigning to {}:{}: {}".format(start, end, str(e)), file=sys.stderr)
-    SeqIO.write(SeqRecord(Seq(''.join(sequence), alphabet=IUPAC.ambiguous_dna), id=name, description=""), args.output_file, "fasta")
+
+    if args.remove_invariant:
+        seq_str = ''.join([c for (i, c) in enumerate(sequence) if i in variant_sites])
+    else:
+        seq_str = ''.join(sequence)
+    SeqIO.write(SeqRecord(Seq(seq_str, alphabet=IUPAC.ambiguous_dna), id=name, description=""), args.output_file, "fasta")
 
         # output.write(bytes("\t".join([type, str(record.affected_start), str(record.affected_end), str(record.alleles[0]), str(record.alleles[1])])+"\n", encoding="ascii"))
     # output.close()

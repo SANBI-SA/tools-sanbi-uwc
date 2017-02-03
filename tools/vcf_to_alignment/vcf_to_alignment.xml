@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<tool id="vcf_to_alignment" name="Generate FASTA alignment from VCF collection" version="0.2">
+<tool id="vcf_to_alignment" name="Generate FASTA alignment from VCF collection" version="0.3">
   <description>Generate a multiple sequence alignment given a collection of variants and a reference sequence</description>
   <requirements>
       <requirement type="package" version="1.67">biopython</requirement>
@@ -10,7 +10,9 @@
     #if str($reference.source) == 'history':
       ln -s '${reference.history}' reference.fasta &&
     #end if
-    python $__tool_directory__/vcf_to_msa.py --vcf_files
+    python $__tool_directory__/vcf_to_msa.py
+    $remove_invariant_sites
+    --vcf_files
     #for $vcf_file in $vcf_inputs:
       '${vcf_file.element_identifier}^^^${vcf_file}'
     #end for
@@ -25,6 +27,7 @@
   </command>
   <inputs>
     <param name="vcf_inputs" type="data_collection" format="vcf" collection_type="list" label="Variants (VCF format)" />
+    <param name="remove_invariant_sites" type="boolean" truevalue="--remove_invariant" falsevalue="" label="Remove invariant sites from alignment" />
     <conditional name="reference" label="Reference sequence source">
       <param name="source" type="select">
         <option value="history" selected="True">History</option>
@@ -46,6 +49,7 @@
   </outputs>
   <tests>
     <test>
+      <param name="remove_invariant_sites" value="False" />
       <param name="vcf_inputs">
         <collection type="list">
           <element name="vcf_inputs.vcf1" value="vcf1.vcf" />
@@ -55,6 +59,18 @@
       </param>
       <param name="history" value="reference.fasta" ftype="fasta" />
       <output name="output_alignment" value="output1.fasta" />
+    </test>
+    <test>
+      <param name="remove_invariant_sites" value="True" />
+      <param name="vcf_inputs">
+        <collection type="list">
+          <element name="vcf_inputs.vcf1" value="vcf1.vcf" />
+          <element name="vcf_inputs.vcf2" value="vcf2.vcf" />
+          <element name="vcf_inputs.vcf3" value="vcf3.vcf" />
+        </collection>
+      </param>
+      <param name="history" value="reference.fasta" ftype="fasta" />
+      <output name="output_alignment" value="output2.fasta" />
     </test>
   </tests>
   <help><![CDATA[
