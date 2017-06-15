@@ -1,0 +1,48 @@
+<?xml version="0.1" encoding="utf-8" ?>
+<tool id="tb2neo" name="M. tuberculosis database building" version="1.0.3">
+    <description>Parses TB GFF file and other annotation to build a
+        Neo4j Graph database.</description>
+    <requirements>
+      <requirement type="package" version="4.0.0b2">py2neo</requirement>
+      <requirement type="package" version="0.0.7">tb2neo</requirement>
+    </requirements>
+    <command detect_errors="aggressive"><![CDATA[
+        tb2neo --docker --outputdir '${outputDb.files_path}' init ${test_mode}
+          '${input_gff}' &&
+        python $__tool_directory__/write_db_summary.py
+          '${outputDb.files_path}' '${outputDb.name}' >'${outputDb}'
+        ]]>
+    </command>
+    <inputs>
+        <param name="input_gff" type="data"
+          format="gff" label="TB genome annotation"
+          help="Specify the M. tuberculosis annotation file (sourced from Ensembl or NCBI)"
+          optional="False" />
+        <param name="test_mode" type="boolean" truevalue="-d -R -U -P -G -O"
+          falsevalue="-d -r -u -p -g -o" label="Quick load mode"
+          help="Only load GFF3 features (for test mode only)" />
+    </inputs>
+    <outputs>
+        <data format="neostore" name="outputDb"/>
+    </outputs>
+    <tests>
+        <test>
+          <param name="test_mode" value="True" />
+          <param name="input_gff" value="sample.gff3" />
+          <assert_stdout>
+            <has_text text="Extract and load features to Neo4j" />
+          </assert_stdout>
+        </test>
+    </tests>
+    <help><![CDATA[
+      The tb2neo_ tool builds a Neo4j database from M. tuberculosis genome
+      annotation (supplied in GFF3 format) and other annotation sources
+      (Uniprot, GO, InterPro and Tuberculist). The output is a Neo4j database
+      stored as a Galaxy neostore datatype that can be explored with the Neo4j
+      Interactive Environment or saved for use outside Galaxy.
+
+      .. _tb2neo: https://github.com/sanbi-sa/tb2neo
+      ]]></help>
+    <citations>
+    </citations>
+</tool>
