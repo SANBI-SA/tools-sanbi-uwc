@@ -1,0 +1,7 @@
+categories: [Sequence Analysis]
+description: VCF import for Neo4j database
+homepage_url: https://github.com/sanbi-sa/vcf2neo
+long_description: Parses collection of VCF files and adds to Neo4j TB database
+name: vcf2neo
+owner: sanbi-uwc
+remote_repository_url: https://github.com/sanbi-sa/tools-sanbi-uwc

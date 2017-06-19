@@ -1,0 +1,7 @@
+categories: [Sequence Analysis]
+description: M. tuberculosis annotation database builder
+homepage_url: https://github.com/sanbi-sa/tb2neo
+long_description: Parses TB GFF file and other annotation to build Neo4j Graph database.
+name: tb2neo
+owner: sanbi-uwc
+remote_repository_url: https://github.com/sanbi-sa/tools-sanbi-uwc
