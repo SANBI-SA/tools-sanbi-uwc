@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<tool id="novo_align" name="NOVO ALIGN" version="0.0.9">
+<tool id="novo_align" name="novoalign" version="0.0.10">
     <description>Tool to run the Novo Align mapping tool</description>
     <requirements>
         <requirement type="package" version="1.2">samtools</requirement>
@@ -42,35 +42,36 @@
           ln -s '${index.reference}' reference.fasta &&
           novoindex -m reference.nix reference.fasta &&
         #end if
-        python $__tool_directory__/novo_align.py
-            '${out_file}'
-            --index
+        novoalign -c \${GALAXY_SLOTS:-8} -k -d
             #if str($index.source) == 'builtin':
               '${index.index1.fields.path}'
             #else
               reference.nix
             #end if
+            -f 
             #if $paired_end.is_paired_end
                 #if $paired_input_type == "pair_of_files"
                     #if $paired_end.paired_input_type_conditional.fastq_r1_in.metadata.is_gzipped
-                        --forward_file ./input_mate1.gz
-                        --reverse_file ./input_mate2.gz
+                        ./input_mate1.gz
+                        ./input_mate2.gz
                     #else
-                        --forward_file ./input_mate1.$r1_ext
-                        --reverse_file ./input_mate2.$r2_ext
+                        ./input_mate1.$r1_ext
+                        ./input_mate2.$r2_ext
                     #end if
                 #else
                     #if $paired_end.paired_input_type_conditional.fastq_pair.forward.metadata.is_gzipped:
-                        --forward_file ./input_mate1.gz
-                        --reverse_file ./input_mate2.gz
+                        ./input_mate1.gz
+                        ./input_mate2.gz
                     #else
-                        --forward_file ./input_mate1.$r1_ext
-                        --reverse_file ./input_mate2.$r2_ext
+                        ./input_mate1.$r1_ext
+                        ./input_mate2.$r2_ext
                     #end if
                 #end if
             #else
-                --forward_file ${fastq_in}.${fastq_in.ext} --reverse_file ${fastq_in}.${fastq_in.ext}
+                '${fastq_in}.${fastq_in.ext}' '${fastq_in}.${fastq_in.ext}'
             #end if
+            -i PE 250, 100 
+            -o SAM '@RG\tID:RG\tSM:\$i\tPL:ILLUMINA' | samtools view -bS - | novosort -c \${GALAXY_SLOTS:-8} -m 8G -s -f - > '${out_file}' 
 
     ]]></command>
     <inputs>
