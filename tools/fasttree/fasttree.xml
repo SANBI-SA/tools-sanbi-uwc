@@ -1,4 +1,4 @@
-<tool id="fasttree" name="FastTree" version="0.1">
+<tool id="fasttree" name="FastTree" version="0.2">
   <description>infers approximately-maximum-likelihood phylogenetic trees from alignments of nucleotide or protein sequences.</description>
 
   <requirements>
