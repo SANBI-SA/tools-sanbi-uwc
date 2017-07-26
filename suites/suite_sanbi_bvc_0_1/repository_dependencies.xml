@@ -2,7 +2,7 @@
 <repositories description="A suite of tools associated with SANBI Bactarial Varriant Calling pipeline">
     <repository changeset_revision="069b6b601fad" name="trimmomatic" owner="sanbi-uwc" toolshed="https://testtoolshed.g2.bx.psu.edu" />
     <repository changeset_revision="119cb8e503d0" name="novo_align" owner="sanbi-uwc" toolshed="https://testtoolshed.g2.bx.psu.edu" />
-    <repository changeset_revision="5f1da1eadb39" name="picard" owner="avowinkel" toolshed="https://toolshed.g2.bx.psu.edu" />
+    <repository changeset_revision="ffa70c31d088" name="picard" owner="avowinkel" toolshed="https://testtoolshed.g2.bx.psu.edu" />
     <repository changeset_revision="c07ad8a9c701" name="freebayes" owner="devteam" toolshed="https://testtoolshed.g2.bx.psu.edu" />
     <repository changeset_revision="7923e67fa16a" name="qualimap2" owner="sanbi-uwc" toolshed="https://testtoolshed.g2.bx.psu.edu" />
     <repository changeset_revision="924af057bbca" name="snpeff" owner="jjohnson" toolshed="https://testtoolshed.g2.bx.psu.edu" />
