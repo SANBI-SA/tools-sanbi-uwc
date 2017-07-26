@@ -1,0 +1,9 @@
+categories:
+- Sequence Analysis
+description: SANBI Bacterial Variant Calling - Tool Suite, defining all dependencies for SANBIBacterialVariantCalling.
+long_description: |
+    SANBI Bacterial Variant Calling - Tool Suite, defining all dependencies for SANBIBacterialVariantCalling.
+name: suite_sanbi_bvc_0_1
+owner: sanbi-uwc
+remote_repository_url: https://github.com/SANBI-SA/tools-sanbi-uwc/tree/master/suites/suite_sanbi_bvc_0_1
+type: unrestricted
