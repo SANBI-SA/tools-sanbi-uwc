@@ -45,8 +45,8 @@
         "$input2"
     ]]></command>
     <inputs>
-        <param type="data" name="input1" format="fa" label="Indexed reference fasta file (gzip supported)" help="Indexed reference fasta file (gzip supported)"/>
-        <param type="data" name="input2" format="bam"/>
+        <param type="data" name="input2" format="bam" label="Input Bam File"/>
+        <param type="data" name="input1" format="fa,fasta" label="Indexed reference fasta file (gzip supported)" help="Indexed reference fasta file (gzip supported)"/>
         <param name="region" type="text" label="Limit calls to this region (chrom:start-end)">
             <help>
                Limit calls to this region (chrom:start-end).
