@@ -6,18 +6,54 @@
         <exit_code range="1:" />
     </stdio>
     <command><![CDATA[
-        lofreq call -f "$input1" -o "$output1" "$input2"
+        lofreq call
+        -f "$input1"
+        -o "$output1"
+        #if $region and str($region) != '':
+          -r "$region"
+        #end if
+        #if $region-bed-file and str($region-bed-file) != '':
+          -l "$region-bed-file"
+        #end if
+        --min-bq "$min-bq"
+        --min-alt-bq "$min-alt-bq"
+        --def-alt-bq "$def-alt-bq"
+        --min-jq "$min-jq"
+        --min-alt-jq "$min-alt-jq"
+        --def-alt-jq "$def-alt-jq"
+        #if $base_alignment_and_indel_alignment and str($base_alignment_and_indel_alignment) != '':
+          #echo " "
+          #echo ' '.join(str($base_alignment_and_indel_alignment).split(','))
+        #end if
+        --min-mq "$min-bq"
+        --max-mq "$max-mq"
+        --def-nm-q "$def-nm-q"
+        --min-cov "$min-cov"
+        --max-depth "$max-depth"
+        $merge_mapping_quality
+        #if $sq_vcf and str($sq_vcf) != '':
+          -S "$sq_vcf"
+        #end if
+        #if $indels and str($indels) != '':
+          #echo " "
+          #echo ' '.join(str($indels).split(','))
+        #end if
+        #if $misc and str($misc) != '':
+          #echo " "
+          #echo ' '.join(str($misc).split(','))
+        #end if
+        "$input2"
     ]]></command>
     <inputs>
-        <param type="data" name="input1" format="fa" />
-        <param type="data" name="input2" format="bam" />
+        <param type="data" name="input1" format="fa" label="Indexed reference fasta file (gzip supported)" help="Indexed reference fasta file (gzip supported)"/>
+        <param type="data" name="input2" format="bam"/>
         <param name="region" type="text" label="Limit calls to this region (chrom:start-end)">
             <help>
                Limit calls to this region (chrom:start-end).
             </help>
             <validator type="regex" message="No whitespace allowed">^\S*$</validator>
         </param>
-        <param format="bed" name="input" type="data" optional="true" label="List of positions (chr pos) or regions (BED) file"/>
+        <param format="bed" name="region-bed-file" type="data" optional="true" label="List of positions (chr pos) or regions (BED) file"/>
 	    <param name="min-bq" type="integer" label="Skip any base with baseQ smaller than" value="6" help="Skip any base with baseQ smaller than [INT]" />
         <param name="min-alt-bq" type="integer" label="Skip alternate bases with baseQ smaller than" value="6" help=" Skip alternate bases with baseQ smaller than [INT]" />
         <param name="def-alt-bq" type="integer" label="Overwrite baseQs of alternate bases (that passed bq filter) with this value (-1: use median ref-bq; 0: keep)" value="0" help="Overwrite baseQs of alternate bases (that passed bq filter) with this value (-1: use median ref-bq; 0: keep) [INT]" />
@@ -36,8 +72,9 @@
         <param name="def-nm-q" type="integer" label="If >= 0, then replace non-match base qualities with this default value [-1] " value="0" help="   If >= 0, then replace non-match base qualities with this default value [-1]" />
         <param name="min-cov" type="integer" label="Test only positions having at least this coverage " value="1" help="(note: without --no-default-filter default filters (incl. coverage) kick in after predictions are done)" />
         <param name="max-depth" type="integer" label=" Cap coverage at this depth" value="1000000" help="Cap coverage at this depth [1000000] [INT]" />
+
         <param name="merge_mapping_quality" type="boolean" truevalue="" falsevalue="--no-mq" checked="true" label="Don't merge mapping quality in LoFreq's model"/>
-        <param format="vcf" name="input" type="data" optional="true" label="Ignore variants in this vcf file for source quality computation."/>
+        <param format="vcf" name="sq_vcf" type="data" optional="true" label="Ignore variants in this vcf file for source quality computation."/>
         <param name="indels" type="select" display="checkboxes" multiple="true" label="Indels Options">
             <option value="--call-indels">Enable indel calls (note: preprocess your file to include indel alignment qualities!)</option>
             <option value="--only-indels">Only call indels; no SNVs</option>
@@ -60,7 +97,7 @@
     <outputs>
         <data name="output1" format="vcf" />
     </outputs>
-    <tests>d
+    <tests>
         <test>
             <param name="input1" value="ref.fa"/>
             <param name="input2" value="aln.bam"/>
