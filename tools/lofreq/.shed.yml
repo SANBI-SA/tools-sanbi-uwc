@@ -1,5 +1,6 @@
 categories:
-- Next-Gen Sequencing
+- Next Gen Mappers
+- Metagenomics
 - Variant Analysis
 description: Fast and sensitive variant calling from next-gen sequencing data
 homepage_url: http://csb5.github.io/lofreq/
@@ -8,6 +9,6 @@ long_description: |
   It makes full use of base-call qualities and other sources of errors inherent in sequencing (e.g. mapping or base/indel alignment uncertainty),
   which are usually ignored by other methods or only used for filtering.
 name: lofreq
-owner: sanbi
+owner: sanbi-uwc
 remote_repository_url: https://github.com/SANBI-SA/tools-sanbi-uwc/tree/master/tools/lofreq
 type: unrestricted
