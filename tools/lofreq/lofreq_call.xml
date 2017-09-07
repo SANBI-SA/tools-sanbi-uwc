@@ -12,24 +12,24 @@
         #if $region and str($region) != '':
           -r "$region"
         #end if
-        #if $region-bed-file and str($region-bed-file) != '':
-          -l "$region-bed-file"
+        #if $RegionBedFile and str($RegionBedFile) != '':
+          -l "$RegionBedFile"
         #end if
-        --min-bq "$min-bq"
-        --min-alt-bq "$min-alt-bq"
-        --def-alt-bq "$def-alt-bq"
-        --min-jq "$min-jq"
-        --min-alt-jq "$min-alt-jq"
-        --def-alt-jq "$def-alt-jq"
-        #if $base_alignment_and_indel_alignment and str($base_alignment_and_indel_alignment) != '':
+        --min-bq "$MinBq"
+        --min-alt-bq "$MinAltBq"
+        --def-alt-bq "$DefAltBq"
+        --min-jq "$MinJq"
+        --min-alt-jq "$MinAltJq"
+        --def-alt-jq "$DefAltJq"
+        #if $BaseAlignmentAndIndedAlignment and str($BaseAlignmentAndIndedAlignment) != '':
           #echo " "
-          #echo ' '.join(str($base_alignment_and_indel_alignment).split(','))
+          #echo ' '.join(str($BaseAlignmentAndIndedAlignment).split(','))
         #end if
-        --min-mq "$min-bq"
-        --max-mq "$max-mq"
-        --def-nm-q "$def-nm-q"
-        --min-cov "$min-cov"
-        --max-depth "$max-depth"
+        --min-mq "$MinMq"
+        --max-mq "$MaxMq"
+        --def-nm-q "$DefNmQ"
+        --min-cov "$MinCov"
+        --max-depth "$MaxDepth"
         $merge_mapping_quality
         #if $sq_vcf and str($sq_vcf) != '':
           -S "$sq_vcf"
@@ -53,25 +53,25 @@
             </help>
             <validator type="regex" message="No whitespace allowed">^\S*$</validator>
         </param>
-        <param format="bed" name="region-bed-file" type="data" optional="true" label="List of positions (chr pos) or regions (BED) file"/>
-	    <param name="min-bq" type="integer" label="Skip any base with baseQ smaller than" value="6" help="Skip any base with baseQ smaller than [INT]" />
-        <param name="min-alt-bq" type="integer" label="Skip alternate bases with baseQ smaller than" value="6" help=" Skip alternate bases with baseQ smaller than [INT]" />
-        <param name="def-alt-bq" type="integer" label="Overwrite baseQs of alternate bases (that passed bq filter) with this value (-1: use median ref-bq; 0: keep)" value="0" help="Overwrite baseQs of alternate bases (that passed bq filter) with this value (-1: use median ref-bq; 0: keep) [INT]" />
-        <param name="min-jq" type="integer" label="Skip any base with joinedQ smaller than" value="0" help="Skip any base with joinedQ smaller than [INT]" />
-        <param name="min-alt-jq" type="integer" label="Skip alternate bases with joinedQ smaller than" value="0" help="Skip alternate bases with joinedQ smaller than [INT]" />
-        <param name="def-alt-jq" type="integer" label="Overwrite joinedQs of alternate bases (that passed jq filter) with this value (-1: use median ref-bq; 0: keep)" value="0" help="Overwrite joinedQs of alternate bases (that passed jq filter) with this value (-1: use median ref-bq; 0: keep)" />
+        <param format="bed" name="RegionBedFile" type="data" optional="true" label="List of positions (chr pos) or regions (BED) file"/>
+	    <param name="MinBq" type="integer" label="Skip any base with baseQ smaller than" value="6" help="Skip any base with baseQ smaller than [INT]" />
+        <param name="MinAltBq" type="integer" label="Skip alternate bases with baseQ smaller than" value="6" help=" Skip alternate bases with baseQ smaller than [INT]" />
+        <param name="DefAltBq" type="integer" label="Overwrite baseQs of alternate bases (that passed bq filter) with this value (-1: use median ref-bq; 0: keep)" value="0" help="Overwrite baseQs of alternate bases (that passed bq filter) with this value (-1: use median ref-bq; 0: keep) [INT]" />
+        <param name="MinJq" type="integer" label="Skip any base with joinedQ smaller than" value="0" help="Skip any base with joinedQ smaller than [INT]" />
+        <param name="MinAltJq" type="integer" label="Skip alternate bases with joinedQ smaller than" value="0" help="Skip alternate bases with joinedQ smaller than [INT]" />
+        <param name="DefAltJq" type="integer" label="Overwrite joinedQs of alternate bases (that passed jq filter) with this value (-1: use median ref-bq; 0: keep)" value="0" help="Overwrite joinedQs of alternate bases (that passed jq filter) with this value (-1: use median ref-bq; 0: keep)" />
 
-        <param name="base_alignment_and_indel_alignment" type="select" display="checkboxes" multiple="true" label="Base-alignment (BAQ) and indel-aligment (IDAQ) qualities Options">
+        <param name="BaseAlignmentAndIndedAlignment" type="select" display="checkboxes" multiple="true" label="Base-alignment (BAQ) and indel-aligment (IDAQ) qualities Options">
             <option value="--no-baq">Disable use of base-alignment quality (BAQ)</option>
             <option value="--no-idap">Don't use IDAQ values (NOT recommended under ANY circumstances other than debugging)</option>
             <option value="--del-baq">Delete pre-existing BAQ values, i.e. compute even if already present in BAM</option>
             <option value="--no-ext-baq"> Use 'normal' BAQ (samtools default) instead of extended BAQ (both computed on the fly if not already present in lb tag)</option>
         </param>
-        <param name="min-mq" type="integer" label="Skip reads with mapping quality smaller than" value="0" help="Skip reads with mapping quality smaller than [INT]" />
-        <param name="max-mq" type="integer" label="Cap mapping quality at " value="0" help="Cap mapping quality at [INT]" />
-        <param name="def-nm-q" type="integer" label="If >= 0, then replace non-match base qualities with this default value [-1] " value="0" help="   If >= 0, then replace non-match base qualities with this default value [-1]" />
-        <param name="min-cov" type="integer" label="Test only positions having at least this coverage " value="1" help="(note: without --no-default-filter default filters (incl. coverage) kick in after predictions are done)" />
-        <param name="max-depth" type="integer" label=" Cap coverage at this depth" value="1000000" help="Cap coverage at this depth [1000000] [INT]" />
+        <param name="MinMq" type="integer" label="Skip reads with mapping quality smaller than" value="0" help="Skip reads with mapping quality smaller than [INT]" />
+        <param name="MaxMq" type="integer" label="Cap mapping quality at " value="0" help="Cap mapping quality at [INT]" />
+        <param name="DefNmQ" type="integer" label="If >= 0, then replace non-match base qualities with this default value [-1] " value="0" help="   If >= 0, then replace non-match base qualities with this default value [-1]" />
+        <param name="MinCov" type="integer" label="Test only positions having at least this coverage " value="1" help="(note: without --no-default-filter default filters (incl. coverage) kick in after predictions are done)" />
+        <param name="MaxDepth" type="integer" label=" Cap coverage at this depth" value="1000000" help="Cap coverage at this depth [1000000] [INT]" />
 
         <param name="merge_mapping_quality" type="boolean" truevalue="" falsevalue="--no-mq" checked="true" label="Don't merge mapping quality in LoFreq's model"/>
         <param format="vcf" name="sq_vcf" type="data" optional="true" label="Ignore variants in this vcf file for source quality computation."/>
