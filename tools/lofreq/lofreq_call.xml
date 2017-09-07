@@ -63,7 +63,6 @@
 
         <param name="BaseAlignmentAndIndedAlignment" type="select" display="checkboxes" multiple="true" label="Base-alignment (BAQ) and indel-aligment (IDAQ) qualities Options">
             <option value="--no-baq">Disable use of base-alignment quality (BAQ)</option>
-            <option value="--no-idaq">Don't use IDAQ values (NOT recommended under ANY circumstances other than debugging)</option>
             <option value="--del-baq">Delete pre-existing BAQ values, i.e. compute even if already present in BAM</option>
             <option value="--no-ext-baq"> Use 'normal' BAQ (samtools default) instead of extended BAQ (both computed on the fly if not already present in lb tag)</option>
         </param>
