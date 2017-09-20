@@ -82,7 +82,7 @@
             <option value="--only-indels">Only call indels; no SNVs</option>
         </param>
 
-        <param name="Sig" type="integer" label="P-Value cutoff / significance level [0.010000]" value="0.010000" help="P-Value cutoff / significance level [0.010000]" />
+        <param name="Sig" type="float" label="P-Value cutoff / significance level [0.010000]" value="0.010000" help="P-Value cutoff / significance level [0.010000]" />
         <param name="Bonf" type="text" label="Bonferroni factor. 'dynamic' (increase per actually performed test) or INT ['dynamic']" value="dynamic" help="Bonferroni factor. 'dynamic' (increase per actually performed test) or INT ['dynamic']" />
 
         <param name="misc" type="select" display="checkboxes" multiple="true" label="Misc Options">
