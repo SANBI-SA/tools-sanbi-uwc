@@ -30,6 +30,7 @@ def fuzzysearch(query, target):
 
 parser = argparse.ArgumentParser()
 parser.add_argument('--vcf_files', nargs="+")
+#parser.add_argument('--vcf_dirs, ')
 parser.add_argument('--reference_file', type=argparse.FileType())
 parser.add_argument('--output_file', type=argparse.FileType('w'))
 parser.add_argument('--remove_invariant', action='store_true', default=False)
@@ -56,6 +57,11 @@ sequences = {}
 if args.remove_invariant:
     variant_sites = set()
 for i, vcf_descriptor in enumerate(args.vcf_files):
+
+    #pathlist = Path("TKK").glob('*.vcf')
+    #for path in pathlist:
+    #print(str(path))
+
     # seqname = os.path.splitext(os.path.basename(vcf_filename))[0]
     (seqname,vcf_filename) = vcf_descriptor.split('^^^')
     sequence_names.append(seqname)
