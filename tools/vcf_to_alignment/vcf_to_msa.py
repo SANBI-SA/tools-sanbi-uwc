@@ -12,6 +12,8 @@ import vcf
 import intervaltree
 from operator import itemgetter
 
+from pathlib import Path
+
 difference = lambda x,y: 0 if x == y else 1
 
 string_difference = lambda query, target, query_len: sum((difference(query[i], target[i])) for i in range(query_len))
@@ -66,23 +68,26 @@ sequence_names = []
 sequences = {}
 if args.remove_invariant:
     variant_sites = set()
-for i, vcf_descriptor in enumerate(args.vcf_files):
 
-    #pathlist = Path("TKK").glob('*.vcf')
-    #for path in pathlist:
-    #print(str(path))
+vcf_list = []
+if args.vcf_dir:
+    pathlist = Path(args.vcf_dir).glob('*.vcf')
+    for path in pathlist:
+        vcf_list.append(str(path))
+elif args.vcf_files:
+    vcf_list = args.vcf_files
 
-    # seqname = os.path.splitext(os.path.basename(vcf_filename))[0]
-    (seqname,vcf_filename) = vcf_descriptor.split('^^^')
+for i, vcf_descriptor in enumerate(vcf_list):
+    #print(os.path.basename(vcf_descriptor))
+    seqname = str(os.path.basename(vcf_descriptor)).rsplit('.vcf',1)[0]
     sequence_names.append(seqname)
     sequence = list(reference)
     sequences[seqname] = sequence
     print(seqname)
-    # tsv_filename = vcf_filename.replace(".vcf", ".tsv")
-    # output = open(tsv_filename, "wb")
+
     insertions[seqname] = []
     count = 0
-    for record in vcf.VCFReader(filename=vcf_filename):
+    for record in vcf.VCFReader(filename=vcf_descriptor):
         type="unknown"
         if record.is_snp and do_snps:
             type="snp"
