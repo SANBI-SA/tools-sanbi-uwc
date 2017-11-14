@@ -28,12 +28,22 @@ def fuzzysearch(query, target):
             (min_distance, best_pos) = (distance, i)
     return best_pos
 
+class readable_dir(argparse.Action):
+    def __call__(self, parser, namespace, values, option_string=None):
+        prospective_dir=values
+        if not os.path.isdir(prospective_dir):
+            raise argparse.ArgumentTypeError("readable_dir:{0} is not a valid path".format(prospective_dir))
+        if os.access(prospective_dir, os.R_OK):
+            setattr(namespace,self.dest,prospective_dir)
+        else:
+            raise argparse.ArgumentTypeError("readable_dir:{0} is not a readable dir".format(prospective_dir))
+
 parser = argparse.ArgumentParser()
-parser.add_argument('--vcf_files', nargs="+")
-#parser.add_argument('--vcf_dirs, ')
-parser.add_argument('--reference_file', type=argparse.FileType())
-parser.add_argument('--output_file', type=argparse.FileType('w'))
-parser.add_argument('--remove_invariant', action='store_true', default=False)
+parser.add_argument('-f','--vcf_files', nargs="+")
+parser.add_argument('-d','--vcf_dir', action=readable_dir, help="VCF directory ")
+parser.add_argument('-n', '--reference_file', type=argparse.FileType())
+parser.add_argument('-o', '--output_file', type=argparse.FileType('w'))
+parser.add_argument('-r', '--remove_invariant', action='store_true', default=False)
 args = parser.parse_args()
 
 do_inserts = False
