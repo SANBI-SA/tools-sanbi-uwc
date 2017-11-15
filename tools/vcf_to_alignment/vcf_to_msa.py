@@ -12,6 +12,8 @@ import vcf
 import intervaltree
 from operator import itemgetter
 
+from pathlib import Path
+
 difference = lambda x,y: 0 if x == y else 1
 
 string_difference = lambda query, target, query_len: sum((difference(query[i], target[i])) for i in range(query_len))
@@ -28,11 +30,22 @@ def fuzzysearch(query, target):
             (min_distance, best_pos) = (distance, i)
     return best_pos
 
+class readable_dir(argparse.Action):
+    def __call__(self, parser, namespace, values, option_string=None):
+        prospective_dir=values
+        if not os.path.isdir(prospective_dir):
+            raise argparse.ArgumentTypeError("readable_dir:{0} is not a valid path".format(prospective_dir))
+        if os.access(prospective_dir, os.R_OK):
+            setattr(namespace,self.dest,prospective_dir)
+        else:
+            raise argparse.ArgumentTypeError("readable_dir:{0} is not a readable dir".format(prospective_dir))
+
 parser = argparse.ArgumentParser()
-parser.add_argument('--vcf_files', nargs="+")
-parser.add_argument('--reference_file', type=argparse.FileType())
-parser.add_argument('--output_file', type=argparse.FileType('w'))
-parser.add_argument('--remove_invariant', action='store_true', default=False)
+parser.add_argument('-f','--vcf_files', nargs="+")
+parser.add_argument('-d','--vcf_dir', action=readable_dir, help="VCF directory ")
+parser.add_argument('-n', '--reference_file', type=argparse.FileType())
+parser.add_argument('-o', '--output_file', type=argparse.FileType('w'))
+parser.add_argument('-r', '--remove_invariant', action='store_true', default=False)
 args = parser.parse_args()
 
 do_inserts = False
@@ -55,18 +68,26 @@ sequence_names = []
 sequences = {}
 if args.remove_invariant:
     variant_sites = set()
-for i, vcf_descriptor in enumerate(args.vcf_files):
-    # seqname = os.path.splitext(os.path.basename(vcf_filename))[0]
-    (seqname,vcf_filename) = vcf_descriptor.split('^^^')
+
+vcf_list = []
+if args.vcf_dir:
+    pathlist = Path(args.vcf_dir).glob('*.vcf')
+    for path in pathlist:
+        vcf_list.append(str(path))
+elif args.vcf_files:
+    vcf_list = args.vcf_files
+
+for i, vcf_descriptor in enumerate(vcf_list):
+    #print(os.path.basename(vcf_descriptor))
+    seqname = str(os.path.basename(vcf_descriptor)).rsplit('.vcf',1)[0]
     sequence_names.append(seqname)
     sequence = list(reference)
     sequences[seqname] = sequence
     print(seqname)
-    # tsv_filename = vcf_filename.replace(".vcf", ".tsv")
-    # output = open(tsv_filename, "wb")
+
     insertions[seqname] = []
     count = 0
-    for record in vcf.VCFReader(filename=vcf_filename):
+    for record in vcf.VCFReader(filename=vcf_descriptor):
         type="unknown"
         if record.is_snp and do_snps:
             type="snp"
