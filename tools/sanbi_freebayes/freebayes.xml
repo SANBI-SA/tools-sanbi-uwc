@@ -273,7 +273,6 @@
             <param name="reference_source_selector" type="select" label="Choose the source for the reference genome">
                 <option value="cached">Locally cached</option>
                 <option value="history">History</option>
-                <option value="builtin">Built-in</option>
             </param>
             <when value="cached">
                 <expand macro="input_bam">
