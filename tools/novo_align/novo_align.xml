@@ -104,7 +104,7 @@
       </param>
       <when value="builtin">
         <param name="index1" type="select" label="Novo-Align Index(FASTA format)">
-            <options from_data_table="all_fasta"/>
+            <options from_data_table="novocraft_index"/>
         </param>
       </when>
       <when value="history">
@@ -116,7 +116,7 @@
         <param name="fastq_input1" type="data" format="fastqsanger" label="Select first set of reads" help="Specify dataset with forward reads"/>
         <param name="fastq_input2" type="data" format="fastqsanger" label="Select second set of reads" help="Specify dataset with reverse reads"/>
         <param name="index1" type="select" label="Novo-Align Index(FASTA format)">
-            <options from_data_table="all_fasta"/>
+            <options from_data_table="novocraft_index"/>
         </param>
     </inputs>-->
     <outputs>
