@@ -3,10 +3,10 @@
     <macros>
         <import>macros.xml</import>
     </macros>
-    <!--<expand macro="requirements">
+    <expand macro="requirements">
         <requirement type="package" version="4.1.3">gawk</requirement>
         <requirement type="package" version="20170422">parallel</requirement>
-    </expand>-->
+    </expand>
     <command detect_errors="exit_code"><![CDATA[
     ##set up input files
 
@@ -344,7 +344,7 @@
                             <when value="provide_vcf">
                                 <param name="input_variant_vcf" argument="--variant-input" type="data" format="vcf_bgzip"
                                        label="Use variants reported in this VCF dataset as input to the algorithm">
-                                    <conversion name="Tabixized_input" type="tabix" />
+                                    <!--<conversion name="Tabixized_input" type="tabix" />-->
                                 </param>
                                 <param name="only_use_input_alleles" argument="--only-use-input-alleles" type="boolean" truevalue="--only-use-input-alleles" falsevalue="" checked="false"
                                        label="Only provide variant calls and genotype likelihoods for sites in VCF" />
