@@ -77,7 +77,7 @@
     <conditional name="paired_end">
     <param name="is_paired_end" type="boolean" label="Paired end data?" truevalue="yes" falsevalue="no" checked="yes" />
     <when value="no">
-      <param name="fastq_in" type="data" format="fastqsanger|fastqsanger.gz" label="Input FASTQ file" />
+      <param name="fastq_in" type="data" format="fastqsanger,fastqsanger.gz" label="Input FASTQ file" />
     </when>
     <when value="yes">
       <conditional name="paired_input_type_conditional">
@@ -86,11 +86,11 @@
           <option value="collection">Dataset collection pair</option>
         </param>
         <when value="pair_of_files">
-      <param name="fastq_r1_in" type="data" format="fastqsanger|fastqsanger.gz" label="Input FASTQ file (R1/first of pair)" />
-      <param name="fastq_r2_in" type="data" format="fastqsanger|fastqsanger.gz" label="Input FASTQ file (R2/second of pair)" />
+      <param name="fastq_r1_in" type="data" format="fastqsanger,fastqsanger.gz" label="Input FASTQ file (R1/first of pair)" />
+      <param name="fastq_r2_in" type="data" format="fastqsanger,fastqsanger.gz" label="Input FASTQ file (R2/second of pair)" />
     </when>
         <when value="collection">
-          <param name="fastq_pair" format="fastqsanger|fastqsanger.gz" type="data_collection"
+          <param name="fastq_pair" format="fastqsanger,fastqsanger.gz" type="data_collection"
          collection_type="paired"
          label="Select FASTQ dataset collection with R1/R2 pair" />
         </when>
