@@ -7,9 +7,8 @@
         <requirement type="package" version="04.2016">novoalign-license</requirement>
     </requirements>
     <command detect_errors="aggressive"><![CDATA[
-        #set $paired_input_type = $paired_end.paired_input_type_conditional.paired_input_type
         #if $paired_end.is_paired_end
-            #if $paired_input_type == "pair_of_files"
+            #if $paired_end.paired_input_type_conditional.paired_input_type == "pair_of_files"
                 #if $paired_end.paired_input_type_conditional.fastq_r1_in.metadata.is_gzipped
                     ln -s "${$paired_end.paired_input_type_conditional.fastq_r1_in}" ./input_mate1.gz &&
                     ln -s "${$paired_end.paired_input_type_conditional.fastq_r2_in}" ./input_mate2.gz &&
@@ -51,7 +50,7 @@
               reference.nix
             #end if
             #if $paired_end.is_paired_end
-                #if $paired_input_type == "pair_of_files"
+                #if $paired_end.paired_input_type_conditional.paired_input_type == "pair_of_files"
                     #if $paired_end.paired_input_type_conditional.fastq_r1_in.metadata.is_gzipped
                         --forward_file ./input_mate1.gz
                         --reverse_file ./input_mate2.gz
