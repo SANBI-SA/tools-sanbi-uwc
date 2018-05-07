@@ -68,7 +68,11 @@
                     #end if
                 #end if
             #else
-                --forward_file ${fastq_in}.${fastq_in.ext} --reverse_file ${fastq_in}.${fastq_in.ext}
+                #if $fastq_in.metadata.is_gzipped
+                    --forward_file ./input_singles.gz.${fastq_in.ext} --reverse_file ./input_singles.gz.${fastq_in.ext}
+                #else
+                    --forward_file ./input_singles.${fastq_in.ext} --reverse_file ./input_singles.${fastq_in.ext}
+                #end if
             #end if
 
     ]]></command>
