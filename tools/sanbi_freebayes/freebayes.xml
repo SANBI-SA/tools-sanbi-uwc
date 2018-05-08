@@ -44,7 +44,7 @@
     #else
         ##divide up the regions in the bam file for efficient processing
         #for $bam_count, $input_bam in enumerate( $input_bamfiles ):
-            samtools sort - | samtools view -H b_${bam_count}.bam |
+            samtools view -H b_${bam_count}.bam |
             grep '^@SQ' |
             cut -f 2- |
             awk '{ gsub("^SN:","",$1); gsub("^LN:","",$2); print $1"\t0\t"$2; }' >> regions_all.bed &&
