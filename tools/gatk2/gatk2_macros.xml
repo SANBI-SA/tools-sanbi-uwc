@@ -1,7 +1,7 @@
 <macros>
   <xml name="requirements">
     <requirements>
-      <requirement type="package">gatk</requirement>
+      <requirement type="package">gatk2</requirement>
       <requirement type="package" version="0.1.19">samtools</requirement>
       <requirement type="package" version="1.56.0">picard</requirement>
       <requirement type="set_environment">GATK2_PATH</requirement>
