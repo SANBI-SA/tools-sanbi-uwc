@@ -10,7 +10,7 @@ log = logging.getLogger( __name__ )
 
 def novo_align(output_filename, index_filename, fwd_file, rev_file ):
     param = r'@RG\tID:RG\tSM:$i\tPL:ILLUMINA'
-    cmdline_str = "novoalign -c 8 -k -d {} -f {} {} -i PE 250, 100 -o SAM $'{}' | samtools view -bS - > {}".format(
+    cmdline_str = "novoalign -c 8 -k -d {} -f {} {} -i PE 250, 100 -o SAM '{}' | samtools view -bS - > {}".format(
         index_filename,
         fwd_file,
         rev_file,
