@@ -34,7 +34,7 @@ def newSplit(value):
 def main():
     parser = argparse.ArgumentParser(description="Generate a BAM file from the Novo Align tool")
     parser.add_argument('out_file')
-    parser.add_argument('out_stats')    
+    parser.add_argument('--out_stats')    
     parser.add_argument('--index_filename')
     parser.add_argument('--forward_filename')
     parser.add_argument('--reverse_filename')

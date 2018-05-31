@@ -43,6 +43,7 @@
         #end if
         python $__tool_directory__/novo_align.py
             '${out_file}'
+            '${out_stats}'
             --index
             #if str($index.source) == 'builtin':
               '${index.index1.fields.path}'
@@ -123,7 +124,8 @@
         </param>
     </inputs>-->
     <outputs>
-        <data format="bam" name="out_file" />
+        <data format="sam" name="out_file" />
+        <data format="text" name="out_stats" />
     </outputs>
     <tests>
         <test>
