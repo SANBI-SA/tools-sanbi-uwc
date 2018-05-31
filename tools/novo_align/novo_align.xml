@@ -125,7 +125,7 @@
     </inputs>-->
     <outputs>
         <data format="sam" name="out_file" />
-        <data format="text" name="out_stats" />
+        <data format="txt" name="out_stats" />
     </outputs>
     <tests>
         <test>
