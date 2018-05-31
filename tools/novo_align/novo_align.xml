@@ -43,7 +43,7 @@
         #end if
         python $__tool_directory__/novo_align.py
             '${out_file}'
-            '${out_stats}'
+            --out_stats '${out_stats}'
             --index
             #if str($index.source) == 'builtin':
               '${index.index1.fields.path}'
