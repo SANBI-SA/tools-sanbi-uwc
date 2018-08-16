@@ -1,3 +1,4 @@
+<?xml version="1.0"?> 
 <tool id="vcf_snps_utils_intersect" name="IntersectSNPs" version="@TOOL_VERSION@+galaxy0">
   <description>Intersect SNPs with a CSV file</description>
   <macros>
@@ -32,8 +33,7 @@
       <output name="output" compare="diff" lines_diff="2" file="sample1.html" ftype="html" />
     </test>
   </tests>
-
-  <help>
+  <help><![CDATA[
 
   **What it does**
 
@@ -68,6 +68,5 @@
 
   vcf_snps_utils intersect example.vcf example.csv --out output/test
 
-  </help>
-
+  ]]></help>
 </tool>
