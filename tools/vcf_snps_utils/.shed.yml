@@ -1,0 +1,11 @@
+categories:
+- Variant Analysis
+description: VCF_SNPS_UTILS is a toolset of utilities to intorrigate VCF snps.
+long_description: |
+  VCF_SNPS_UTILS is a toolset of utilities to intorrigate VCF snps.
+  
+  https://github.com/COMBAT-TB/vcf_snps_utils/wiki
+name: vcf_snps_utils
+owner: sanbi-uwc
+remote_repository_url: https://github.com/COMBAT-TB/vcf_snps_utils
+type: unrestricted
