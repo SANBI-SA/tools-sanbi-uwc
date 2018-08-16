@@ -1,0 +1,9 @@
+<macros>
+  <token name="@TOOL_VERSION@">0.0.2</token>
+  <xml name="requirements">
+    <requirements>
+      <requirement type="package" version="@TOOL_VERSION@">vcf_snps_utils</requirement>
+      <yield />
+    </requirements>    
+  </xml>
+</macros>
