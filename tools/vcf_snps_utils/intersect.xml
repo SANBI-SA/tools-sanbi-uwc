@@ -1,0 +1,69 @@
+ <?xml version="1.0"?>
+<tool id="intersect" name="Intersect SNPs with a CSV file" version="@TOOL_VERSION@+galaxy0" profile="17.01">
+  <description>Intersect SNPs with a CSV file</description>
+   <macros>
+    <import>vcf_snps_utils_macros.xml</import>
+  </macros>
+        
+  <command detect_errors="exit_code"><![CDATA[
+    ln -s '$input_vcf' data.vcf &&
+    ln -s '$input_csv' data.csv &&
+    vcf_snps_utils intersect data.vcf data.csv --out "$output_pdf.file.path"
+    ]]>
+  </command>
+        
+  <inputs>
+    <param name="input_vcf" type="data" format="vcf" label="Input VCF" />
+    <param name="input_csv" type="data" format="csv" label="Input CSV" />
+  </inputs>
+        
+  <outputs>
+    <data name="output_pdf" format="pdf" label="SNPs Intersection Report" />
+    <data name="output_txt" format="txt" label="SNPs Intersection Combination Report" />
+    <data name="output_r" format="R" label="SNPs Intersection R object" />
+  </outputs>
+        
+  <tests>
+    <test>
+      <param name="input_vcf" value="sample1.vcf" />
+      <output name="output" compare="diff" lines_diff="2" file="sample1.html" ftype="html" />
+    </test>
+
+  <help>
+
+**What it does**
+
+Intersect SNPs and generate an output report from a CSV file of knowned SNPs (workflow generated/annotated)
+
+Usage: vcf_snps_utils intersect [OPTIONS] [VCFFILES]... CSVFILE
+
+-----
+
+**Example**
+
+  VCF snp intersect tool (CSV file).
+
+  This tools compares CSV snps to the VCF snps This is to establish whether
+  the discovered (VCF snps) have been discovered in the pass. This will
+  potential be extended to include verification using other external source
+  such as databases/api.
+
+  CSV File passed should be in the following format (Example):
+  position in H37Rv        gene    short name      snp_type        Reference       Sample1   Sample2       Sample3
+  1285     dnaA    dnaA1285        nsSNP   G       G       G       G
+  4013     recF    recF4013        nsSNP   T       C       C       C
+
+  Report bugs to: combattb-help@sanbi.ac.za CombatTB home page:
+  <http://www.combattb.org/software/tools/> General help using CombatTB
+  software: <http://www.combattb.org/gethelp/>
+
+Options:
+  --out TEXT  set the output directory, default is
+              "/tmp/vcf_snps_utils_output/"
+  --help      Show this message and exit.
+
+  vcf_snps_utils intersect example.vcf example.csv --out output/test
+
+    </help>
+
+</tool>
