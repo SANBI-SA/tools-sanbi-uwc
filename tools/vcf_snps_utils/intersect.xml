@@ -1,5 +1,4 @@
- <?xml version="1.0"?>
-<tool id="intersect" name="Intersect SNPs with a CSV file" version="@TOOL_VERSION@+galaxy0" profile="17.01">
+<tool id="vcf_snps_utils_intersect" name="IntersectSNPs" version="@TOOL_VERSION@+galaxy0">
   <description>Intersect SNPs with a CSV file</description>
   <macros>
     <token name="@TOOL_VERSION@">0.0.2</token>
