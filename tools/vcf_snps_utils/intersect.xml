@@ -2,8 +2,12 @@
 <tool id="intersect" name="Intersect SNPs with a CSV file" version="@TOOL_VERSION@+galaxy0" profile="17.01">
   <description>Intersect SNPs with a CSV file</description>
   <macros>
-    <import>vcf_snps_utils_macros.xml</import>
+    <token name="@TOOL_VERSION@">0.0.2</token>
   </macros>
+
+  <requirements>
+    <requirement type="package" version="@TOOL_VERSION@">vcf_snps_utils</requirement>
+  </requirements>
         
   <command detect_errors="exit_code"><![CDATA[
     ln -s '$input_vcf' data.vcf &&
@@ -29,7 +33,7 @@
       <output name="output" compare="diff" lines_diff="2" file="sample1.html" ftype="html" />
     </test>
   </tests>
-  
+
   <help>
 
 **What it does**
