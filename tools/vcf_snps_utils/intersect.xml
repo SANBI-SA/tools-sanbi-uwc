@@ -35,15 +35,15 @@
 
   <help>
 
-**What it does**
+  **What it does**
 
-Intersect SNPs and generate an output report from a CSV file of knowned SNPs (workflow generated/annotated)
+  Intersect SNPs and generate an output report from a CSV file of knowned SNPs (workflow generated/annotated)
 
-Usage: vcf_snps_utils intersect [OPTIONS] [VCFFILES]... CSVFILE
+  Usage: vcf_snps_utils intersect [OPTIONS] [VCFFILES]... CSVFILE
 
------
+  -----
 
-**Example**
+  **Example**
 
   VCF snp intersect tool (CSV file).
 
@@ -61,10 +61,10 @@ Usage: vcf_snps_utils intersect [OPTIONS] [VCFFILES]... CSVFILE
   <http://www.combattb.org/software/tools/> General help using CombatTB
   software: <http://www.combattb.org/gethelp/>
 
-Options:
-  --out TEXT  set the output directory, default is
+  Options:
+    --out TEXT  set the output directory, default is
               "/tmp/vcf_snps_utils_output/"
-  --help      Show this message and exit.
+    --help      Show this message and exit.
 
   vcf_snps_utils intersect example.vcf example.csv --out output/test
 
