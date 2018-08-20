@@ -5,15 +5,17 @@
     <token name="@TOOL_VERSION@">0.0.2</token>
   </macros>
 
-  <requirements>
+   <requirements>
     <requirement type="package" version="@TOOL_VERSION@">vcf_snps_utils</requirement>
   </requirements>
         
   <command detect_errors="exit_code"><![CDATA[
     ln -s '$input_vcf' data.vcf &&
     ln -s '$input_csv' data.csv &&
-    vcf_snps_utils intersect data.vcf data.csv --out "$output_pdf.file.path"
-    ]]>
+    vcf_snps_utils intersect data.vcf data.csv --outdir "$output_pdf.files_path" &&
+    mv "$output_pdf.files_path"/Intervene_upset.pdf $output_pdf &&
+    mv "$output_pdf.files_path"/Intervene_upset_combinations.txt $output_txt
+    ]]>                                                                                                                 
   </command>
         
   <inputs>
@@ -24,7 +26,6 @@
   <outputs>
     <data name="output_pdf" format="pdf" label="SNPs Intersection Report" />
     <data name="output_txt" format="txt" label="SNPs Intersection Combination Report" />
-    <data name="output_r" format="R" label="SNPs Intersection R object" />
   </outputs>
         
   <tests>
