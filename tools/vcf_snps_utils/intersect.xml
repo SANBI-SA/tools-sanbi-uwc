@@ -2,7 +2,7 @@
 <tool id="vcf_snps_utils_intersect" name="IntersectSNPs" version="@TOOL_VERSION@+galaxy0">
   <description>Intersect SNPs with a CSV file</description>
   <macros>
-    <token name="@TOOL_VERSION@">v0.0.3b1</v0></token>
+    <token name="@TOOL_VERSION@">v0.0.3b1</token>
   </macros>
 
    <requirements>
