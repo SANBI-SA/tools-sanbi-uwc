@@ -2,7 +2,7 @@
 <tool id="vcf_snps_utils_intersect" name="IntersectSNPs" version="@TOOL_VERSION@+galaxy0">
   <description>Intersect SNPs with a CSV file</description>
   <macros>
-    <token name="@TOOL_VERSION@">0.0.2</token>
+    <token name="@TOOL_VERSION@"><v0 class="0 3b1"></v0></token>
   </macros>
 
    <requirements>
@@ -10,27 +10,23 @@
   </requirements>
         
   <command detect_errors="exit_code"><![CDATA[
-    ln -s '$input_vcf' data.vcf &&
-    ln -s '$input_csv' data.csv &&
-    vcf_snps_utils intersect data.vcf data.csv --outdir "$output_pdf.files_path" &&
-    mv "$output_pdf.files_path"/Intervene_upset.pdf $output_pdf &&
-    mv "$output_pdf.files_path"/Intervene_upset_combinations.txt $output_txt
+    vcf_snps_utils intersect *.vcf '$input_csv' --outdir "$output_report.files_path" &&
+    mv vcf_intesect_report.html $output_report
     ]]>                                                                                                                 
   </command>
         
   <inputs>
-    <param name="input_vcf" type="data" format="vcf" label="Input VCF" />
+    <param name="input_vcfs" type="data" format="vcf" label="Select Workflow VCF Datasets" min="1" multiple="True"/> 
     <param name="input_csv" type="data" format="csv" label="Input CSV" />
   </inputs>
         
   <outputs>
-    <data name="output_pdf" format="pdf" label="SNPs Intersection Report" />
-    <data name="output_txt" format="txt" label="SNPs Intersection Combination Report" />
+    <data name="output_report" format="html" label="SNPs Intersect output report" />
   </outputs>
         
   <tests>
     <test>
-      <param name="input_vcf" value="sample1.vcf" />
+      <param name="input_vcfs" value="test1.vcf,test2.vcf" />
       <output name="output" compare="diff" lines_diff="2" file="sample1.html" ftype="html" />
     </test>
   </tests>
