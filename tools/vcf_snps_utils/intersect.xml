@@ -26,8 +26,8 @@
         
   <tests>
     <test>
-      <param name="input_vcfs" value="test1.vcf,test2.vcf" />
-      <output name="output" compare="diff" lines_diff="2" file="sample1.html" ftype="html" />
+      <param name="input_vcfs" value="test.vcf" />
+      <output name="output_report" compare="diff" lines_diff="2" file="report.html" ftype="html" />
     </test>
   </tests>
   <help><![CDATA[
