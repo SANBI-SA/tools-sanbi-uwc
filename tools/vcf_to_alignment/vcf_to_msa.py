@@ -12,9 +12,11 @@ import vcf
 import intervaltree
 from operator import itemgetter
 
-difference = lambda x,y: 0 if x == y else 1
+difference = lambda x, y: 0 if x == y else 1
+
 
 string_difference = lambda query, target, query_len: sum((difference(query[i], target[i])) for i in range(query_len))
+
 
 def fuzzysearch(query, target):
     query_len = len(query)
@@ -28,12 +30,32 @@ def fuzzysearch(query, target):
             (min_distance, best_pos) = (distance, i)
     return best_pos
 
+
 parser = argparse.ArgumentParser()
 parser.add_argument('--vcf_files', nargs="+")
-parser.add_argument('--reference_file', type=argparse.FileType())
-parser.add_argument('--output_file', type=argparse.FileType('w'))
+parser.add_argument('--reference_file', required=True, type=argparse.FileType())
+parser.add_argument('--output_file', required=True, type=argparse.FileType('w'))
 parser.add_argument('--remove_invariant', action='store_true', default=False)
+parser.add_argument('--exclude', type=argparse.FileType(), help='BED format file of regions to exclude from variant calling')
 args = parser.parse_args()
+
+exclude_trees = {}
+if args.exclude is not None:
+    for line in args.exclude:
+        # all of BED format that we care about is chromosome, start, end
+        fields = line.strip().split('\t')
+        if len(fields) < 3:
+            continue
+        chrom = fields[0]
+        start = int(fields[1])
+        end = int(fields[2])
+        if chrom not in exclude_trees:
+            tree = intervaltree.IntervalTree()
+            exclude_trees[chrom] = tree
+        else:
+            tree = exclude_trees[chrom]
+        tree[start:end] = True
+print(exclude_trees)
 
 do_inserts = False
 do_deletes = False
@@ -45,7 +67,7 @@ if (do_inserts or do_deletes) and args.remove_invariant:
 # vcf_files_dir = os.path.expanduser("~/Data/vcf")
 # vcf_files = [os.path.join(vcf_files_dir, "vcf{}.vcf".format(num)) for num in range(1,4)]
 # print(vcf_files)
-reference_seq  = SeqIO.read(args.reference_file, "fasta")
+reference_seq = SeqIO.read(args.reference_file, "fasta")
 reference = str(reference_seq.seq)
 # output_file = open(os.path.join(os.path.expanduser("~/Data/fasta/vcf_to_msa"), 'output.fasta'), 'w')
 insertions = {}
@@ -55,9 +77,10 @@ sequence_names = []
 sequences = {}
 if args.remove_invariant:
     variant_sites = set()
-for i, vcf_descriptor in enumerate(args.vcf_files):
-    # seqname = os.path.splitext(os.path.basename(vcf_filename))[0]
-    (seqname,vcf_filename) = vcf_descriptor.split('^^^')
+for i, vcf_filename in enumerate(args.vcf_files):
+    print(vcf_filename)
+    seqname = os.path.splitext(os.path.basename(vcf_filename))[0]
+    # (seqname,vcf_filename) = vcf_descriptor.split('^^^')
     sequence_names.append(seqname)
     sequence = list(reference)
     sequences[seqname] = sequence
@@ -67,9 +90,15 @@ for i, vcf_descriptor in enumerate(args.vcf_files):
     insertions[seqname] = []
     count = 0
     for record in vcf.VCFReader(filename=vcf_filename):
-        type="unknown"
+        if args.exclude:
+            if record.CHROM in exclude_trees:
+                tree = exclude_trees[record.CHROM]
+                if tree.overlaps(record.affected_start, record.affected_end):
+                    print("skip:", record)
+                    continue
+        type = "unknown"
         if record.is_snp and do_snps:
-            type="snp"
+            type = "snp"
             try:
                 sequence[record.affected_start] = str(record.alleles[1]) # SNP, simply insert alt allele
             except IndexError as e:
@@ -80,7 +109,7 @@ for i, vcf_descriptor in enumerate(args.vcf_files):
         elif record.is_indel:
             length = record.affected_end - record.affected_start
             if record.is_deletion and do_deletes:
-                type="del"
+                type = "del"
                 try:
                     sequence[record.affected_start:record.affected_end] = ['-'] * length
                 except IndexError as e:
@@ -89,7 +118,7 @@ for i, vcf_descriptor in enumerate(args.vcf_files):
             else:
                 if do_inserts:
                     print("Warning: insert processing from VCF is dangerously broken", file=sys.stderr)
-                    type="ins"
+                    type = "ins"
                     # insertions[seqname].append(record)
                     ref = str(record.alleles[0])
                     alt = str(record.alleles[1])

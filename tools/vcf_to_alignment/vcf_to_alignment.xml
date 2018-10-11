@@ -22,6 +22,9 @@
     #else
       '${reference.builtin.fields.path}'
     #end if
+    #if $exclude_list.do_exclude == 'yes':
+      --exclude $exclude_list.exclude_file
+    #end if
     --output_file '${output_alignment}'
     ]]>
   </command>
@@ -42,6 +45,16 @@
           <validator type="no_options" message="No FASTA datasets are available for the selected input dataset" />
         </param>
       </when>
+    </conditional>
+    <conditional name="exclude_list">
+      <param name="do_exclude" type="select">
+        <option value="yes">Yes</option>
+        <option value="no">No</option>
+      </param>
+      <when value="yes">
+        <param name="exclude_file" type="data" format="bed" label="BED file with regions to exclude" />
+      </when>
+      <when value="no"></when>
     </conditional>
   </inputs>
   <outputs>
@@ -70,7 +83,20 @@
         </collection>
       </param>
       <param name="history" value="reference.fasta" ftype="fasta" />
+      <param name="exclude_file" value="exclude1.bed" />
       <output name="output_alignment" value="output2.fasta" />
+    </test>
+    <test>
+      <param name="remove_invariant_sites" value="True" />
+      <param name="vcf_inputs">
+        <collection type="list">
+          <element name="vcf_inputs.vcf1" value="vcf1.vcf" />
+          <element name="vcf_inputs.vcf2" value="vcf2.vcf" />
+          <element name="vcf_inputs.vcf3" value="vcf3.vcf" />
+        </collection>
+      </param>
+      <param name="history" value="reference.fasta" ftype="fasta" />
+      <output name="output_alignment" value="output3.fasta" />
     </test>
   </tests>
   <help><![CDATA[
