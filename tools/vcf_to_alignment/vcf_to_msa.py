@@ -71,7 +71,6 @@ if args.exclude is not None:
         else:
             tree = exclude_trees[chrom]
         tree[start:end] = True
-print(exclude_trees)
 
 do_inserts = False
 do_deletes = False
@@ -104,20 +103,22 @@ elif args.vcf_files:
 
 for i, vcf_descriptor in enumerate(vcf_list):
     # print(os.path.basename(vcf_descriptor))
-    seqname = str(os.path.basename(vcf_descriptor)).rsplit('.vcf', 1)[0]
+    if '^^^' in vcf_descriptor:
+        (seqname, vcf_filename) = vcf_descriptor.split('^^^')
+    else:
+        seqname = str(os.path.basename(vcf_descriptor)).rsplit('.vcf', 1)[0]
+        vcf_filename = vcf_descriptor
     sequence_names.append(seqname)
     sequence = list(reference)
     sequences[seqname] = sequence
-    print(seqname)
 
     insertions[seqname] = []
     count = 0
-    for record in vcf.VCFReader(filename=vcf_descriptor):
+    for record in vcf.VCFReader(filename=vcf_filename):
         if args.exclude:
             if record.CHROM in exclude_trees:
                 tree = exclude_trees[record.CHROM]
                 if tree.overlaps(record.affected_start, record.affected_end):
-                    print("skip:", record)
                     continue
         type = "unknown"
         if record.is_snp and do_snps:
