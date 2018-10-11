@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<tool id="vcf_to_alignment" name="Generate FASTA alignment from VCF collection" version="0.3">
+<tool id="vcf_to_alignment" name="Generate FASTA alignment from VCF collection" version="0.4">
   <description>Generate a multiple sequence alignment given a collection of variants and a reference sequence</description>
   <requirements>
       <requirement type="package" version="1.67">biopython</requirement>
