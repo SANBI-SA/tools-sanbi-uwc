@@ -49,7 +49,7 @@
     <conditional name="exclude_list">
       <param name="do_exclude" type="select">
         <option value="yes">Yes</option>
-        <option value="no">No</option>
+        <option value="no" selected="true">No</option>
       </param>
       <when value="yes">
         <param name="exclude_file" type="data" format="bed" label="BED file with regions to exclude" />
@@ -63,6 +63,7 @@
   <tests>
     <test>
       <param name="remove_invariant_sites" value="False" />
+      <param name="do_exclude" value="no" />
       <param name="vcf_inputs">
         <collection type="list">
           <element name="vcf_inputs.vcf1" value="vcf1.vcf" />
@@ -75,6 +76,7 @@
     </test>
     <test>
       <param name="remove_invariant_sites" value="True" />
+      <param name="do_exclude" value="no" />
       <param name="vcf_inputs">
         <collection type="list">
           <element name="vcf_inputs.vcf1" value="vcf1.vcf" />
@@ -83,11 +85,12 @@
         </collection>
       </param>
       <param name="history" value="reference.fasta" ftype="fasta" />
-      <param name="exclude_file" value="exclude1.bed" />
       <output name="output_alignment" value="output2.fasta" />
     </test>
     <test>
       <param name="remove_invariant_sites" value="True" />
+      <param name="do_exclude" value="yes" />
+      <param name="exclude_file" value="exclude1.bed" />
       <param name="vcf_inputs">
         <collection type="list">
           <element name="vcf_inputs.vcf1" value="vcf1.vcf" />
