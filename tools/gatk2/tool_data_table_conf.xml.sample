@@ -7,6 +7,6 @@
     <!-- Available of GATK references -->
     <table name="gatk2_annotations" comment_char="#">
         <columns>value, name, gatk_value, tools_valid_for</columns>
-        <file path="tool-data/gatk2_annotations.txt" />
+        <file path="tool-data/gatk2_annotations.loc" />
     </table>
 </tables>

@@ -4,7 +4,7 @@
     <import>gatk2_macros.xml</import>
   </macros>
   <expand macro="requirements">
-    <requirement type="package" version="0.9.3">ggplot2</requirement>
+    <requirement type="package" version="0.11.5">ggplot</requirement>
   </expand>
   <expand macro="version_command" />
   <command interpreter="python">
@@ -300,8 +300,8 @@
     <param name="annotations" type="select" multiple="True" display="checkboxes" label="annotations which should used for calculations" help="-an,--use_annotation &amp;lt;use_annotation&amp;gt;">
       <!-- load the available annotations from an external configuration file, since additional ones can be added to local installs -->
       <options from_data_table="gatk2_annotations">
-        <filter type="multiple_splitter" column="tools_valid_for" separator=","/>
-        <filter type="static_value" value="VariantRecalibrator" column="tools_valid_for"/>
+        <filter type="multiple_splitter" column="3" separator=","/>
+        <filter type="static_value" value="VariantRecalibrator" column="3"/>
       </options>
     </param>
 
