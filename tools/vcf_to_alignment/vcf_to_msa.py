@@ -14,7 +14,7 @@ from operator import itemgetter
 from pathlib import Path
 
 
-def difference(x, y): 
+def difference(x, y):
     return 0 if x == y else 1
 
 
@@ -48,7 +48,7 @@ class readable_dir(argparse.Action):
 
 parser = argparse.ArgumentParser()
 parser.add_argument('--vcf_files', nargs="+")
-parser.add_argument('-d','--vcf_dir', action=readable_dir, help="VCF directory ")
+parser.add_argument('-d', '--vcf_dir', action=readable_dir, help="VCF directory ")
 parser.add_argument('--reference_file', required=True, type=argparse.FileType())
 parser.add_argument('--output_file', required=True, type=argparse.FileType('w'))
 parser.add_argument('--remove_invariant', action='store_true', default=False)
@@ -103,8 +103,8 @@ elif args.vcf_files:
     vcf_list = args.vcf_files
 
 for i, vcf_descriptor in enumerate(vcf_list):
-    #print(os.path.basename(vcf_descriptor))
-    seqname = str(os.path.basename(vcf_descriptor)).rsplit('.vcf',1)[0]
+    # print(os.path.basename(vcf_descriptor))
+    seqname = str(os.path.basename(vcf_descriptor)).rsplit('.vcf', 1)[0]
     sequence_names.append(seqname)
     sequence = list(reference)
     sequences[seqname] = sequence
@@ -123,7 +123,7 @@ for i, vcf_descriptor in enumerate(vcf_list):
         if record.is_snp and do_snps:
             type = "snp"
             try:
-                sequence[record.affected_start] = str(record.alleles[1]) # SNP, simply insert alt allele
+                sequence[record.affected_start] = str(record.alleles[1])  # SNP, simply insert alt allele
             except IndexError as e:
                 print("snp: Error assigning to {}:{}: {}".format(record.affected_start, record.affected_end, str(e)), file=sys.stderr)
             if args.remove_invariant:
