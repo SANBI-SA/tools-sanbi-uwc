@@ -11,11 +11,15 @@ import os.path
 import vcf
 import intervaltree
 from operator import itemgetter
+from pathlib import Path
 
-difference = lambda x, y: 0 if x == y else 1
+
+def difference(x, y): 
+    return 0 if x == y else 1
 
 
-string_difference = lambda query, target, query_len: sum((difference(query[i], target[i])) for i in range(query_len))
+def string_difference(query, target, query_len):
+    return sum((difference(query[i], target[i])) for i in range(query_len))
 
 
 def fuzzysearch(query, target):
@@ -25,14 +29,26 @@ def fuzzysearch(query, target):
     min_distance = string_difference(query, target, query_len)
     best_pos = 0
     for i in range(0, target_len - query_len + 1):
-        distance = string_difference(query, target[i:i+query_len], query_len)
+        distance = string_difference(query, target[i:i + query_len], query_len)
         if distance < min_distance:
             (min_distance, best_pos) = (distance, i)
     return best_pos
 
 
+class readable_dir(argparse.Action):
+    def __call__(self, parser, namespace, values, option_string=None):
+        prospective_dir = values
+        if not os.path.isdir(prospective_dir):
+            raise argparse.ArgumentTypeError("readable_dir:{0} is not a valid path".format(prospective_dir))
+        if os.access(prospective_dir, os.R_OK):
+            setattr(namespace, self.dest, prospective_dir)
+        else:
+            raise argparse.ArgumentTypeError("readable_dir:{0} is not a readable dir".format(prospective_dir))
+
+
 parser = argparse.ArgumentParser()
 parser.add_argument('--vcf_files', nargs="+")
+parser.add_argument('-d','--vcf_dir', action=readable_dir, help="VCF directory ")
 parser.add_argument('--reference_file', required=True, type=argparse.FileType())
 parser.add_argument('--output_file', required=True, type=argparse.FileType('w'))
 parser.add_argument('--remove_invariant', action='store_true', default=False)
@@ -77,19 +93,26 @@ sequence_names = []
 sequences = {}
 if args.remove_invariant:
     variant_sites = set()
-for i, vcf_filename in enumerate(args.vcf_files):
-    print(vcf_filename)
-    seqname = os.path.splitext(os.path.basename(vcf_filename))[0]
-    # (seqname,vcf_filename) = vcf_descriptor.split('^^^')
+
+vcf_list = []
+if args.vcf_dir:
+    pathlist = Path(args.vcf_dir).glob('*.vcf')
+    for path in pathlist:
+        vcf_list.append(str(path))
+elif args.vcf_files:
+    vcf_list = args.vcf_files
+
+for i, vcf_descriptor in enumerate(vcf_list):
+    #print(os.path.basename(vcf_descriptor))
+    seqname = str(os.path.basename(vcf_descriptor)).rsplit('.vcf',1)[0]
     sequence_names.append(seqname)
     sequence = list(reference)
     sequences[seqname] = sequence
     print(seqname)
-    # tsv_filename = vcf_filename.replace(".vcf", ".tsv")
-    # output = open(tsv_filename, "wb")
+
     insertions[seqname] = []
     count = 0
-    for record in vcf.VCFReader(filename=vcf_filename):
+    for record in vcf.VCFReader(filename=vcf_descriptor):
         if args.exclude:
             if record.CHROM in exclude_trees:
                 tree = exclude_trees[record.CHROM]
@@ -167,7 +190,7 @@ for name in sequence_names:
         seq_str = ''.join(sequence)
     SeqIO.write(SeqRecord(Seq(seq_str, alphabet=IUPAC.ambiguous_dna), id=name, description=""), args.output_file, "fasta")
 
-        # output.write(bytes("\t".join([type, str(record.affected_start), str(record.affected_end), str(record.alleles[0]), str(record.alleles[1])])+"\n", encoding="ascii"))
+    # output.write(bytes("\t".join([type, str(record.affected_start), str(record.affected_end), str(record.alleles[0]), str(record.alleles[1])])+"\n", encoding="ascii"))
     # output.close()
 
 args.output_file.close()

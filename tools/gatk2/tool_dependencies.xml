@@ -24,7 +24,8 @@
     <package name="picard" version="1.56.0">
         <repository name="package_picard_1_56_0" owner="devteam" />
     </package>
-    <package name="ggplot2" version="0.9.3">
+    <!-- <package name="ggplot2" version="0.9.3">
         <repository name="package_r_ggplot2_0_9_3" owner="iuc" />
-    </package>
+    </package> -->
+    
 </tool_dependency>

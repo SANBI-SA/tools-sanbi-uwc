@@ -1,11 +1,16 @@
 #!/usr/bin/env python
-#David Hoover, based on gatk by Dan Blankenberg
+# David Hoover, based on gatk by Dan Blankenberg
 
 """
 A wrapper script for running the GenomeAnalysisTK.jar commands.
 """
 
-import sys, optparse, os, tempfile, subprocess, shutil
+import sys
+import optparse
+import  os
+import tempfile
+import subprocess
+import shutil
 from binascii import unhexlify
 
 GALAXY_EXT_TO_GATK_EXT = { 'gatk_interval':'intervals', 'bam_index':'bam.bai', 'gatk_dbsnp':'dbSNP', 'picard_interval_list':'interval_list' } #items not listed here will use the galaxy extension as-is
