@@ -1,0 +1,4 @@
+<?xml version="1.0"?>
+<repositories description="A suite of tools associated with SNIPPY Bactarial Varriant Calling pipeline">
+    <repository changeset_revision="d4e6df2bc5e8" name="snippy" owner="uic" toolshed="https://testtoolshed.g2.bx.psu.edu" />
+</repositories>
