@@ -1,9 +1,0 @@
-categories:
-- Sequence Analysis
-description: SANBI Snippy Bacterial Variant Calling - Tool Suite, defining all dependencies for SANBISnippyBacterialVariantCalling.
-long_description: |
-    SANBI SNIPPYBacterial Variant Calling - Tool Suite, defining all dependencies for SANBISnippyBacterialVariantCalling.
-name: suite_sanbi_snippy_3.2
-owner: iuc
-remote_repository_url: https://github.com/SANBI-SA/tools-sanbi-uwc/tree/master/suites/suite_sanbi_snippy_3.2
-type: unrestricted
