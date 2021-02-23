@@ -1,0 +1,69 @@
+<tool id="artic_guppyflex" name="Perfoming length filtering for Chimeric Reads (guppyflex)" version="0.1.0" python_template_version="3.5">
+    <requirements>
+        <!--<requirement type="package" version="1.2.1">artic-ncov2019</requirement>-->
+        <requirement type="package" version="1.2.1">artic</requirement>
+    </requirements>
+    <command detect_errors="exit_code"><![CDATA[
+        artic guppyplex --min-length 400 --max-length 700 --directory '$fastq_input1' --prefix run_name
+    ]]></command>
+    <inputs>
+      <conditional name="input_type">
+        <param name="input_type_selector" type="select" label="Select input type"
+               help="Select between fastq and bam datasets and between paired and single end data">
+            <option value="fastq_collection">Fastq collection</option>
+            <option value="single">Single fastq</option>
+        </param>
+        <when value="single">
+            <param name="fastq_input1" type="data" format="fastq"
+                   label="Select fastq dataset" help="Specify dataset with single reads"/>
+        </when>
+        <when value="fastq_collection">
+            <param name="fastq_input1" format="fastq" type="data_collection" collection_type="list" label="Select a fastq collection"
+                   help="See help section for an explanation of dataset collections"/>
+        </when>
+      </conditional>
+    </inputs>
+    <outputs>
+        <data name="output1" format="fastq" from_work_dir="run_name_.fastq" />
+    </outputs>
+    <tests>
+        <test>
+            <param name="input1" value="test_data/test.fastq"/>
+            <output name="output1" file="run_name_.fastq"/>
+        </test>
+    </tests>
+    <help><![CDATA[
+        usage: artic guppyplex [-h] [-q] --directory directory
+                       [--max-length max_length] [--min-length min_length]
+                       [--quality quality] [--sample sample]
+                       [--skip-quality-check] [--prefix PREFIX]
+                       [--output output]
+
+        optional arguments:
+        -h, --help            show this help message and exit
+        -q, --quiet           Do not output warnings to stderr
+        --directory directory
+                                Basecalled and demultiplexed (guppy) results directory
+        --max-length max_length
+                                remove reads greater than read length
+        --min-length min_length
+                                remove reads less than read length
+        --quality quality     remove reads against this quality filter
+        --sample sample       sampling frequency for random sample of sequence to
+                                reduce excess
+        --skip-quality-check  Do not filter on quality score (speeds up)
+        --prefix PREFIX       Prefix for guppyplex files
+        --output output       FASTQ file to write
+    ]]></help>
+    <citations>
+        <citation type="bibtex">
+@misc{githubartic-ncov2019,
+  author = {LastTODO, FirstTODO},
+  year = {TODO},
+  title = {artic-ncov2019},
+  publisher = {GitHub},
+  journal = {GitHub repository},
+  url = {https://github.com/artic-network/artic-ncov2019},
+}</citation>
+    </citations>
+</tool>

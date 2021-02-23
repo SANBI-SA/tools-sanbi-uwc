@@ -52,3 +52,5 @@ nosetests.xml
 
 # Tool test outputs.
 *tool_test_output*
+
+*.venv
