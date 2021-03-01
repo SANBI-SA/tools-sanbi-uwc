@@ -1,6 +1,6 @@
 <tool id="artic_guppyplex" name="Artic Guppyplex - (Length filtering)" version="0.1.0" python_template_version="3.5">
     <requirements>
-        <requirement type="package" version="1.1.2">artic</requirement>
+        <requirement type="package" version="1.2.1">artic</requirement>
     </requirements>
     <command detect_errors="exit_code">
     <![CDATA[
