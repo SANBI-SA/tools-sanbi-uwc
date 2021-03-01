@@ -57,7 +57,7 @@
             <validator type="regex" message="No whitespace allowed">^\S*$</validator>
         </param>
         <param format="bed" name="RegionBedFile" type="data" optional="true" label="List of positions (chr pos) or regions (BED) file"/>
-	    <param name="MinBq" type="integer" label="Skip any base with baseQ smaller than" value="6" help="Skip any base with baseQ smaller than [INT]" />
+	      <param name="MinBq" type="integer" label="Skip any base with baseQ smaller than" value="6" help="Skip any base with baseQ smaller than [INT]" />
         <param name="MinAltBq" type="integer" label="Skip alternate bases with baseQ smaller than" value="6" help=" Skip alternate bases with baseQ smaller than [INT]" />
         <param name="DefAltBq" type="integer" label="Overwrite baseQs of alternate bases (that passed bq filter) with this value (-1: use median ref-bq; 0: keep)" value="0" help="Overwrite baseQs of alternate bases (that passed bq filter) with this value (-1: use median ref-bq; 0: keep) [INT]" />
         <param name="MinJq" type="integer" label="Skip any base with joinedQ smaller than" value="0" help="Skip any base with joinedQ smaller than [INT]" />

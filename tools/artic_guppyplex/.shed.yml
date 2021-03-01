@@ -7,9 +7,9 @@ long_description: |
     Features include: read filtering, primer trimming, amplicon coverage normalisation,
     variant calling and consensus building
 homepage_url: https://github.com/artic-network/fieldbioinformatics
-name: artic_guppyflex
+name: artic_guppyplex
 owner: sanbi-uwc
-remote_repository_url: https://github.com/zipho/tools-sanbi-uwc/tree/master/tools/artic_guppyflex
+remote_repository_url: https://github.com/zipho/tools-sanbi-uwc/tree/master/tools/artic_guppyplex
 type: unrestricted
 auto_tool_repositories:
   name_template: "{{ tool_id }}"
