@@ -1,0 +1,14 @@
+categories:
+- Fastq Manipulation
+- Statistics
+- Visualization
+description: A tool to do some basic COG-UK QC
+homepage_url: https://github.com/connor-lab/ncov2019-artic-nf
+long_description: |
+  A tool to do some basic COG-UK QC.
+  This currently tests if >50% of reference bases are covered by >10 reads (Illumina) or >20 reads (Nanopore), 
+  OR if there is a stretch of more than 10 Kb of sequence without N - setting qc_pass in <outdir>/<prefix>.qc.csv to TRUE. 
+name: qc
+owner: sanbi-uwc
+remote_repository_url: https://github.com/SANBI-SA/tools-sanbi-uwc/tree/master/tools/qc
+type: unrestricted
