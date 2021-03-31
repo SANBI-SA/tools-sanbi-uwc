@@ -1,0 +1,75 @@
+<tool id="qc_cog_uk" name="Quality Control (COG-UK QC)" version="0.1.0" python_template_version="3.5">
+    <requirements>
+        <requirement type="package" version="1.11">samtools</requirement>
+        <requirement type="package" version="1.78">biopython</requirement>
+        <requirement type="package" version="1.2.3">pandas</requirement>
+        <requirement type="package" version="3.3.4">matplotlib</requirement>
+    </requirements>
+    <command detect_errors="exit_code" interpreter="python"><![CDATA[
+        qc.py '$qc_type_conditional.qc_type' --outfile '$output1' --sample '$input_sample'\
+            --ref '$input_ref' --bam '$input_bam' --fasta '$input_cons_fasta' && \
+        mv '$input_sample'.depth.png '$output2'
+    ]]></command>
+    <inputs>
+        <conditional name="input_type_conditional">
+            <param name="input_type" type="select" label="Input Type">
+                <option value="single" selected="true">Single Dataset</option>
+                <option value="paired_collection">Paired Collection</option>
+            </param>
+            <when value="single">
+                 <param name="input_sample" type="data" format="fastqsanger" label="Select fastq dataset" help="Specify dataset with single reads"/>
+            </when>
+            <when value="paired_collection">
+                 <param name="input_sample" format="fastqsanger" type="data_collection" collection_type="paired" label="Select dataset pair" help="Specify paired dataset collection containing paired reads"/>
+            </when>
+        </conditional>
+        <conditional name="qc_type_conditional">
+            <param name="qc_type" type="select" label="Input Type">
+                <option value="--illumina" selected="true">Illumina</option>
+                <option value="--nanopore">Nanopore</option>
+            </param>
+        </conditional>
+        <param type="data" name="input_ref" format="fasta" label="Reference File"/>
+        <param type="data" name="input_bam" format="bam" label="Aligned (and trimmed) BAM "/>
+        <param type="data" name="input_cons_fasta" format="fasta" label="Computed FASTA consensus"/>
+    </inputs>
+    <outputs>
+        <data name="output1" format="qc.csv" />
+        <data name="output2" format="qc.png" />
+    </outputs>
+    <tests>
+        <test>
+            <param name="input_sample" value="test_sample"/>
+            <param name="input_ref" value="ref.fasta"/>
+            <param name="input_bam" value="sample.bam"/>
+            <param name="input_cons_fasta" value="sample.fasta"/>
+            <output name="output1" file="test_sample.qc.csv"/>
+            <output name="output2" file="test_sample.depth.png"/>
+        </test>
+    </tests>
+    <help><![CDATA[
+usage: qc.py [-h] (--nanopore | --illumina) --outfile OUTFILE --sample SAMPLE
+        --ref REF --bam BAM --fasta FASTA
+optional arguments:
+-h, --help         show this help message and exit
+--nanopore
+--illumina
+--outfile OUTFILE
+--sample SAMPLE
+--ref REF
+--bam BAM
+--fasta FASTA
+
+        ]]></help>
+    <citations>
+        <citation type="bibtex">
+@misc{githubncov2019-artic-nf,
+  author = {LastTODO, FirstTODO},
+  year = {TODO},
+  title = {ncov2019-artic-nf},
+  publisher = {GitHub},
+  journal = {GitHub repository},
+  url = {https://github.com/connor-lab/ncov2019-artic-nf},
+}</citation>
+    </citations>
+</tool>
