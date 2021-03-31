@@ -39,10 +39,10 @@
     </outputs>
     <tests>
         <test>
-            <param name="input_sample" value="test_sample"/>
+            <param name="input_sample" value="test_sample.fastqsanger.gz"/>
             <param name="input_ref" value="ref.fasta"/>
             <param name="input_bam" value="sample.bam"/>
-            <param name="input_cons_fasta" value="sample.fasta"/>
+            <param name="input_cons_fasta" value="sample_consensus.fasta"/>
             <output name="output1" file="test_sample.qc.csv"/>
             <output name="output2" file="test_sample.depth.png"/>
         </test>
