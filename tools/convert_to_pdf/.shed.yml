@@ -1,0 +1,9 @@
+categories:
+-  Convert Formats
+description: TSV to PDF is a tool to convert tsv format file into pdf format file. 
+long_description: |
+   TSV_TO_PDF is a platform-independent tools written in Python that provides a command-line interface to convert tsv file into a pdf format file.
+name: tsv_to_pdf
+owner: sanbi-uwc
+remote_repository_url: https://github.com/zipho/tsv_to_pdf
+type: unrestricted
