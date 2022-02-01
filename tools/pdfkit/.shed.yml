@@ -1,0 +1,9 @@
+categories:
+-  Convert Formats
+description: This is a tool to convert files into pdf format. 
+long_description: |
+   pdfkit is a platform-independent tools written in Python that provides a command-line interface to convert various formatted file into a pdf format file.
+name: pdfkit
+owner: sanbi-uwc
+remote_repository_url: https://github.com/zipho/pdfkit
+type: unrestricted

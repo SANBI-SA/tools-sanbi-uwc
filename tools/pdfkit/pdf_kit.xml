@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<tool id="pdfkit" name="PDF Kit" version="0.6.1">
+    <description>Tool to transform files into a pdf format.</description>
+    <requirements>
+        <requirement type="package" version="0.6.1">pdfkit</requirement>
+    </requirements>
+    <stdio>
+        <exit_code range=":-1" />
+        <exit_code range="1:" />
+    </stdio>
+    <command interpreter="python">
+        pdfkit
+            --input_file $input_file
+            --output_file $output_pdf_file
+          
+    </command>
+    <inputs>
+        <param name="input_file" type="data" format="tsv" label="TSV/CSV input file" help="Specify a tsv file for upload"/>
+    </inputs>
+    <outputs>
+        <data format="pdf" name="output_file" label="PDFKIT: Transform the input file to pdf output"/>
+    </outputs>
+    <help>Help!</help>
+    <citations>
+        <citation></citation>
+    </citations>
+    <tests>
+        <test>
+        </test>
+    </tests>
+</tool>
